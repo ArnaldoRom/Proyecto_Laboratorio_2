@@ -16,10 +16,8 @@ class Turno{
     }
     get estado(){
         return this.#estado;
-    }
-
-    
-    function reservarTurno(){}
+    }    
+    function reservarTurno() { }
 
     function cancelaTurno(){}
 
