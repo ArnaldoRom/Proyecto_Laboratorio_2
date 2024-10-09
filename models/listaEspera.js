@@ -1,11 +1,15 @@
 class ListaEspera {
-  #profeccional;
+  #idPaciente;
 
-  constructor(profecional) {
-    this.#profeccional = profecional;
+  constructor(idPaciente) {
+    this.#idPaciente = idPaciente;
   }
 
-  get profecional() {
-    return this.#profeccional;
+  get idPaciente() {
+    return this.#idPaciente;
+  }
+
+  set idPaciente(value) {
+    this.#idPaciente = value;
   }
 }

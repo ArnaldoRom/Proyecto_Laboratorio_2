@@ -1,25 +1,35 @@
 class Calendario {
-  #fecha;
-  #descripcion;
+  #diasNoLaborables;
+  #año;
+  #estado;
 
-  constructor(fecha, descripcion) {
-    this.#fecha = fecha;
-    this.#descripcion = descripcion;
+  constructor(diasNoLaborables, año, estado) {
+    this.#diasNoLaborables = diasNoLaborables;
+    this.#año = año;
+    this.#estado = estado;
   }
 
-  get fecha() {
-    return this.#fecha;
+  get diasNoLaborables() {
+    return this.#diasNoLaborables;
   }
 
-  get descripcion() {
-    return this.#descripcion;
+  get año() {
+    return this.#año;
   }
 
-  set fecha(value) {
-    this.#fecha = value;
+  get estado() {
+    return this.#estado;
   }
 
-  set descripcion(value) {
-    this.#descripcion = value;
+  set diasNoLaborables(value) {
+    this.#diasNoLaborables = value;
+  }
+
+  set año(value) {
+    this.#año = value;
+  }
+
+  set estado(value) {
+    this.#estado = value;
   }
 }

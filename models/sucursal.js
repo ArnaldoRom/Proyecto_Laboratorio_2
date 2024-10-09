@@ -1,11 +1,15 @@
 class Sucursal {
   #nombre;
-  #ubicacion;
+  #direccion;
+  #clasificacion;
+  #idCalendario;
   #estado;
 
-  constructor(nombre, ubicacion, estado) {
+  constructor(nombre, direccion, clasificacion, idCalendario, estado) {
     this.#nombre = nombre;
-    this.#ubicacion = ubicacion;
+    this.#direccion = direccion;
+    this.#clasificacion = clasificacion;
+    this.#idCalendario = idCalendario;
     this.#estado = estado;
   }
 
@@ -13,8 +17,16 @@ class Sucursal {
     return this.#nombre;
   }
 
-  get ubicacion() {
-    return this.#ubicacion;
+  get direccion() {
+    return this.#direccion;
+  }
+
+  get clasificacion() {
+    return this.#clasificacion;
+  }
+
+  get idCalendario() {
+    return this.#idCalendario;
   }
 
   get estado() {
@@ -25,8 +37,16 @@ class Sucursal {
     this.#nombre = value;
   }
 
-  set ubicacion(value) {
-    this.#ubicacion = value;
+  set direccion(value) {
+    this.#direccion = value;
+  }
+
+  set clasificacion(value) {
+    this.#clasificacion = value;
+  }
+
+  set idCalendario(value) {
+    this.#idCalendario = value;
   }
 
   set estado(value) {

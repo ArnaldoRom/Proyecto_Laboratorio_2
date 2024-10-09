@@ -1,47 +1,45 @@
 class Profesional {
-    #matricula;
-    #especialidad;
-    #persona;
-    #agenda;
+  #nombre;
+  #apellido;
+  #matricula;
+  #estado;
 
-   
-    constructor(matricula, especialidad, persona, agenda) {
-        this.#matricula = matricula;            
-        this.#especialidad = especialidad;      
-        this.#persona = persona;                
-        this.#agenda = agenda;                  
-    }
+  constructor(nombre, apellido, matricula, estado) {
+    this.#nombre = nombre;
+    this.#apellido = apellido;
+    this.#matricula = matricula;
+    this.#estado = estado;
+  }
 
-    get matricula() {
-        return this.#matricula;
-    }
+  get nombre() {
+    return this.#nombre;
+  }
 
-    get agenda() {
-        return this.#agenda;
-    }
+  get apellido() {
+    return this.#apellido;
+  }
 
-    get persona() {
-        return this.#persona;
-    }
+  get matricula() {
+    return this.#matricula;
+  }
 
-    get especialidad() {
-        return this.#especialidad;
-    }
+  get estado() {
+    return this.#estado;
+  }
 
-    set matricula(value) {
-        this.#matricula = value;
-    }
+  set nombre(value) {
+    this.#nombre = value;
+  }
 
-    set agenda(value) {
-        this.#agenda = value;
-    }
+  set apellido(value) {
+    this.#apellido = value;
+  }
 
-    set persona(value) {
-        this.#persona = value;
-    }
+  set matricula(value) {
+    this.#matricula = value;
+  }
 
-    set especialidad(value) {
-        this.#especialidad = value;
-    }
-    
+  set estado(value) {
+    this.#estado = value;
+  }
 }

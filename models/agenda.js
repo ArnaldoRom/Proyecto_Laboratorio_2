@@ -1,113 +1,113 @@
-class agenda {
-  #turno;
-  #profesional;
-  #tipoConsulta;
-  #sucursal;
-  #descripcion;
-  #especialidad;
-  #listaEspera;
-  #calendario;
-  #horario;
+class Agenda {
+  #dia;
+  #hora_inicio;
+  #hora_fin;
+  #clasificacion;
+  #limiteTurno;
+  #idProfesional;
+  #idSucursal;
+  #idEspecialidad;
+  #idEstadoHorario;
   #estado;
 
   constructor(
-    turno,
-    profesional,
-    tipoConsulta,
-    sucursal,
-    descripcion,
-    especialidad,
-    listaEspera,
-    calendario,
-    horario,
+    dia,
+    hora_inicio,
+    hora_fin,
+    clasificacion,
+    limiteTurno,
+    idProfecional,
+    idSucursal,
+    idEspecialidad,
+    idEstadoHorario,
     estado
   ) {
-    this.#turno = turno;
-    this.#profesional = profesional;
-    this.#tipoConsulta = tipoConsulta;
-    this.#sucursal = sucursal;
-    this.#descripcion = descripcion;
-    this.#especialidad = especialidad;
-    this.#listaEspera = listaEspera;
-    this.#calendario = calendario;
-    this.#horario = horario;
+    this.#dia = dia;
+    this.#hora_inicio = hora_inicio;
+    this.#hora_fin = hora_fin;
+    this.#clasificacion = clasificacion;
+    this.#limiteTurno = limiteTurno;
+    this.#idProfesional = idProfecional;
+    this.#idSucursal = idSucursal;
+    this.#idEspecialidad = idEspecialidad;
+    this.#idEstadoHorario = idEstadoHorario;
     this.#estado = estado;
   }
 
-  get turno() {
-    return this.#turno;
+  get dia() {
+    return this.#dia;
   }
 
-  get profesional() {
-    return this.#profesional;
+  get hora_inicio() {
+    return this.#hora_inicio;
   }
 
-  get tipoConsulta() {
-    return this.#tipoConsulta;
+  get hora_fin() {
+    return this.#hora_fin;
   }
 
-  get sucursal() {
-    return this.#sucursal;
+  get clasificacion() {
+    return this.#clasificacion;
   }
 
-  get descripcion() {
-    return this.#descripcion;
+  get limiteTurno() {
+    return this.#limiteTurno;
   }
 
-  get especialidad() {
-    return this.#especialidad;
+  get idProfecional() {
+    return this.#idProfesional;
   }
 
-  get listaEspera() {
-    return this.#listaEspera;
+  get idSucursal() {
+    return this.#idSucursal;
   }
 
-  get calendario() {
-    return this.#calendario;
+  get idEspecialidad() {
+    return this.#idEspecialidad;
   }
 
-  get horario() {
-    return this.#horario;
+  get idEstadoHorario() {
+    return this.#idEstadoHorario;
   }
 
   get estado() {
     return this.#estado;
   }
 
-  set turno(value) {
-    this.#turno = value;
+  set dia(value) {
+    this.#dia = value;
   }
 
-  set profesional(value) {
-    this.#profesional = value;
+  set hora_inicio(value) {
+    this.#hora_inicio = value;
   }
 
-  set tipoConsulta(value) {
-    this.#tipoConsulta = value;
+  set hora_fin(value) {
+    this.#hora_fin = value;
   }
 
-  set sucursal(value) {
-    this.#sucursal = value;
+  set clasificacion(value) {
+    this.#clasificacion = value;
   }
 
-  set descripcion(value) {
-    this.#descripcion = value;
+  set limiteTurno(value) {
+    this.#limiteTurno = value;
   }
 
-  set especialidad(value) {
-    this.#especialidad = value;
+  set idProfecional(value) {
+    this.#idProfesional = value;
   }
 
-  set listaEspera(value) {
-    this.#listaEspera = value;
+  set idSucursal(value) {
+    this.#idSucursal = value;
   }
 
-  set calendario(value) {
-    this.#calendario = value;
+  set idEspecialidad(value) {
+    this.#idEspecialidad = value;
   }
 
-  set horario(value) {
-    this.#horario = value;
+  set idEstadoHorario(value) {
+    this.#idEstadoHorario = value;
   }
 
   set estado(value) {
