@@ -1,4 +1,4 @@
-import { createPool } from "mysql2";
+import { createPool } from "mysql2/promise";
 
 export const conexion = createPool({
   connectionLimit: 10,
@@ -6,5 +6,5 @@ export const conexion = createPool({
   user: "root",
   password: "",
   port: 3306,
-  database: " laboratorio_2",
+  database: "laboratorio",
 });

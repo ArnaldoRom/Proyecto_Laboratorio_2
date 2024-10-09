@@ -6,3 +6,5 @@ Las cuales poseen constructor y getters y setters
 \*\_Se codeo el app.js para levantar el server en localhost: "3000". Usando el comando "npm run start" en consola de VSC
 
 \*\_ Se creo una carpeta config la cual adentro contiene el archivo db.js que es donde se realiza la conexion a la base de datos
+
+\*\_Se actualizaron los datos de los models, porque se reviso el trabajo y se creo un nuevo DER. Tambien se establecio la conexion a la base de datos.. usando Rutas.. se creo el archivo de rutas de pacientey paciente controller..
