@@ -8,7 +8,7 @@ class Paciente {
   #idUsuario;
   #estado;
 
-  contructor(
+  constructor(
     nombre,
     apellido,
     dni,

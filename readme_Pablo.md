@@ -8,3 +8,5 @@ Las cuales poseen constructor y getters y setters
 \*\_ Se creo una carpeta config la cual adentro contiene el archivo db.js que es donde se realiza la conexion a la base de datos
 
 \*\_Se actualizaron los datos de los models, porque se reviso el trabajo y se creo un nuevo DER. Tambien se establecio la conexion a la base de datos.. usando Rutas.. se creo el archivo de rutas de pacientey paciente controller..
+
+\*\_Se se empezo a codear las rutas basicas de un CRUD en pacientes como tambien la logica de Programacion en el controller de paciente... Las funciones GET,GET/ID y POST estan funcionales.,faltaria codear la de PUT/PATH
