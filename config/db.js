@@ -6,5 +6,5 @@ export const conexion = createPool({
   user: "root",
   password: "",
   port: 3306,
-  database: "laboratorio_02",
+  database: "laboratorio",
 });
