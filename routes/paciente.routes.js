@@ -4,19 +4,28 @@ import {
   getPacienteId,
   crearPaciente,
   actualizarPaciente,
-  borrarPaciente,
+  bajaPaciente,
+  altaPaciente,
 } from "../controllers/paciente.controller.js";
 
 const router = Router();
 
-router.get("/paciente", getPacientes);
+// Ruta para obtener una lista de todos los pacientes
+router.get("/pacientes", getPacientes);
 
+//Ruta para obtener un solo paciente por su ID
 router.get("/paciente/:id", getPacienteId);
 
-router.post("/paciente", crearPaciente);
+//Ruta para crear un nuevo paciente
+router.post("/paciente/nuevo", crearPaciente);
 
-router.put("/paciente", actualizarPaciente);
+//Ruta para actualizar un paciente por ID
+router.patch("/paciente/:id", actualizarPaciente);
 
-router.delete("/paciente", borrarPaciente);
+// Ruta de BORRADO LOGICO para un paciente
+router.patch("/paciente/baja/:id", bajaPaciente);
+
+//Ruta de ALTA LOGICA para un paciente
+router.patch("/paciente/alta/:id", altaPaciente);
 
 export default router;

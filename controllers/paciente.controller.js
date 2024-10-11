@@ -1,6 +1,6 @@
 import { conexion } from "../config/db.js";
 
-export async function getPacientes(req, res) {
+export const getPacientes = async (req, res) => {
   try {
     const [rows] = await conexion.query("SELECT * FROM paciente");
     res.json(rows);
@@ -10,29 +10,40 @@ export async function getPacientes(req, res) {
       message: "Error al obtener los Pacientes",
     });
   }
-}
+};
 
 export const getPacienteId = async (req, res) => {
-  const [rows] = await conexion.query(
-    "SELECT * FROM paciente WHERE idPaciente = ?",
-    [req.params.id]
-  );
+  try {
+    const [rows] = await conexion.query(
+      "SELECT * FROM paciente WHERE idPaciente = ?",
+      [req.params.id]
+    );
 
-  if (rows.length === 0)
-    return res.status(404).json({
-      message: "El Paciente no exite",
+    if (rows.length === 0)
+      return res.status(404).json({
+        message: "El Paciente no exite",
+      });
+    res.json(rows[0]);
+  } catch (error) {
+    console.error("Error al obtener el paciente: ", error);
+    res.status(500).json({
+      message: "Error al obtener el paciente",
     });
-  res.json(rows[0]);
+  }
 };
 
 export const crearPaciente = async (req, res) => {
   const paciente = req.body;
 
-  console.log(paciente);
-  if (!paciente) {
-    return res
-      .status(400)
-      .json({ message: "El paciente no puede ser null o undefined" });
+  if (
+    !paciente ||
+    !paciente.nombre ||
+    !paciente.apellido ||
+    !paciente.DNI ||
+    !paciente.obraSocial ||
+    !paciente.datosContacto
+  ) {
+    return res.status(400).json({ message: "Todos los datos son requeridos" });
   }
 
   const query = `
@@ -44,12 +55,13 @@ export const crearPaciente = async (req, res) => {
     nombre,
     apellido,
     DNI,
-    motivoConsulta,
+    motivoConsulta = null,
     obraSocial,
     datosContacto,
-    idUsuario,
-    estado,
+    idUsuario = null,
+    estado = 1,
   } = paciente;
+
   const values = [
     nombre,
     apellido,
@@ -64,15 +76,111 @@ export const crearPaciente = async (req, res) => {
   try {
     const [result] = await conexion.execute(query, values);
     const pacienteId = result.insertId;
-    const pacienteGuardado = await getPacienteId;
 
-    return pacienteGuardado;
+    res.status(201).json({
+      idPaciente: pacienteId,
+      nombre,
+      apellido,
+      DNI,
+      motivoConsulta,
+      obraSocial,
+      datosContacto,
+      idUsuario,
+      estado,
+    });
   } catch (error) {
     console.error("Error al ejecutar la consulta:", error);
-    throw new Error("Error al guardar el paciente en la base de datos");
+    return res.status(500).json({
+      message: "Error al registrar el paciente",
+    });
   }
 };
 
-export const actualizarPaciente = (req, res) => res.send("Creando Paciente");
+export const actualizarPaciente = async (req, res) => {
+  const id = req.params.id;
+  const paciente = req.body;
+  const {
+    nombre,
+    apellido,
+    DNI,
+    motivoConsulta = null,
+    obraSocial,
+    datosContacto,
+    idUsuario = null,
+  } = paciente;
 
-export const borrarPaciente = (req, res) => res.send("Creando Paciente");
+  const query =
+    "UPDATE paciente SET nombre = IFNULL(?, nombre), apellido = IFNULL(?, apellido), DNI = IFNULL(?, DNI), motivoConsulta = IFNULL(?, motivoConsulta), obraSocial = IFNULL(?, obraSocial), datosContacto = IFNULL(?, datosContacto), idUsuario = IFNULL(?, idUsuario) WHERE idPaciente = ?";
+
+  try {
+    const [result] = await conexion.execute(query, [
+      nombre,
+      apellido,
+      DNI,
+      motivoConsulta,
+      obraSocial,
+      datosContacto,
+      idUsuario,
+      id,
+    ]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "El paciente no existe" });
+    }
+
+    return res
+      .status(200)
+      .json({ message: "Paciente actualizado exitosamente" });
+  } catch (error) {
+    console.error("Error al Actualizar");
+    return res.status(500).json({
+      message: "Error al actualizar el paciente",
+    });
+  }
+};
+
+export const bajaPaciente = async (req, res) => {
+  const id = req.params.id;
+
+  const query = "UPDATE paciente SET estado = 0 WHERE idPaciente = ?";
+
+  try {
+    const [result] = await conexion.execute(query, [id]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "El paciente no existe" });
+    }
+
+    return res
+      .status(200)
+      .json({ message: "Paciente dado de baja exitosamente" });
+  } catch (error) {
+    console.error("Error al Borrar paciente");
+    return res.status(500).json({
+      message: "Error al Borrar el paciente",
+    });
+  }
+};
+
+export const altaPaciente = async (req, res) => {
+  const id = req.params.id;
+
+  const query = "UPDATE paciente SET estado = 1 WHERE idPaciente = ?";
+
+  try {
+    const [result] = await conexion.execute(query, [id]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "El paciente no existe" });
+    }
+
+    return res
+      .status(200)
+      .json({ message: "Paciente dado de ALTA exitosamente" });
+  } catch (error) {
+    console.error("Error con paciente");
+    return res.status(500).json({
+      message: "Error a la ALTA del paciente",
+    });
+  }
+};
