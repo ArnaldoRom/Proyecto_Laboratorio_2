@@ -1,25 +1,50 @@
 class ProfesionalEspecializado {
-  #idProfecional;
+  #idProfecionalEspecializado;
   #idEspecialidad;
+  #idProfecional;
+  #matricula;
 
-  constructor(idProfecional, idEspecialidad) {
-    this.#idProfecional = idProfecional;
+  constructor(
+    idEspecialidadidProfecional,
+    idEspecialidad,
+    idProfecional,
+    matricula
+  ) {
+    this.#idProfecionalEspecializado = idEspecialidadidProfecional;
     this.#idEspecialidad = idEspecialidad;
+    this.#idProfecional = idProfecional;
+    this.#matricula = matricula;
   }
 
-  get idProfecional() {
-    return this.#idProfecional;
+  get idEspecialidadidProfecional() {
+    return this.#idProfecionalEspecializado;
   }
 
   get idEspecialidad() {
     return this.#idEspecialidad;
   }
 
-  set idProfecional(value) {
-    this.#idProfecional = value;
+  get idProfecional() {
+    return this.#idProfecional;
+  }
+
+  get matricula() {
+    return this.#matricula;
+  }
+
+  set idEspecialidadidProfecional(value) {
+    this.#idProfecionalEspecializado = value;
   }
 
   set idEspecialidad(value) {
     this.#idEspecialidad;
+  }
+
+  set idProfecional(value) {
+    this.#idProfecional = value;
+  }
+
+  set matricula(value) {
+    this.#matricula = value;
   }
 }

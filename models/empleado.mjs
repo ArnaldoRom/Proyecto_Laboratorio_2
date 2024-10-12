@@ -1,14 +1,12 @@
 class Empleado {
   #nombre;
-  #rol;
   #numeroLegajo;
   #idSucursal;
   #idUsuario;
   #estado;
 
-  constructor(nombre, rol, numeroLegajo, idSucursal, idUsuario, estado) {
+  constructor(nombre, numeroLegajo, idSucursal, idUsuario, estado) {
     this.#nombre = nombre;
-    this.#rol = rol;
     this.#numeroLegajo = numeroLegajo;
     this.#idSucursal = idSucursal;
     this.#idUsuario = idUsuario;
@@ -17,10 +15,6 @@ class Empleado {
 
   get nombre() {
     return this.#nombre;
-  }
-
-  get rol() {
-    return this.#rol;
   }
 
   get numeroLegajo() {
@@ -41,10 +35,6 @@ class Empleado {
 
   set nombre(value) {
     this.#nombre = value;
-  }
-
-  set rol(value) {
-    this.#rol = value;
   }
 
   set numeroLegajo(value) {

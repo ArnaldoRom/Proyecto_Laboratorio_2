@@ -1,10 +1,8 @@
 class Turno {
   #fecha;
   #hora;
-  #estado;
   #idPaciente;
   #idAgenda;
-  #idSucursal;
   #idEmpleado;
   #idListaEspera;
   #idEstadoHorario;
@@ -12,20 +10,16 @@ class Turno {
   constructor(
     fecha,
     hora,
-    estado,
     idPaciente,
     idAgenda,
-    idSucursal,
     idEmpleado,
     idListaEspera,
     idEstadoHorario
   ) {
     this.#fecha = fecha;
     this.#hora = hora;
-    this.#estado = estado;
     this.#idPaciente = idPaciente;
     this.#idAgenda = idAgenda;
-    this.#idSucursal = idSucursal;
     this.#idEmpleado = idEmpleado;
     this.#idListaEspera = idListaEspera;
     this.#idEstadoHorario = idEstadoHorario;
@@ -34,11 +28,9 @@ class Turno {
   get fecha() {
     return this.#fecha;
   }
+
   get hora() {
     return this.#hora;
-  }
-  get estado() {
-    return this.#estado;
   }
 
   get idPaciente() {
@@ -47,10 +39,6 @@ class Turno {
 
   get idAgenda() {
     return this.#idAgenda;
-  }
-
-  get idSucursal() {
-    return this.#idSucursal;
   }
 
   get idEmpleado() {
@@ -73,20 +61,12 @@ class Turno {
     this.#hora = value;
   }
 
-  set estado(value) {
-    this.#estado = value;
-  }
-
   set idPaciente(value) {
     this.#idPaciente = value;
   }
 
   set idAgenda(value) {
     this.#idAgenda = value;
-  }
-
-  set idSucursal(value) {
-    this.#idSucursal = value;
   }
 
   set idEmpleado(value) {

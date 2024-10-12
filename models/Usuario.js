@@ -1,11 +1,13 @@
 class Usuario {
   #nombreUsuario;
   #contraseña;
+  #rol;
   #estado;
 
-  constructor(nombreUsuario, contraseña, estado) {
+  constructor(nombreUsuario, contraseña, rol, estado) {
     this.#nombreUsuario = nombreUsuario;
     this.#contraseña = contraseña;
+    this.#rol = rol;
     this.#estado = estado;
   }
 
@@ -15,6 +17,10 @@ class Usuario {
 
   get contraseña() {
     return this.#contraseña;
+  }
+
+  get rol() {
+    return this.#rol;
   }
 
   get estado() {
@@ -27,6 +33,10 @@ class Usuario {
 
   set contraseña(value) {
     this.#contraseña = value;
+  }
+
+  set rol(value) {
+    this.#rol = value;
   }
 
   set estado(value) {

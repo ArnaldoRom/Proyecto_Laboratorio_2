@@ -1,13 +1,11 @@
 class Profesional {
   #nombre;
   #apellido;
-  #matricula;
   #estado;
 
-  constructor(nombre, apellido, matricula, estado) {
+  constructor(nombre, apellido, estado) {
     this.#nombre = nombre;
     this.#apellido = apellido;
-    this.#matricula = matricula;
     this.#estado = estado;
   }
 
@@ -17,10 +15,6 @@ class Profesional {
 
   get apellido() {
     return this.#apellido;
-  }
-
-  get matricula() {
-    return this.#matricula;
   }
 
   get estado() {
@@ -33,10 +27,6 @@ class Profesional {
 
   set apellido(value) {
     this.#apellido = value;
-  }
-
-  set matricula(value) {
-    this.#matricula = value;
   }
 
   set estado(value) {

@@ -1,41 +1,48 @@
 class Agenda {
   #dia;
+  #duracionHorario;
   #hora_inicio;
   #hora_fin;
   #clasificacion;
   #limiteTurno;
-  #idProfesional;
+  #idProfesionalEspecializado;
   #idSucursal;
-  #idEspecialidad;
   #idEstadoHorario;
+  #idCalendario;
   #estado;
 
   constructor(
     dia,
+    duraqcionHorario,
     hora_inicio,
     hora_fin,
     clasificacion,
     limiteTurno,
-    idProfecional,
+    idProfecionalEspecializado,
     idSucursal,
-    idEspecialidad,
     idEstadoHorario,
+    idCalendario,
     estado
   ) {
     this.#dia = dia;
+    this.#duracionHorario = duraqcionHorario;
     this.#hora_inicio = hora_inicio;
     this.#hora_fin = hora_fin;
     this.#clasificacion = clasificacion;
     this.#limiteTurno = limiteTurno;
-    this.#idProfesional = idProfecional;
+    this.#idProfesionalEspecializado = idProfecionalEspecializado;
     this.#idSucursal = idSucursal;
-    this.#idEspecialidad = idEspecialidad;
     this.#idEstadoHorario = idEstadoHorario;
+    this.#idCalendario = idCalendario;
     this.#estado = estado;
   }
 
   get dia() {
     return this.#dia;
+  }
+
+  get duraqcionHorario() {
+    return this.#duracionHorario;
   }
 
   get hora_inicio() {
@@ -54,20 +61,20 @@ class Agenda {
     return this.#limiteTurno;
   }
 
-  get idProfecional() {
-    return this.#idProfesional;
+  get idProfecionalEspecializado() {
+    return this.#idProfesionalEspecializado;
   }
 
   get idSucursal() {
     return this.#idSucursal;
   }
 
-  get idEspecialidad() {
-    return this.#idEspecialidad;
-  }
-
   get idEstadoHorario() {
     return this.#idEstadoHorario;
+  }
+
+  get idCalendario() {
+    return this.#idCalendario;
   }
 
   get estado() {
@@ -76,6 +83,10 @@ class Agenda {
 
   set dia(value) {
     this.#dia = value;
+  }
+
+  set duracionHorario(value) {
+    this.#duracionHorario = value;
   }
 
   set hora_inicio(value) {
@@ -94,20 +105,20 @@ class Agenda {
     this.#limiteTurno = value;
   }
 
-  set idProfecional(value) {
-    this.#idProfesional = value;
+  set idProfecionalEspecializado(value) {
+    this.#idProfesionalEspecializado = value;
   }
 
   set idSucursal(value) {
     this.#idSucursal = value;
   }
 
-  set idEspecialidad(value) {
-    this.#idEspecialidad = value;
-  }
-
   set idEstadoHorario(value) {
     this.#idEstadoHorario = value;
+  }
+
+  set idCalendario(value) {
+    this.#idCalendario = value;
   }
 
   set estado(value) {

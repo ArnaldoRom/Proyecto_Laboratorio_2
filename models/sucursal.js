@@ -2,14 +2,12 @@ class Sucursal {
   #nombre;
   #direccion;
   #clasificacion;
-  #idCalendario;
   #estado;
 
-  constructor(nombre, direccion, clasificacion, idCalendario, estado) {
+  constructor(nombre, direccion, clasificacion, estado) {
     this.#nombre = nombre;
     this.#direccion = direccion;
     this.#clasificacion = clasificacion;
-    this.#idCalendario = idCalendario;
     this.#estado = estado;
   }
 
@@ -23,10 +21,6 @@ class Sucursal {
 
   get clasificacion() {
     return this.#clasificacion;
-  }
-
-  get idCalendario() {
-    return this.#idCalendario;
   }
 
   get estado() {
@@ -43,10 +37,6 @@ class Sucursal {
 
   set clasificacion(value) {
     this.#clasificacion = value;
-  }
-
-  set idCalendario(value) {
-    this.#idCalendario = value;
   }
 
   set estado(value) {

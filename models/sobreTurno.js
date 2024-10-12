@@ -2,13 +2,11 @@ class SobreTurno {
   #hora;
   #idTurno;
   #idAgenda;
-  #estado;
 
   constructor(hora, idTurno, idAgenda, estado) {
     this.#hora = hora;
     this.#idTurno = idTurno;
     this.#idAgenda = idAgenda;
-    this.#estado = estado;
   }
 
   get hora() {
@@ -23,10 +21,6 @@ class SobreTurno {
     return this.#idAgenda;
   }
 
-  get estado() {
-    return this.#estado;
-  }
-
   set hora(value) {
     this.#hora = value;
   }
@@ -37,9 +31,5 @@ class SobreTurno {
 
   set idAgenda(value) {
     this.#idAgenda = value;
-  }
-
-  set estado(value) {
-    this.#estado = value;
   }
 }
