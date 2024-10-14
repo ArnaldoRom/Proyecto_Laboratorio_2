@@ -24,7 +24,7 @@ export const crearProfesional = async (req, res) => {
     }
 }
 
-// Borrado logico de un profesional
+//Borrado logico de un profesional  (estado = 1 a estado = 0)
 export const eliminarProfesional = async (req, res) => {
     try {
         const idProfesional = req.params.id;
