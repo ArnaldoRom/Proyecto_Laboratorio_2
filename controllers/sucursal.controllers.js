@@ -39,26 +39,15 @@ export const cargarSucursal = async (req, res) => {
     !sucursal ||
     !sucursal.nombre ||
     !sucursal.direccion ||
-    !sucursal.clasificacion ||
-    !sucursal.idCalendario
+    !sucursal.clasificacion
   ) {
     return res.status(400).json({ message: "Todos los datos son requeridos" });
   }
 
   const query = `
-        INSERT INTO sucursal (nombre, direccion, clasificacion, idCalendario, estado)
-        VALUES (?, ?, ?, ?, ?)
-    `;
-
-  const {
-    nombre,
-    direccion,
-    clasificacion,
-    idCalendario,
-    estado = 1,
-  } = sucursal;
-
-  const values = [nombre, direccion, clasificacion, idCalendario, estado];
+        INSERT INTO sucursal (nombre, direccion, clasificacion, estado)        VALUES (?, ?, ?, ?,) `;
+  const { nombre, direccion, clasificacion, estado = 1 } = sucursal;
+  const values = [nombre, direccion, clasificacion, estado];
 
   try {
     const [result] = await conexion.execute(query, values);
@@ -69,7 +58,6 @@ export const cargarSucursal = async (req, res) => {
       nombre,
       direccion,
       clasificacion,
-      idCalendario,
       estado,
     });
   } catch (error) {
@@ -83,17 +71,16 @@ export const cargarSucursal = async (req, res) => {
 export const actualizarSucursal = async (req, res) => {
   const id = req.params.id;
   const sucursal = req.body;
-  const { nombre, direccion, clasificacion, idCalendario } = sucursal;
+  const { nombre, direccion, clasificacion } = sucursal;
 
   const query =
-    "UPDATE sucursal SET nombre = IFNULL(?, nombre), direccion = IFNULL(?, direccion), clasificacion = IFNULL(?, clasificacion), idCalendario = IFNULL(?, idCalendario) WHERE idSucursal = ?";
+    "UPDATE sucursal SET nombre = IFNULL(?, nombre), direccion = IFNULL(?, direccion), clasificacion = IFNULL(?, clasificacion) WHERE idSucursal = ?";
 
   try {
     const [result] = await conexion.execute(query, [
       nombre,
       direccion,
       clasificacion,
-      idCalendario,
       id,
     ]);
 

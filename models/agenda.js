@@ -7,7 +7,6 @@ class Agenda {
   #limiteTurno;
   #idProfesionalEspecializado;
   #idSucursal;
-  #idEstadoHorario;
   #idCalendario;
   #estado;
 
@@ -20,7 +19,6 @@ class Agenda {
     limiteTurno,
     idProfecionalEspecializado,
     idSucursal,
-    idEstadoHorario,
     idCalendario,
     estado
   ) {
@@ -32,7 +30,6 @@ class Agenda {
     this.#limiteTurno = limiteTurno;
     this.#idProfesionalEspecializado = idProfecionalEspecializado;
     this.#idSucursal = idSucursal;
-    this.#idEstadoHorario = idEstadoHorario;
     this.#idCalendario = idCalendario;
     this.#estado = estado;
   }
@@ -67,10 +64,6 @@ class Agenda {
 
   get idSucursal() {
     return this.#idSucursal;
-  }
-
-  get idEstadoHorario() {
-    return this.#idEstadoHorario;
   }
 
   get idCalendario() {
@@ -111,10 +104,6 @@ class Agenda {
 
   set idSucursal(value) {
     this.#idSucursal = value;
-  }
-
-  set idEstadoHorario(value) {
-    this.#idEstadoHorario = value;
   }
 
   set idCalendario(value) {

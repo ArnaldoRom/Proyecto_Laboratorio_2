@@ -1,25 +1,32 @@
 class Calendario {
+  #idCalendario;
   #descripcion;
   #diasNoLaborables;
   #fechaInicio;
   #fechaFin;
-  #año;
+  #anio;
   #estado;
 
   constructor(
+    idCalendario,
     descripcion,
     diasNoLaborables,
     fechaInicio,
     fechaFin,
-    año,
+    anio,
     estado
   ) {
+    this.#idCalendario = idCalendario;
     this.#descripcion = descripcion;
     this.#diasNoLaborables = diasNoLaborables;
     this.#fechaInicio = fechaInicio;
     this.#fechaFin = fechaFin;
-    this.#año = año;
+    this.#anio = anio;
     this.#estado = estado;
+  }
+
+  get idCalendario() {
+    return this.#idCalendario;
   }
 
   get descripcion() {
@@ -38,8 +45,8 @@ class Calendario {
     return this.#fechaFin;
   }
 
-  get año() {
-    return this.#año;
+  get anio() {
+    return this.#anio;
   }
 
   get estado() {
@@ -62,8 +69,8 @@ class Calendario {
     this.#fechaFin = value;
   }
 
-  set año(value) {
-    this.#año = value;
+  set anio(value) {
+    this.#anio = value;
   }
 
   set estado(value) {
