@@ -1,2 +1,4 @@
 /node_modules/
 /config/ds.js
+/package.json
+/package-lock.json

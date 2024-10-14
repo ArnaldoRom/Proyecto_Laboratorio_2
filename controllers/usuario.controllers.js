@@ -18,13 +18,13 @@ export const getNombre = async (req, res) => {
         res.status(500).json({ mensaje: "Error en el servidor" });
     }
 };
-
+/*
 // Verificar la contraseña de un usuario
 export const verificarContrasena = async (req, res) => {
     try {
         
         const [rows] = await conexion.query(
-            "SELECT * FROM usuario WHERE contraseña = ?", 
+            "SELECT * FROM usuario WHERE contraseña = ? AND", 
             [req.params.contraseña]
         );
 
@@ -38,7 +38,7 @@ export const verificarContrasena = async (req, res) => {
         res.status(500).json({ mensaje: "Error en el servidor" });
     }
 };
-
+*/
 // Borrado de usuario (decidir si logico o permanente: SI es logico hay que usar un UPDATE y actualizar el estado)
 export const borrarUsuario = async (req, res) => {
     try {
@@ -53,6 +53,16 @@ export const borrarUsuario = async (req, res) => {
         res.status(500).json({ mensaje: "Error en el servidor" });
     }
 };
+
+export const comprobarRolUsuario = async(req, res) =>{
+    try{
+        const [rows] = await conexion.query("SELECT rol FROM usuario WHERE nombreUsuario = ?", [req.params.nombreUsuario])
+    }catch(error){
+        console.log(error)
+        res.status(500).json({mensaje: "Error en el servidor"})
+    }
+}
+
 
 // Validar usuario
 export const validarUsuario = async (req, res) => {
