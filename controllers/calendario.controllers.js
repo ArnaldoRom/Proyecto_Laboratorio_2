@@ -35,12 +35,12 @@ export const getCalendarioId = async (req, res) => {
 export const crearCalendario = async (req, res) => {
   const calendario = req.body;
 
-  if (!calendario || !calendario.descripcion || !calendario.año) {
+  if (!calendario || !calendario.descripcion || !calendario.anio) {
     return res.status(400).json({ message: "El dato es requerido" });
   }
 
   const query = `
-        INSERT INTO calendario (descripcion, diasNoLaborables, fechaInicio, fechaFin, año,  estado)
+        INSERT INTO calendario (descripcion, diasNoLaborables, fechaInicio, fechaFin, anio,  estado)
         VALUES (?, ?, ?, ?, ?, ?)
     `;
 
@@ -49,7 +49,7 @@ export const crearCalendario = async (req, res) => {
     diasNoLaborables = null,
     fechaInicio = null,
     fechaFin = null,
-    año,
+    anio,
     estado = 1,
   } = calendario;
 
@@ -58,7 +58,7 @@ export const crearCalendario = async (req, res) => {
     diasNoLaborables,
     fechaInicio,
     fechaFin,
-    año,
+    anio,
     estado,
   ];
 
@@ -72,7 +72,7 @@ export const crearCalendario = async (req, res) => {
       diasNoLaborables,
       fechaInicio,
       fechaFin,
-      año,
+      anio,
       estado,
     });
   } catch (error) {
@@ -92,11 +92,11 @@ export const actualizarCalendario = async (req, res) => {
     diasNoLaborables = null,
     fechaInicio = null,
     fechaFin = null,
-    año,
+    anio,
   } = calendario;
 
   const query =
-    "UPDATE calendario SET descripcion = IFNULL(?, descripcion), diasNoLaborables = IFNULL(?, diasNoLaborables), fechaInicio = IFNULL(?, fechaInicio), fechaFin = IFNULL(?, fechaFin), año = IFNULL(?, año) WHERE idCalendario = ?";
+    "UPDATE calendario SET descripcion = IFNULL(?, descripcion), diasNoLaborables = IFNULL(?, diasNoLaborables), fechaInicio = IFNULL(?, fechaInicio), fechaFin = IFNULL(?, fechaFin), anio = IFNULL(?, anio) WHERE idCalendario = ?";
 
   try {
     const [result] = await conexion.execute(query, [
@@ -104,7 +104,7 @@ export const actualizarCalendario = async (req, res) => {
       diasNoLaborables,
       fechaInicio,
       fechaFin,
-      año,
+      anio,
       id,
     ]);
 
