@@ -11,6 +11,6 @@ router.get("/estado", getEstadoHorario);
 
 router.get("/estado/:id", getEstadoHorarioId);
 
-router.post("/paciente/nuevo", agregarEstadoHorario);
+router.post("/estado/nuevo", agregarEstadoHorario);
 
 export default router;

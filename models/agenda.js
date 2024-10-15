@@ -12,7 +12,7 @@ class Agenda {
 
   constructor(
     dia,
-    duraqcionHorario,
+    duracionHorario,
     hora_inicio,
     hora_fin,
     clasificacion,
@@ -23,7 +23,7 @@ class Agenda {
     estado
   ) {
     this.#dia = dia;
-    this.#duracionHorario = duraqcionHorario;
+    this.#duracionHorario = duracionHorario;
     this.#hora_inicio = hora_inicio;
     this.#hora_fin = hora_fin;
     this.#clasificacion = clasificacion;
@@ -38,7 +38,7 @@ class Agenda {
     return this.#dia;
   }
 
-  get duraqcionHorario() {
+  get duracionHorario() {
     return this.#duracionHorario;
   }
 

@@ -43,7 +43,7 @@ export const aregarAgenda = async (req, res) => {
     !agenda.hora_Fin ||
     !agenda.clasificacion ||
     !agenda.idProfecionalEspecializado ||
-    !agenda.idSursal ||    
+    !agenda.idSursal ||
     agenda.idCalendario
   ) {
     return res.status(400).json({ message: "El dato es requerido" });
@@ -61,7 +61,7 @@ export const aregarAgenda = async (req, res) => {
     clasificacion,
     limiteTurno = null,
     idProfecionalEspecializado,
-    idSursal, 
+    idSursal,
     idCalendario,
     estado = 1,
   } = agenda;
@@ -74,7 +74,7 @@ export const aregarAgenda = async (req, res) => {
     clasificacion,
     limiteTurno,
     idProfecionalEspecializado,
-    idSursal, 
+    idSursal,
     idCalendario,
     estado,
   ];
@@ -92,7 +92,7 @@ export const aregarAgenda = async (req, res) => {
       clasificacion,
       limiteTurno,
       idProfecionalEspecializado,
-      idSursal,     
+      idSursal,
       idCalendario,
       estado,
     });
@@ -104,9 +104,15 @@ export const aregarAgenda = async (req, res) => {
   }
 };
 
-export const porEspecialidad = async (req, res){
-    try {
-    const [rows] = await conexion.query("SELECT * FROM agenda ");
+//-- BUSCA AGENDAS POR ESPECIALIDAD
+export const porEspecialidad = async (req, res) => {
+  try {
+    const especialidad = req.params.nombre;
+
+    const [rows] = await conexion.query(
+      "SELECT * FROM agenda JOIN profecionalespecializado ON agenda.idProfesionalEspecializado = profecionalespecializado.idProfesionalEspecializado JOIN especialidad ON profecionalespecializado.idEspecialidad = especialidad.idEspecialidad WHERE nombre = ?",
+      [especialidad]
+    );
     res.json(rows);
   } catch (error) {
     console.error("Error al obtener las Agendas: ", error);
@@ -114,4 +120,72 @@ export const porEspecialidad = async (req, res){
       message: "Error al obtener Agendas",
     });
   }
-}
+};
+
+//-- BUSCA AGENDA POR PROFECIONAL
+export const porProfecional = async (req, res) => {
+  try {
+    const profecional = req.params.nombre;
+    const [rows] = await conexion.query(
+      "SELECT * FROM agenda JOIN profecionalespecializado ON agenda.idProfesionalEspecializado = profecionalespecializado.idProfesionalEspecializado JOIN profesional ON profecionalespecializado.idProfesional = profesional.idProfesional WHERE profesional.nombre = ?",
+      [profecional]
+    );
+    res.json(rows);
+  } catch (error) {
+    console.error("Error al obtener las Agendas: ", error);
+    res.status(500).json({
+      message: "Error al obtener Agendas",
+    });
+  }
+};
+
+//-- BUSCA AGENDAS/TURNOS POR HORARIOS DISPONMIBLES
+export const porHorarioDisponible = async (req, res) => {
+  try {
+    const estado = "Libre";
+    const [rows] = await conexion.query(
+      "SELECT * FROM agenda INNER JOIN turno ON agenda.idAgenda = turno.idAgenda INNER JOIN estadohorario ON turno.idEstadoHorario = estadohorario.idEstadoHorario WHERE estadohorario.estado = ?",
+      [estado]
+    );
+    res.json(rows);
+  } catch (error) {
+    console.error("Error al obtener las Agendas: ", error);
+    res.status(500).json({
+      message: "Error al obtener Agendas",
+    });
+  }
+};
+
+//-- BUSCA AGENDAS/TURNOS POR ESTADOS
+export const porEstadosTurnos = async (req, res) => {
+  try {
+    const estado = req.params.nombre;
+    const [rows] = await conexion.query(
+      "SELECT * FROM agenda INNER JOIN turno ON agenda.idAgenda = turno.idAgenda INNER JOIN estadohorario ON turno.idEstadoHorario = estadohorario.idEstadoHorario WHERE estadohorario.estado = ?",
+      [estado]
+    );
+    res.json(rows);
+  } catch (error) {
+    console.error("Error al obtener las Agendas: ", error);
+    res.status(500).json({
+      message: "Error al obtener Agendas",
+    });
+  }
+};
+
+//-- BUSCA AGENDAS POR CLASIFICACION
+export const porClasificacion = async (req, res) => {
+  try {
+    const clasificacion = req.params.nombre;
+    const [rows] = await conexion.query(
+      "SELECT * FROM agenda WHERE clasificacion = ?",
+      [clasificacion]
+    );
+    res.json(rows);
+  } catch (error) {
+    console.error("Error al obtener las Agendas: ", error);
+    res.status(500).json({
+      message: "Error al obtener Agendas",
+    });
+  }
+};
