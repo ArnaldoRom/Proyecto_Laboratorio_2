@@ -91,7 +91,7 @@ export const getTurno = async (req, res) => {
     try {
         const idTurno = req.params.id;
 
-        const query = "SELECT * FROM turno WHERE idTurno = ? AND estado != 0";
+        const query = "SELECT * FROM turno WHERE idTurno = ? AND estado !=";
         const [rows] = await conexion.query(query, [idTurno]);
 
         if (rows.length > 0) {
