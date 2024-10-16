@@ -64,13 +64,13 @@ export const añadirListaEspera = async (req, res) => {
   }
 };
 
-export const actualizarListaEspera = async (req, res) => {
-  const id = req.params.id;
+export const sacarPacienteDeListaEspera = async (req, res) => {
+  const { idPaciente, idAgenda } = req.params;
 
-  const query = "UPDATE paciente SET estado = 0 WHERE idPaciente = ?";
+  const query = "DELETE FROM ListaEspera WHERE IDPaciente = ? AND IDAgenda = ?";
 
   try {
-    const [result] = await conexion.execute(query, [id]);
+    const [result] = await conexion.execute(query, [idPaciente, idAgenda]);
 
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: "El paciente no existe" });
@@ -78,11 +78,27 @@ export const actualizarListaEspera = async (req, res) => {
 
     return res
       .status(200)
-      .json({ message: "Paciente dado de baja exitosamente" });
+      .json({ message: "Paciente borrado de la lista exitosamente" });
   } catch (error) {
     console.error("Error al Borrar paciente");
     return res.status(500).json({
       message: "Error al Borrar el paciente",
+    });
+  }
+};
+
+export const primerPaciente = async (req, res) => {
+  try {
+    const agenda = req.params.id;
+    const [rows] = await conexion.query(
+      "SELECT IDListaEspera, IDPaciente, IDAgenda FROM ListaEspera WHERE IDAgenda = ? ORDER BY IDListaEspera ASC LIMIT 1;",
+      [agenda]
+    );
+    res.json(rows);
+  } catch (error) {
+    console.error("Error al obtener Lista de Espera: ", error);
+    res.status(500).json({
+      message: "Error al obtener Lista de Espera",
     });
   }
 };
