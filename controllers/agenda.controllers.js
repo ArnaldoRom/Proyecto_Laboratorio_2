@@ -1,4 +1,14 @@
+import { json } from "express";
 import { conexion } from "../config/db.js";
+import { ListaEspera } from "../models/ListaEspera.js"
+
+class controllers{
+  get.espealidad(res) {
+    ListaEspera.getAgenda
+    res(json);
+  
+  }
+}
 
 export const getAgenda = async (req, res) => {
   try {
