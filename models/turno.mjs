@@ -1,3 +1,5 @@
+const conexion = require("../config/db.js")
+
 class Turno {
   #fecha;
   #hora;
@@ -7,15 +9,7 @@ class Turno {
   #idListaEspera;
   #idEstadoHorario;
 
-  constructor(
-    fecha,
-    hora,
-    idPaciente,
-    idAgenda,
-    idEmpleado,
-    idListaEspera,
-    idEstadoHorario
-  ) {
+  constructor( fecha, hora,idPaciente,idAgenda,idEmpleado,idListaEspera,idEstadoHorario) {
     this.#fecha = fecha;
     this.#hora = hora;
     this.#idPaciente = idPaciente;
@@ -25,59 +19,51 @@ class Turno {
     this.#idEstadoHorario = idEstadoHorario;
   }
 
-  get fecha() {
-    return this.#fecha;
+  //crear un turno
+  static crearTurno(data, callback){
+    const query = `
+    INSERT INTO turno (fecha, hora, idPaciente, idAgenda, idEmpleado, idListaEspera, idEstadoHorario)
+    VALUES ('${data.fecha}', '${data.hora}', '${data.idPaciente}', '${data.idAgenda}', '${data.idEmpleado}', '${data.idListaEspera}', '${data.idEstadoHorario}')
+  `;
+  }
+  
+  static modificarTurno(data, idTurno, callback) {
+   conexion.query`
+      UPDATE turno 
+      SET fecha = '${data.fecha}', hora = '${data.hora}', 
+          idPaciente = '${data.idPaciente}', idAgenda = '${data.idAgenda}', 
+          idEmpleado = '${data.idEmpleado}', idListaEspera = '${data.idListaEspera}', 
+          idEstadoHorario = '${data.idEstadoHorario}'
+      WHERE idTurno = '${idTurno}'
+    `;
   }
 
-  get hora() {
-    return this.#hora;
+  //cambiar el estado actual a cualquier otro
+  static cambiarEstado(estado, idTurno, callback) {
+    conexion.query`
+      UPDATE turno 
+      SET estado = '${estado}' 
+      WHERE idTurno = '${idTurno}'
+    `;
   }
 
-  get idPaciente() {
-    return this.#idPaciente;
+  //borrar un turno
+  static borrarTurno(idTurno, callback) {
+    conexion.query`
+      UPDATE turno 
+      SET estado = 0 
+      WHERE idTurno = '${idTurno}'
+    `;
   }
 
-  get idAgenda() {
-    return this.#idAgenda;
+  //Cambiar el estado siempre a libre
+  static cambiarEstadoALibre(idTurno, callback){
+    conexion.query`
+    UPDATE turno 
+    SET estado = '2' 
+    WHERE idTurno = '${idTurno}'
+  `
   }
 
-  get idEmpleado() {
-    return this.#idEmpleado;
-  }
-
-  get idListaEspera() {
-    return this.#idListaEspera;
-  }
-
-  get idEstadoHorario() {
-    return this.#idEstadoHorario;
-  }
-
-  set fecha(value) {
-    this.#fecha = value;
-  }
-
-  set hora(value) {
-    this.#hora = value;
-  }
-
-  set idPaciente(value) {
-    this.#idPaciente = value;
-  }
-
-  set idAgenda(value) {
-    this.#idAgenda = value;
-  }
-
-  set idEmpleado(value) {
-    this.#idEmpleado = value;
-  }
-
-  set idListaEspera(value) {
-    this.#idListaEspera = value;
-  }
-
-  set idEstadoHorario(value) {
-    this.#idEstadoHorario = value;
-  }
 }
+module.exports = Turno;

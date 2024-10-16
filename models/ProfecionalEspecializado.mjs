@@ -1,3 +1,5 @@
+const conexion = require("../config/db.js")
+
 class ProfesionalEspecializado {
   #idProfecionalEspecializado;
   #idEspecialidad;
@@ -16,35 +18,35 @@ class ProfesionalEspecializado {
     this.#matricula = matricula;
   }
 
-  get idEspecialidadidProfecional() {
-    return this.#idProfecionalEspecializado;
-  }
+ // Crear los profesionales especializados
+ static crearProfesionalEspecializado(data, callback) {
+  conexion.query`INSERT INTO profesional_especializado (idEspecialidad, idProfecional, matricula) 
+    VALUES ('${data.idEspecialidad}', '${data.idProfecional}', '${data.matricula}')`;
+}
 
-  get idEspecialidad() {
-    return this.#idEspecialidad;
-  }
+// Obtener todos los profesionales especializados
+static obtenerProfesionalesEspecializados(callback) { //tengo que ver en la base de datos si es asi
+  //Verificar la consulta en la base de datos
+  conexion.query`
+    SELECT profesional.nombre, profesional.apellido, especialidad.nombre, especialidad.descripcion FROM profesionalEspecializado
+    JOIN profesional ON profesiona.idProfesional = profesionalEspecializado.idProfesioanl JOIN 
+  `;
+}
 
-  get idProfecional() {
-    return this.#idProfecional;
-  }
+// Actualizar profesional especializado por id
+static actualizarProfesionalEspecializado(data, idProfecionalEspecializado, callback) {
+  conexion.query`
+    UPDATE profesional_especializado 
+    SET idEspecialidad = '${data.idEspecialidad}', idProfecional = '${data.idProfecional}', matricula = '${data.matricula}'
+    WHERE idProfecionalEspecializado = '${idProfecionalEspecializado}'
+  `;
+}
 
-  get matricula() {
-    return this.#matricula;
-  }
+// Eliminar profesionales especializado
+static eliminarProfesionalEspecializado(idProfecionalEspecializado, callback) {
+  conexion.query` DELETE FROM profesional_especializado 
+  WHERE idProfecionalEspecializado = '${idProfecionalEspecializado}'
+  `;
+}
 
-  set idEspecialidadidProfecional(value) {
-    this.#idProfecionalEspecializado = value;
-  }
-
-  set idEspecialidad(value) {
-    this.#idEspecialidad;
-  }
-
-  set idProfecional(value) {
-    this.#idProfecional = value;
-  }
-
-  set matricula(value) {
-    this.#matricula = value;
-  }
 }

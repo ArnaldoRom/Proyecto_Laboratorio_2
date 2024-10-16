@@ -1,3 +1,5 @@
+const conexion = require("../config/db.js")
+
 class Profesional {
   #nombre;
   #apellido;
@@ -9,27 +11,55 @@ class Profesional {
     this.#estado = estado;
   }
 
-  get nombre() {
-    return this.#nombre;
+   // Darle e alta a un profesional
+   static altaProfesional(idProfesional, callback) {
+    const query = `
+      UPDATE profesional 
+      SET estado = 1 
+      WHERE idProfesional = '${idProfesional}'
+    `;
+
+    conexion.query(query, (error, results) => {
+      if (error) {
+        return callback(error, null);
+      }
+      callback(null, results);
+    });
   }
 
-  get apellido() {
-    return this.#apellido;
+  //Esto sirve para darle de baja a un profesional 
+  static bajaProfesional(idProfesional, callback) {
+    const query = `
+      UPDATE profesional 
+      SET estado = 0 
+      WHERE idProfesional = '${idProfesional}'
+    `;
+
+    conexion.query(query, (error, results) => {
+      if (error) {
+        return callback(error, null);
+      }
+      callback(null, results);
+    });
   }
 
-  get estado() {
-    return this.#estado;
+  //Crear un nuevo profesional
+  static crearProfesional(data, callback) {
+    const query = `
+      INSERT INTO profesional (nombre, apellido, especialidad, estado) 
+      VALUES ('${data.nombre}', '${data.apellido}', '${data.especialidad}', '${data.estado}')
+    `;
   }
 
-  set nombre(value) {
-    this.#nombre = value;
+  // Metodo para actualizar el profesional
+  static actualizarProfesional(data, idProfesional, callback) {
+    const query = `
+      UPDATE profesional 
+      SET nombre = '${data.nombre}', apellido = '${data.apellido}', especialidad = '${data.especialidad}' 
+      WHERE idProfesional = '${idProfesional}'
+    `;
   }
 
-  set apellido(value) {
-    this.#apellido = value;
-  }
 
-  set estado(value) {
-    this.#estado = value;
-  }
+
 }

@@ -42,7 +42,7 @@ export const eliminarProfesional = async (req, res) => {
         res.status(500).json({ mensaje: "Error en el servidor" });
     }
 }
-
+//crearProfesional, actualizarProfesional, altaProfesional, eliminarProfesional
 // Actualizar un profesional
 export const actualizarProfesional = async (req, res) => {
     try {

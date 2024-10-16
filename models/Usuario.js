@@ -10,36 +10,32 @@ class Usuario {
     this.#rol = rol;
     this.#estado = estado;
   }
+ //crear un nuevo usuario
+ static crearUsuario(data, callback) {
+  conexion.query`
+    INSERT INTO usuario (nombreUsuario, contraseña, rol, estado) 
+    VALUES ('${data.nombreUsuario}', '${data.contraseña}', 'Paciente', '${data.estado}')`;
+}
 
-  get nombreUsuario() {
-    return this.#nombreUsuario;
-  }
+// Método para obtener todos los usuarios
+static obtenerUsuarios(callback) {
+  conexion.query`SELECT * FROM usuario `;
+}
 
-  get contraseña() {
-    return this.#contraseña;
-  }
+//actualizar un usuario por id
+static actualizarUsuario(data, idUsuario, callback) {
+  conexion.query`UPDATE usuario SET nombreUsuario = '${data.nombreUsuario}', contraseña = '${data.contraseña}', 
+        rol = '${data.rol}', estado = '${data.estado}' WHERE idUsuario = '${idUsuario}'`;
+}
 
-  get rol() {
-    return this.#rol;
-  }
+// eliminar (desactivar) un usuario por id
+static eliminarUsuario(idUsuario, callback) {
+  conexion.query`UPDATE usuario SET estado = 0 WHERE idUsuario = '${idUsuario}'`;
+}
 
-  get estado() {
-    return this.#estado;
-  }
+//activar un usuario por id
+static activarUsuario(idUsuario, callback) {
+  conexion.query`UPDATE usuario  SET estado = 1  WHERE idUsuario = '${idUsuario}'`;
+}
 
-  set nombreUsuario(value) {
-    this.#nombreUsuario = value;
-  }
-
-  set contraseña(value) {
-    this.#contraseña = value;
-  }
-
-  set rol(value) {
-    this.#rol = value;
-  }
-
-  set estado(value) {
-    this.#estado = value;
-  }
 }
