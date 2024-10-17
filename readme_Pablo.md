@@ -9,6 +9,12 @@ Las cuales poseen constructor y getters y setters
 
 \*\_Se actualizaron los datos de los models, porque se reviso el trabajo y se creo un nuevo DER. Tambien se establecio la conexion a la base de datos.. usando Rutas.. se creo el archivo de rutas de pacientey paciente controller..
 
-\*\_Se se empezo a codear las rutas basicas de un CRUD en pacientes como tambien la logica de Programacion en el controller de paciente... Las funciones GET,GET/ID y POST estan funcionales.,faltaria codear la de PUT/PATH
+\*\_Se se empezo a codear las rutas basicas de un CRUD en pacientes como tambien la logica de Programacion en el controller de paciente... Las funciones GET,GET/ID y POST estan funcionales.,faltaria codear la de PUT/PATHd
 
 \*\_Se completo el CRUD para paciente , calendario, y sucursal... Tambien de crearon los archivos con las respectivas rutas...
+
+\*\_ Se separo las consultas SQL y se las mando a las clases correspondiente... Faltaria crear el nuevo controllers
+
+GREGAR AFFECTER ROWS EN LAS VALIDACIONES AL CREAR
+
+NO SE PUEDE USAR PUTCH...

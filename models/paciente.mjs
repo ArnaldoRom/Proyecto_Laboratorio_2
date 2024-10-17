@@ -1,3 +1,5 @@
+import { conexion } from "../config/db.js";
+
 class Paciente {
   #nombre;
   #apellido;
@@ -28,67 +30,104 @@ class Paciente {
     this.#estado = estado;
   }
 
-  get nombre() {
-    return this.#nombre;
+  static async getPaciente() {
+    try {
+      const [rows] = await conexion.query("SELECT * FROM paciente");
+      return rows;
+    } catch (error) {
+      console.error("Error al obtener Pacientes", error);
+      throw error;
+    }
   }
 
-  get apellido() {
-    return this.#apellido;
+  static async getPacienteId(id) {
+    try {
+      const [rows] = await conexion.query(
+        "SELECT * FROM paciente WHERE idPaciente = ?",
+        [id]
+      );
+      return rows[0];
+    } catch (error) {
+      console.error("Error al recuperar Paciente");
+      throw error;
+    }
   }
 
-  get dni() {
-    return this.#dni;
+  static async cargarPaciente(data) {
+    try {
+      const query = `
+        INSERT INTO paciente (nombre, apellido, DNI, motivoConsulta, obraSocial, datosContacto, idUsuario, estado)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+      const values = [
+        data.nombre,
+        data.apellido,
+        data.DNI,
+        data.motivoConsulta,
+        data.obraSocial,
+        data.datosContacto,
+        data.idUsuario,
+        data.estado,
+      ];
+
+      const [result] = await conexion.query(query, values);
+      return result.insertId;
+    } catch (error) {
+      console.error("Error al cargar Paciente", error);
+      throw error;
+    }
   }
 
-  get motivoConsulta() {
-    return this.#motivoConsulta;
+  static async actualizarPaciente(data, id) {
+    try {
+      const query =
+        "UPDATE paciente SET nombre = IFNULL(?, nombre), apellido = IFNULL(?, apellido), DNI = IFNULL(?, DNI), motivoConsulta = IFNULL(?, motivoConsulta), obraSocial = IFNULL(?, obraSocial), datosContacto = IFNULL(?, datosContacto), idUsuario = IFNULL(?, idUsuario) WHERE idPaciente = ?";
+
+      const values = [
+        data.nombre,
+        data.apellido,
+        data.DNI,
+        data.motivoConsulta,
+        data.obraSocial,
+        data.datosContacto,
+        data.idUsuario,
+        id,
+      ];
+
+      const [rows] = await conexion.query(query, values);
+      return rows;
+    } catch (error) {
+      console.error("Error al Actualizar datos del Paciente");
+      throw error;
+    }
   }
 
-  get obraSocial() {
-    return this.#obraSocial;
+  static async bajaPaciente(id) {
+    try {
+      const [rows] = await conexion.query(
+        "UPDATE paciente SET estado = 0 WHERE idPaciente = ?",
+        [id]
+      );
+      return rows;
+    } catch (error) {
+      console.error("Error al dar de baja Paciente");
+      throw error;
+    }
   }
 
-  get datoContacto() {
-    return this.#datoContacto;
-  }
-
-  get idUsuario() {
-    return this.#idUsuario;
-  }
-
-  get estado() {
-    return this.#estado;
-  }
-
-  set nombre(value) {
-    this.#nombre = value;
-  }
-
-  set apellido(value) {
-    this.#apellido = value;
-  }
-
-  set dni(value) {
-    this.#dni = value;
-  }
-
-  set motivoConsulta(value) {
-    this.#motivoConsulta = value;
-  }
-
-  set obraSocial(value) {
-    this.#obraSocial = value;
-  }
-
-  set datoContacto(value) {
-    this.#datoContacto = value;
-  }
-
-  set idUsuario(value) {
-    this.#idUsuario = value;
-  }
-
-  set estado(value) {
-    this.#estado = value;
+  static async altaPaciente(id) {
+    try {
+      const [rows] = await conexion.query(
+        "UPDATE paciente SET estado = 1 WHERE idPaciente = ?",
+        [id]
+      );
+      return rows;
+    } catch (error) {
+      console.error("Error al dar de alta Paciente");
+      throw error;
+    }
   }
 }
+
+export default Paciente;

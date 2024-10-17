@@ -1,3 +1,5 @@
+import { conexion } from "../config/db.js";
+
 class Calendario {
   #idCalendario;
   #descripcion;
@@ -25,55 +27,100 @@ class Calendario {
     this.#estado = estado;
   }
 
-  get idCalendario() {
-    return this.#idCalendario;
+  static async getCalendario() {
+    try {
+      const [rows] = await conexion.query("SELECT * FROM calendario");
+      return rows;
+    } catch (error) {
+      console.error("Error al obtener Calendario", error);
+      throw error;
+    }
   }
 
-  get descripcion() {
-    return this.#descripcion;
+  static async getCalendarioId(id) {
+    try {
+      const [rows] = await conexion.query(
+        "SELECT * FROM calendario WHERE idCalendario = ?",
+        [id]
+      );
+      return rows[0];
+    } catch (error) {
+      console.error("Error al recuperar Calendariopor Id");
+      throw error;
+    }
   }
 
-  get diasNoLaborables() {
-    return this.#diasNoLaborables;
+  static async crearCalendario(data) {
+    try {
+      const query = `
+        INSERT INTO calendario (descripcion, diasNoLaborables, fechaInicio, fechaFin, anio,  estado)
+        VALUES (?, ?, ?, ?, ?, ?)
+    `;
+
+      const values = [
+        data.descripcion,
+        data.diasNoLaborables,
+        data.fechaInicio,
+        data.fechaFin,
+        data.anio,
+        data.estado,
+      ];
+
+      const [result] = await conexion.query(query, values);
+      return result.insertId;
+    } catch (error) {
+      console.error("Error al agregar un Calendario", error);
+      throw error;
+    }
   }
 
-  get fechaInicio() {
-    return this.#fechaInicio;
+  static async actualizarCalendario(data, id) {
+    try {
+      const query =
+        "UPDATE calendario SET descripcion = IFNULL(?, descripcion), diasNoLaborables = IFNULL(?, diasNoLaborables), fechaInicio = IFNULL(?, fechaInicio), fechaFin = IFNULL(?, fechaFin), anio = IFNULL(?, anio) WHERE idCalendario = ?";
+
+      const values = [
+        data.descripcion,
+        data.diasNoLaborables,
+        data.fechaInicio,
+        data.fechaFin,
+        data.anio,
+        id,
+      ];
+
+      const [rows] = await conexion.query(query, values);
+      return rows;
+    } catch (error) {
+      console.error("Error al Actualizar Calendario");
+      throw error;
+    }
   }
 
-  get fechaFin() {
-    return this.#fechaFin;
+  static async bajaCalendario(id) {
+    try {
+      const [rows] = await conexion.query(
+        "UPDATE calendario SET estado = 0 WHERE idCalendario =?",
+        [id]
+      );
+      return rows;
+    } catch (error) {
+      console.error("Error al dar de baja Calendario");
+      throw error;
+    }
   }
 
-  get anio() {
-    return this.#anio;
-  }
-
-  get estado() {
-    return this.#estado;
-  }
-
-  set descripcion(value) {
-    this.#descripcion = value;
-  }
-
-  set diasNoLaborables(value) {
-    this.#diasNoLaborables = value;
-  }
-
-  set fechaInicio(value) {
-    this.#fechaInicio = value;
-  }
-
-  set fechaFin(value) {
-    this.#fechaFin = value;
-  }
-
-  set anio(value) {
-    this.#anio = value;
-  }
-
-  set estado(value) {
-    this.#estado = value;
+  static async altaCalendario(id) {
+    try {
+      const [rows] = await conexion.query(
+        "UPDATE calendario SET estado = 1 WHERE idCalendario =?",
+        [id]
+      );
+      return rows;
+    } catch (error) {
+      console.error("Error al dar de alta Calendario");
+      throw error;
+    }
   }
 }
+
+export default Calendario;

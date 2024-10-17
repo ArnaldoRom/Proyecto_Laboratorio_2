@@ -1,3 +1,5 @@
+import { conexion } from "../config/db.js";
+
 class Sucursal {
   #nombre;
   #direccion;
@@ -11,35 +13,89 @@ class Sucursal {
     this.#estado = estado;
   }
 
-  get nombre() {
-    return this.#nombre;
+  static async getSucursal() {
+    try {
+      const [rows] = await conexion.query("SELECT * FROM sucursal");
+      return rows;
+    } catch (error) {
+      console.error("Error al obtener Sucursal", error);
+      throw error;
+    }
   }
 
-  get direccion() {
-    return this.#direccion;
+  static async getSucursalId(id) {
+    try {
+      const [rows] = await conexion.query(
+        "SELECT * FROM sucursal WHERE idSucursal = ?",
+        [id]
+      );
+      return rows[0];
+    } catch (error) {
+      console.error("Error al recuperar la Sucursal");
+      throw error;
+    }
   }
 
-  get clasificacion() {
-    return this.#clasificacion;
+  static async cargarSucursal(data) {
+    try {
+      const query = `
+        INSERT INTO sucursal (nombre, direccion, clasificacion, estado) VALUES (?, ?, ?, ?,) `;
+
+      const values = [
+        data.nombre,
+        data.direccion,
+        data.clasificacion,
+        data.estado,
+      ];
+
+      const [result] = await conexion.query(query, values);
+      return result.insertId;
+    } catch (error) {
+      console.error("Error al agregar una nueva Sucursal", error);
+      throw error;
+    }
   }
 
-  get estado() {
-    return this.#estado;
+  static async actualizarSucursal(data, id) {
+    try {
+      const query =
+        "UPDATE sucursal SET nombre = IFNULL(?, nombre), direccion = IFNULL(?, direccion), clasificacion = IFNULL(?, clasificacion) WHERE idSucursal = ?";
+
+      const values = [data.nombre, data.direccion, data.clasificacion, id];
+
+      const [rows] = await conexion.query(query, values);
+      return rows;
+    } catch (error) {
+      console.error("Error al Actualizar la Sucursal");
+      throw error;
+    }
   }
 
-  set nombre(value) {
-    this.#nombre = value;
+  static async bajaSucursal(id) {
+    try {
+      const [rows] = await conexion.query(
+        "UPDATE sucursal SET estado = 0 WHERE idSucursal = ?",
+        [id]
+      );
+      return rows;
+    } catch (error) {
+      console.error("Error al dar de baja la Sucursal");
+      throw error;
+    }
   }
 
-  set direccion(value) {
-    this.#direccion = value;
-  }
-
-  set clasificacion(value) {
-    this.#clasificacion = value;
-  }
-
-  set estado(value) {
-    this.#estado = value;
+  static async altaSucursal(id) {
+    try {
+      const [rows] = await conexion.query(
+        "UPDATE sucursal SET estado = 1 WHERE idSucursal = ?",
+        [id]
+      );
+      return rows;
+    } catch (error) {
+      console.error("Error al dar de alta la Sucursal");
+      throw error;
+    }
   }
 }
+
+export default Sucursal;

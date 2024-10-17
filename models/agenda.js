@@ -1,9 +1,10 @@
+import { conexion } from "../config/db.js";
+
 class Agenda {
   #dia;
   #duracionHorario;
   #hora_inicio;
   #hora_fin;
-  #clasificacion;
   #limiteTurno;
   #idProfesionalEspecializado;
   #idSucursal;
@@ -15,7 +16,6 @@ class Agenda {
     duracionHorario,
     hora_inicio,
     hora_fin,
-    clasificacion,
     limiteTurno,
     idProfecionalEspecializado,
     idSucursal,
@@ -26,7 +26,6 @@ class Agenda {
     this.#duracionHorario = duracionHorario;
     this.#hora_inicio = hora_inicio;
     this.#hora_fin = hora_fin;
-    this.#clasificacion = clasificacion;
     this.#limiteTurno = limiteTurno;
     this.#idProfesionalEspecializado = idProfecionalEspecializado;
     this.#idSucursal = idSucursal;
@@ -34,83 +33,91 @@ class Agenda {
     this.#estado = estado;
   }
 
-  get dia() {
-    return this.#dia;
+  static async getAgenda() {
+    try {
+      const [rows] = await conexion.query("SELECT * FROM agenda");
+      return rows;
+    } catch (error) {
+      console.error("Error al obtener Agenda", error);
+      throw error;
+    }
   }
 
-  get duracionHorario() {
-    return this.#duracionHorario;
+  static async getAgendaId(id) {
+    try {
+      const [rows] = await conexion.query(
+        "SELECT * FROM agenda WHERE idAgenda = ?",
+        [id]
+      );
+      return rows[0];
+    } catch (error) {
+      console.error("Error al recuperar Agenda por Id");
+      throw error;
+    }
   }
 
-  get hora_inicio() {
-    return this.#hora_inicio;
+  static async agregarAgenda(data) {
+    try {
+      const query =
+        "INSERT INTO agenda (dia, duracionHorario, hora_inicio, hora_Fin, limiteTurno, idProfesionalEspecializado, idSucursal, idCalendario, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+      const values = [
+        data.dia,
+        data.duracionHorario,
+        data.hora_inicio,
+        data.hora_fin,
+        data.limiteTurno,
+        data.idProfecionalEspecializado,
+        data.idSucursal,
+        data.idCalendario,
+        data.estado,
+      ];
+      const [result] = await conexion.query(query, values);
+      return result.insertId;
+    } catch (error) {
+      console.error("Error al agregar una Agenda", error);
+      throw error;
+    }
   }
 
-  get hora_fin() {
-    return this.#hora_fin;
+  static async porEspecialidad(nombre) {
+    try {
+      const query =
+        "SELECT * FROM agenda JOIN profecionalespecializado ON agenda.idProfesionalEspecializado = profecionalespecializado.idProfesionalEspecializado JOIN especialidad ON profecionalespecializado.idEspecialidad = especialidad.idEspecialidad WHERE nombre = ?";
+
+      const [rows] = await conexion.query(query, [nombre]);
+      return rows;
+    } catch (error) {
+      console.error("Error al obtener Agenda por Especialidad", error);
+      throw error;
+    }
   }
 
-  get clasificacion() {
-    return this.#clasificacion;
+  static async porProfecional(nombre) {
+    try {
+      const query =
+        "SELECT * FROM agenda JOIN profecionalespecializado ON agenda.idProfesionalEspecializado = profecionalespecializado.idProfesionalEspecializado JOIN profesional ON profecionalespecializado.idProfesional = profesional.idProfesional WHERE profesional.nombre = ?";
+
+      const [rows] = await conexion.query(query, [nombre]);
+      return rows;
+    } catch (error) {
+      console.error("Error al obtender Agenda por Profecional");
+      throw error;
+    }
   }
 
-  get limiteTurno() {
-    return this.#limiteTurno;
-  }
+  static async porEstadoTurno(estado = "Libre") {
+    try {
+      const query =
+        "SELECT * FROM agenda INNER JOIN turno ON agenda.idAgenda = turno.idAgenda INNER JOIN estadohorario ON turno.idEstadoHorario = estadohorario.idEstadoHorario WHERE estadohorario.estado = ?";
 
-  get idProfecionalEspecializado() {
-    return this.#idProfesionalEspecializado;
-  }
-
-  get idSucursal() {
-    return this.#idSucursal;
-  }
-
-  get idCalendario() {
-    return this.#idCalendario;
-  }
-
-  get estado() {
-    return this.#estado;
-  }
-
-  set dia(value) {
-    this.#dia = value;
-  }
-
-  set duracionHorario(value) {
-    this.#duracionHorario = value;
-  }
-
-  set hora_inicio(value) {
-    this.#hora_inicio = value;
-  }
-
-  set hora_fin(value) {
-    this.#hora_fin = value;
-  }
-
-  set clasificacion(value) {
-    this.#clasificacion = value;
-  }
-
-  set limiteTurno(value) {
-    this.#limiteTurno = value;
-  }
-
-  set idProfecionalEspecializado(value) {
-    this.#idProfesionalEspecializado = value;
-  }
-
-  set idSucursal(value) {
-    this.#idSucursal = value;
-  }
-
-  set idCalendario(value) {
-    this.#idCalendario = value;
-  }
-
-  set estado(value) {
-    this.#estado = value;
+      const [rows] = await conexion.query(query, [estado]);
+      return rows;
+    } catch (error) {
+      console.error("Error al obtener turno por estado");
+      throw error;
+    }
   }
 }
+
+export default Agenda;
