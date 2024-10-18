@@ -13,7 +13,7 @@ class ListaEspera {
 
   static async getListaEspera() {
     try {
-      const [rows] = await conexion.query("SELECT * FROM listaEspera");
+      const [rows] = await conexion.query("SELECT * FROM listaespera");
       return rows;
     } catch (error) {
       console.error("Error al obtener Lista de Espera", error);
@@ -24,7 +24,7 @@ class ListaEspera {
   static async getListaEsperaId(id) {
     try {
       const [rows] = await conexion.query(
-        "SELECT * FROM listaEspera WHERE idListaEspera = ?",
+        "SELECT * FROM listaespera WHERE idListaEspera = ?",
         [id]
       );
       return rows[0];
@@ -53,7 +53,7 @@ class ListaEspera {
   static async sacarPacienteDeListaEspera(idPaciente, idAgenda) {
     try {
       const query =
-        "DELETE FROM ListaEspera WHERE IDPaciente = ? AND IDAgenda = ?";
+        "DELETE FROM listaespera WHERE IDPaciente = ? AND IDAgenda = ?";
       const [result] = await conexion.query(query, [idPaciente, idAgenda]);
       return result;
     } catch (error) {
@@ -65,7 +65,7 @@ class ListaEspera {
   static async primerPaciente(idAgenda) {
     try {
       const [rows] = await conexion.query(
-        "SELECT IDListaEspera, IDPaciente, IDAgenda FROM ListaEspera WHERE IDAgenda = ? ORDER BY IDListaEspera ASC LIMIT 1;",
+        "SELECT IDListaEspera, IDPaciente, IDAgenda FROM listaespera WHERE IDAgenda = ? ORDER BY IDListaEspera ASC LIMIT 1;",
         [idAgenda]
       );
       return rows;

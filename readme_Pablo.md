@@ -15,6 +15,8 @@ Las cuales poseen constructor y getters y setters
 
 \*\_ Se separo las consultas SQL y se las mando a las clases correspondiente... Faltaria crear el nuevo controllers
 
+\*\_ Se realizo las funciones de sobreturno.
+
 GREGAR AFFECTER ROWS EN LAS VALIDACIONES AL CREAR
 
 NO SE PUEDE USAR PUTCH...
