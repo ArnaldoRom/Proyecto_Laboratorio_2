@@ -20,8 +20,6 @@
 
     En turno necesita un actualizarTurnoALibre, y quiere reutilizar agendaPorEspecialidad en profesionalEspecializado (importar)
 
-NAAA QUE VER AJAJAJJA
-
 ## Que sigue despues de terminar con el DLA
 
     Quedaria redefinir los controladores que vamos a utilizar y realizar las consultas.

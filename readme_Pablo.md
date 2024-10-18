@@ -18,3 +18,5 @@ Las cuales poseen constructor y getters y setters
 GREGAR AFFECTER ROWS EN LAS VALIDACIONES AL CREAR
 
 NO SE PUEDE USAR PUTCH...
+
+LIBRERIA Zoe para validar
