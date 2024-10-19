@@ -21,12 +21,20 @@ class Turno {
 
   //crear un turno
   static crearTurno(data, callback){
-    const query = `
+    conexion.query`
     INSERT INTO turno (fecha, hora, idPaciente, idAgenda, idEmpleado, idListaEspera, idEstadoHorario)
     VALUES ('${data.fecha}', '${data.hora}', '${data.idPaciente}', '${data.idAgenda}', '${data.idEmpleado}', '${data.idListaEspera}', '${data.idEstadoHorario}')
   `;
   }
   
+  static crearTurnoConNull(data, callback){
+    conexion.query`
+    INSERT INTO turno (fecha, hora, idPaciente, idAgenda, idEmpleado, idListaEspera, idEstadoHorario)
+    VALUES ('${data.fecha}', '${data.hora}', null, '${data.idAgenda}', '${data.idEmpleado}', null, null)
+  `;
+  }
+
+
   static modificarTurno(data, idTurno, callback) {
    conexion.query`
       UPDATE turno 
