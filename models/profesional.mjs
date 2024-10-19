@@ -13,7 +13,7 @@ class Profesional {
 
    // Darle e alta a un profesional
    static altaProfesional(idProfesional, callback) {
-    const query = `
+    conexion.query`
       UPDATE profesional 
       SET estado = 1 
       WHERE idProfesional = '${idProfesional}'
@@ -29,7 +29,7 @@ class Profesional {
 
   //Esto sirve para darle de baja a un profesional 
   static bajaProfesional(idProfesional, callback) {
-    const query = `
+    conexion.query`
       UPDATE profesional 
       SET estado = 0 
       WHERE idProfesional = '${idProfesional}'
@@ -45,7 +45,7 @@ class Profesional {
 
   //Crear un nuevo profesional
   static crearProfesional(data, callback) {
-    const query = `
+    conexion.query`
       INSERT INTO profesional (nombre, apellido, especialidad, estado) 
       VALUES ('${data.nombre}', '${data.apellido}', '${data.especialidad}', '${data.estado}')
     `;
@@ -53,7 +53,7 @@ class Profesional {
 
   // Metodo para actualizar el profesional
   static actualizarProfesional(data, idProfesional, callback) {
-    const query = `
+    cconexion.query`
       UPDATE profesional 
       SET nombre = '${data.nombre}', apellido = '${data.apellido}', especialidad = '${data.especialidad}' 
       WHERE idProfesional = '${idProfesional}'
