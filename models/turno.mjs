@@ -30,7 +30,7 @@ class Turno {
   static crearTurnoConNull(data, callback){
     conexion.query`
     INSERT INTO turno (fecha, hora, idPaciente, idAgenda, idEmpleado, idListaEspera, idEstadoHorario)
-    VALUES ('${data.fecha}', '${data.hora}', null, '${data.idAgenda}', '${data.idEmpleado}', null, null)
+    VALUES (null, null, null, '${data.idAgenda}', '${data.idEmpleado}', null, null)
   `;
   }
 
