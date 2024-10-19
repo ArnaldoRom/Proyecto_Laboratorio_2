@@ -10,14 +10,13 @@ class Turno {
   #idEstadoHorario;
   #clasificacion;
 
-  constructor( fecha, hora, clasificacion,idPaciente,idAgenda,idEmpleado,idListaEspera,idEstadoHorario) {
+  constructor( fecha, hora, clasificacion,idPaciente,idAgenda,idEmpleado,idEstadoHorario) {
     this.#fecha = fecha;
     this.#hora = hora;
     this.#clasificacion = clasificacion;
     this.#idPaciente = idPaciente;
     this.#idAgenda = idAgenda;
     this.#idEmpleado = idEmpleado;
-    this.#idListaEspera = idListaEspera;
     this.#idEstadoHorario = idEstadoHorario;
 
   }
@@ -25,15 +24,16 @@ class Turno {
   //crear un turno
   static crearTurno(data, callback){
     conexion.query`
-    INSERT INTO turno (fecha, hora, idPaciente, idAgenda, idEmpleado, idListaEspera, idEstadoHorario)
-    VALUES ('${data.fecha}', '${data.hora}', '${data.idPaciente}', '${data.idAgenda}', '${data.idEmpleado}', '${data.idListaEspera}', '${data.idEstadoHorario}')
+    INSERT INTO turno (fecha, hora, idPaciente, idAgenda, idEmpleado, idEstadoHorario)
+    VALUES ('${data.fecha}', '${data.hora}', '${data.idPaciente}', '${data.idAgenda}', 
+    '${data.idEmpleado}', '${data.idEstadoHorario}')
   `;
   }
   
   static crearTurnoConNull(data, callback){
     conexion.query`
-    INSERT INTO turno (clasificacion, fecha, hora, idPaciente, idAgenda, idEmpleado, idListaEspera, idEstadoHorario)
-    VALUES (null, null, null, null, '${data.idAgenda}', null, null, null)
+    INSERT INTO turno (clasificacion, fecha, hora, idPaciente, idAgenda, idEmpleado, idEstadoHorario)
+    VALUES (null, null, null, null, '${data.idAgenda}', null, null)
   `;
   }
 
@@ -43,7 +43,7 @@ class Turno {
       UPDATE turno 
       SET fecha = '${data.fecha}', hora = '${data.hora}', 
           idPaciente = '${data.idPaciente}', idAgenda = '${data.idAgenda}', 
-          idEmpleado = '${data.idEmpleado}', idListaEspera = '${data.idListaEspera}', 
+          idEmpleado = '${data.idEmpleado}', 
           idEstadoHorario = '${data.idEstadoHorario}'
       WHERE idTurno = '${idTurno}'
     `;
