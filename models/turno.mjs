@@ -8,15 +8,18 @@ class Turno {
   #idEmpleado;
   #idListaEspera;
   #idEstadoHorario;
+  #clasificacion;
 
-  constructor( fecha, hora,idPaciente,idAgenda,idEmpleado,idListaEspera,idEstadoHorario) {
+  constructor( fecha, hora, clasificacion,idPaciente,idAgenda,idEmpleado,idListaEspera,idEstadoHorario) {
     this.#fecha = fecha;
     this.#hora = hora;
+    this.#clasificacion = clasificacion;
     this.#idPaciente = idPaciente;
     this.#idAgenda = idAgenda;
     this.#idEmpleado = idEmpleado;
     this.#idListaEspera = idListaEspera;
     this.#idEstadoHorario = idEstadoHorario;
+
   }
 
   //crear un turno
@@ -29,8 +32,8 @@ class Turno {
   
   static crearTurnoConNull(data, callback){
     conexion.query`
-    INSERT INTO turno (fecha, hora, idPaciente, idAgenda, idEmpleado, idListaEspera, idEstadoHorario)
-    VALUES (null, null, null, '${data.idAgenda}', '${data.idEmpleado}', null, null)
+    INSERT INTO turno (clasificacion, fecha, hora, idPaciente, idAgenda, idEmpleado, idListaEspera, idEstadoHorario)
+    VALUES (null, null, null, null, '${data.idAgenda}', null, null, null)
   `;
   }
 
