@@ -1,4 +1,4 @@
-import { conexion } from "../config/db";
+import { conexion } from "../config/db.js";
 
 class ProfesionalEspecializado {
   #idProfecionalEspecializado;
