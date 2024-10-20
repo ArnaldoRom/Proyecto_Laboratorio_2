@@ -1,4 +1,4 @@
-const conexion = require("../config/db.js")
+import { conexion } from "../config/db";
 
 class Profesional {
   #nombre;
@@ -61,5 +61,6 @@ class Profesional {
   }
 
 
-
 }
+
+export default Profesional;
