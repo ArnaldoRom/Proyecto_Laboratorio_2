@@ -1,4 +1,4 @@
-const conexion = require("../config/db.js")
+import { conexion } from "../config/db";
 
 class Turno {
   #fecha;
@@ -77,4 +77,4 @@ class Turno {
   }
 
 }
-module.exports = Turno;
+export default Usuario;

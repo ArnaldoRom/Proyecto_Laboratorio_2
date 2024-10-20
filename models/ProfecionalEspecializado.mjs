@@ -1,4 +1,4 @@
-const conexion = require("../config/db.js")
+import { conexion } from "../config/db";
 
 class ProfesionalEspecializado {
   #idProfecionalEspecializado;
@@ -50,3 +50,4 @@ static eliminarProfesionalEspecializado(idProfecionalEspecializado, callback) {
 }
 
 }
+export default ProfesionalEspecializado;

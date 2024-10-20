@@ -1,3 +1,5 @@
+import { conexion } from "../config/db";
+
 class Usuario {
   #nombreUsuario;
   #contraseña;
@@ -39,3 +41,4 @@ static activarUsuario(idUsuario, callback) {
 }
 
 }
+export default Usuario;
