@@ -77,4 +77,5 @@ class Turno {
   }
 
 }
-export default Usuario;
+
+export default Turno;
