@@ -9,7 +9,7 @@ class Turno {
   #idEmpleado;
   #idListaEspera;
   #idEstadoHorario;
-  #clasificacion;
+
 
   constructor( fecha, hora, clasificacion,idPaciente,idAgenda,idEmpleado,idEstadoHorario) {
     this.#fecha = fecha;
