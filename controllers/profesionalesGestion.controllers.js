@@ -1,6 +1,6 @@
-import Especialidad from "./models/especialidad.js";
-import Profesional from "./models/profesional.js";
-import ProfesionalEspecializado from "./models/profecionalEspecializado.js";
+import Especialidad from "../models/especialidad.js";
+import Profesional from "../models/profesional.js";
+import ProfesionalEspecializado from "../models/profecionalEspecializado.js";
 
 // Controlador para Especialidades ---------------------------------------------
 export const crearEspecialidad = async (req, res) => {
