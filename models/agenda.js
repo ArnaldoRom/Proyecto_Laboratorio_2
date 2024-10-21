@@ -49,7 +49,7 @@ class Agenda {
         "SELECT * FROM agenda WHERE idAgenda = ?",
         [id]
       );
-      return rows[0];
+      return rows;
     } catch (error) {
       console.error("Error al recuperar Agenda por Id");
       throw error;
