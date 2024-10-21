@@ -1,6 +1,5 @@
 import Agenda from "../models/Agenda.js";
 import Turno from "../models/turno.mjs";
-//import { Turno } from "../models/turno.mjs";
 
 export const crearAgenda = async (req, res) => {
   const {
@@ -52,3 +51,13 @@ export const crearAgenda = async (req, res) => {
     res.status(500).json({ message: "Error al crear la agenda y los turnos." });
   }
 };
+
+export const getAgendas = async (req, res) => {};
+
+export const getAgendasId = async (req, res) => {};
+
+export const filtroEspecialidad = async (req, res) => {};
+
+export const filtroProfecional = async (req, res) => {};
+
+export const filtroEstadoTurno = async (req, res) => {};
