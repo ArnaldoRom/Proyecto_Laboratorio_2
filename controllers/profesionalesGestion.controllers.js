@@ -217,4 +217,3 @@ export const eliminarProfesionalEspecializado = async (req, res) => {
       .json({ message: "Error al eliminar el profesional especializado" });
   }
 };
-
