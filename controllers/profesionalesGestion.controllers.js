@@ -28,6 +28,28 @@ export const activarEspecialidad = async (req, res) => {
   }
 };
 
+export const crearEspecialidad = async (req, res) => {
+  const data = req.body;
+
+  try {
+    const id = await Especialidad.crearEspecialidad(data);
+    res.status(201).json({ message: "Especialidad creada exitosamente", id });
+  } catch (error) {
+    console.error("Error al crear la especialidad:", error);
+    res.status(500).json({ message: "Error al crear la especialidad." });
+  }
+};
+
+export const obtenerEspecialidades = async (req, res) => {
+  try {
+    const especialidades = await Especialidad.obtenerEspecialidades();
+    res.status(200).json(especialidades);
+  } catch (error) {
+    console.error("Error al obtener las especialidades:", error);
+    res.status(500).json({ message: "Error al obtener las especialidades." });
+  }
+}
+
 // Controlador para Profesionales ---------------------------------------------
 
 export const altaProfesional = async (req, res) => {
