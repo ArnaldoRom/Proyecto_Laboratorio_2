@@ -3,6 +3,7 @@ import { conexion } from "../config/db.js";
 class Turno {
   #fecha;
   #hora;
+  #clasificacion;
   #idPaciente;
   #idAgenda;
   #idEmpleado;
@@ -18,23 +19,22 @@ class Turno {
     this.#idAgenda = idAgenda;
     this.#idEmpleado = idEmpleado;
     this.#idEstadoHorario = idEstadoHorario;
-
   }
+
+  
 
   //crear un turno
   static crearTurno(data, callback){
     conexion.query`
     INSERT INTO turno (fecha, hora, idPaciente, idAgenda, idEmpleado, idEstadoHorario)
     VALUES ('${data.fecha}', '${data.hora}', '${data.idPaciente}', '${data.idAgenda}', 
-    '${data.idEmpleado}', '${data.idEstadoHorario}')
-  `;
+    '${data.idEmpleado}', '${data.idEstadoHorario}')`, callback;
   }
   
   static crearTurnoConNull(data, callback){
     conexion.query`
-    INSERT INTO turno (clasificacion, fecha, hora, idPaciente, idAgenda, idEmpleado, idEstadoHorario)
-    VALUES (null, null, null, null, '${data.idAgenda}', null, null)
-  `;
+    INSERT INTO turno (fecha, hora, clasificacion,idPaciente,idAgenda,idEmpleado,idEstadoHorario)
+    VALUES ( null, null, null, null, '${data.idAgenda}', null, '${data.idEstadoHorario}')`, callback;
   }
 
 
@@ -46,11 +46,11 @@ class Turno {
           idEmpleado = '${data.idEmpleado}', 
           idEstadoHorario = '${data.idEstadoHorario}'
       WHERE idTurno = '${idTurno}'
-    `;
+    `, callback;
   }
 
   //cambiar el estado actual a cualquier otro
-  static cambiarEstado(estado, idTurno, callback) {
+  static cambiarEstado(estado, idTurno) {
     conexion.query`
       UPDATE turno 
       SET estado = '${estado}' 
@@ -58,23 +58,14 @@ class Turno {
     `;
   }
 
-  //borrar un turno
-  static borrarTurno(idTurno, callback) {
-    conexion.query`
-      UPDATE turno 
-      SET estado = 0 
-      WHERE idTurno = '${idTurno}'
-    `;
-  }
 
   //Cambiar el estado siempre a libre
-  static cambiarEstadoALibre(idTurno, callback){
+  static cambiarEstadoALibre(idTurno){
     conexion.query`
     UPDATE turno 
     SET estado = '2' 
     WHERE idTurno = '${idTurno}'
-  `
-  }
+  `}
 
 }
 

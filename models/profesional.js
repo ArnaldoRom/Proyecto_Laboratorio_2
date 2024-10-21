@@ -48,7 +48,7 @@ class Profesional {
     conexion.query`
       INSERT INTO profesional (nombre, apellido, especialidad, estado) 
       VALUES ('${data.nombre}', '${data.apellido}', '${data.especialidad}', '${data.estado}')
-    `;
+    `, callback;
   }
 
   // Metodo para actualizar el profesional
@@ -57,7 +57,7 @@ class Profesional {
       UPDATE profesional 
       SET nombre = '${data.nombre}', apellido = '${data.apellido}', especialidad = '${data.especialidad}' 
       WHERE idProfesional = '${idProfesional}'
-    `;
+    `, callback;
   }
 
 

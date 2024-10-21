@@ -22,7 +22,7 @@ class Especialidad {
   static obtenerEspecialidades(callback) {
     conexion.query`
       SELECT * FROM especialidad
-    `;
+    `,callback;
   }
 
   // Actualizar la especialidad
