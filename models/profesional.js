@@ -11,56 +11,80 @@ class Profesional {
     this.#estado = estado;
   }
 
-   // Darle e alta a un profesional
-   static altaProfesional(idProfesional, callback) {
-    conexion.query`
-      UPDATE profesional 
-      SET estado = 1 
-      WHERE idProfesional = '${idProfesional}'
-    `;
-
-    conexion.query(query, (error, results) => {
-      if (error) {
-        return callback(error, null);
-      }
-      callback(null, results);
-    });
+  // Dar de alta a un profesional
+  static async altaProfesional(idProfesional) {
+    try {
+      const query = `
+        UPDATE profesional 
+        SET estado = 1 
+        WHERE idProfesional = ?
+      `;
+      const [result] = await conexion.query(query, [idProfesional]);
+      return result.affectedRows;
+    } catch (error) {
+      console.error("Error al dar de alta a un profesional", error);
+      throw error;
+    }
   }
 
-  //Esto sirve para darle de baja a un profesional 
-  static bajaProfesional(idProfesional, callback) {
-    conexion.query`
-      UPDATE profesional 
-      SET estado = 0 
-      WHERE idProfesional = '${idProfesional}'
-    `;
-
-    conexion.query(query, (error, results) => {
-      if (error) {
-        return callback(error, null);
-      }
-      callback(null, results);
-    });
+  // Dar de baja a un profesional
+  static async bajaProfesional(idProfesional) {
+    try {
+      const query = `
+        UPDATE profesional 
+        SET estado = 0 
+        WHERE idProfesional = ?
+      `;
+      const [result] = await conexion.query(query, [idProfesional]);
+      return result.affectedRows;
+    } catch (error) {
+      console.error("Error al dar de baja a un profesional", error);
+      throw error;
+    }
   }
 
-  //Crear un nuevo profesional
-  static crearProfesional(data, callback) {
-    conexion.query`
-      INSERT INTO profesional (nombre, apellido, especialidad, estado) 
-      VALUES ('${data.nombre}', '${data.apellido}', '${data.especialidad}', '${data.estado}')
-    `, callback;
+  // Crear un nuevo profesional
+  static async crearProfesional(data) {
+    try {
+      const query = `
+        INSERT INTO profesional (nombre, apellido, especialidad, estado) 
+        VALUES (?, ?, ?, ?)
+      `;
+      const values = [
+        data.nombre,
+        data.apellido,
+        data.especialidad,
+        data.estado,
+      ];
+      const [result] = await conexion.query(query, values);
+      return result.insertId;
+    } catch (error) {
+      console.error("Error al crear un profesional", error);
+      throw error;
+    }
   }
 
-  // Metodo para actualizar el profesional
-  static actualizarProfesional(data, idProfesional, callback) {
-    cconexion.query`
-      UPDATE profesional 
-      SET nombre = '${data.nombre}', apellido = '${data.apellido}', especialidad = '${data.especialidad}' 
-      WHERE idProfesional = '${idProfesional}'
-    `, callback;
+  // Actualizar un profesional por id
+  static async actualizarProfesional(data, idProfesional) {
+    try {
+      const query = `
+        UPDATE profesional 
+        SET nombre = ?, apellido = ?, especialidad = ? 
+        WHERE idProfesional = ?
+      `;
+      const values = [
+        data.nombre,
+        data.apellido,
+        data.especialidad,
+        idProfesional,
+      ];
+      const [result] = await conexion.query(query, values);
+      return result.affectedRows;
+    } catch (error) {
+      console.error("Error al actualizar un profesional", error);
+      throw error;
+    }
   }
-
-
 }
 
 export default Profesional;

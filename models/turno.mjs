@@ -7,11 +7,9 @@ class Turno {
   #idPaciente;
   #idAgenda;
   #idEmpleado;
-  #idListaEspera;
   #idEstadoHorario;
 
-
-  constructor( fecha, hora, clasificacion,idPaciente,idAgenda,idEmpleado,idEstadoHorario) {
+  constructor(fecha, hora, clasificacion, idPaciente, idAgenda, idEmpleado, idEstadoHorario) {
     this.#fecha = fecha;
     this.#hora = hora;
     this.#clasificacion = clasificacion;
@@ -21,52 +19,107 @@ class Turno {
     this.#idEstadoHorario = idEstadoHorario;
   }
 
-  
-
-  //crear un turno
-  static crearTurno(data, callback){
-    conexion.query`
-    INSERT INTO turno (fecha, hora, idPaciente, idAgenda, idEmpleado, idEstadoHorario)
-    VALUES ('${data.fecha}', '${data.hora}', '${data.idPaciente}', '${data.idAgenda}', 
-    '${data.idEmpleado}', '${data.idEstadoHorario}')`, callback;
-  }
-  
-  static crearTurnoConNull(data, callback){
-    conexion.query`
-    INSERT INTO turno (fecha, hora, clasificacion,idPaciente,idAgenda,idEmpleado,idEstadoHorario)
-    VALUES ( null, null, null, null, '${data.idAgenda}', null, '${data.idEstadoHorario}')`, callback;
-  }
-
-
-  static modificarTurno(data, idTurno, callback) {
-   conexion.query`
-      UPDATE turno 
-      SET fecha = '${data.fecha}', hora = '${data.hora}', 
-          idPaciente = '${data.idPaciente}', idAgenda = '${data.idAgenda}', 
-          idEmpleado = '${data.idEmpleado}', 
-          idEstadoHorario = '${data.idEstadoHorario}'
-      WHERE idTurno = '${idTurno}'
-    `, callback;
+  // Crear un turno
+  static async crearTurno(data) {
+    try {
+      const query = `
+        INSERT INTO turno (fecha, hora, clasificacion, idPaciente, idAgenda, idEmpleado, idEstadoHorario)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+      `;
+      const values = [
+        data.fecha,
+        data.hora,
+        data.clasificacion,
+        data.idPaciente,
+        data.idAgenda,
+        data.idEmpleado,
+        data.idEstadoHorario,
+      ];
+      const [result] = await conexion.query(query, values);
+      return result.insertId;
+    } catch (error) {
+      console.error("Error al crear un turno", error);
+      throw error;
+    }
   }
 
-  //cambiar el estado actual a cualquier otro
-  static cambiarEstado(estado, idTurno) {
-    conexion.query`
-      UPDATE turno 
-      SET estado = '${estado}' 
-      WHERE idTurno = '${idTurno}'
-    `;
+  // Crear un turno con valores nulos
+  static async crearTurnoConNull(data) {
+    try {
+      const query = `
+        INSERT INTO turno (fecha, hora, clasificacion, idPaciente, idAgenda, idEmpleado, idEstadoHorario)
+        VALUES (NULL, NULL, NULL, NULL, ?, NULL, ?)
+      `;
+      const values = [
+        data.idAgenda,
+        data.idEstadoHorario,
+      ];
+      const [result] = await conexion.query(query, values);
+      return result.insertId;
+    } catch (error) {
+      console.error("Error al crear un turno con valores nulos", error);
+      throw error;
+    }
   }
 
+  // Modificar un turno
+  static async modificarTurno(data, idTurno) {
+    try {
+      const query = `
+        UPDATE turno 
+        SET fecha = ?, hora = ?, clasificacion = ?, idPaciente = ?, idAgenda = ?, idEmpleado = ?, idEstadoHorario = ?
+        WHERE idTurno = ?
+      `;
+      const values = [
+        data.fecha,
+        data.hora,
+        data.clasificacion,
+        data.idPaciente,
+        data.idAgenda,
+        data.idEmpleado,
+        data.idEstadoHorario,
+        idTurno,
+      ];
+      const [result] = await conexion.query(query, values);
+      return result.affectedRows;
+    } catch (error) {
+      console.error("Error al modificar un turno", error);
+      throw error;
+    }
+  }
 
-  //Cambiar el estado siempre a libre
-  static cambiarEstadoALibre(idTurno){
-    conexion.query`
-    UPDATE turno 
-    SET estado = '2' 
-    WHERE idTurno = '${idTurno}'
-  `}
+  // Cambiar el estado actual a cualquier otro
+  static async cambiarEstado(estado, idTurno) {
+    try {
+      const query = `
+        UPDATE turno 
+        SET estado = ?
+        WHERE idTurno = ?
+      `;
+      const [result] = await conexion.query(query, [estado, idTurno]);
+      return result.affectedRows;
+    } catch (error) {
+      console.error("Error al cambiar el estado de un turno", error);
+      throw error;
+    }
+  }
 
+  // Cambiar el estado siempre a libre
+  static async cambiarEstadoALibre(idTurno) {
+    try {
+      const query = `
+        UPDATE turno 
+        SET estado = '2'
+        WHERE idTurno = ?
+      `;
+      const [result] = await conexion.query(query, [idTurno]);
+      return result.affectedRows;
+    } catch (error) {
+      console.error("Error al cambiar el estado a libre", error);
+      throw error;
+    }
+  }
 }
 
 export default Turno;
+

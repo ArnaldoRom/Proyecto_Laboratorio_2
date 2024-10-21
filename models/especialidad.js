@@ -11,50 +11,79 @@ class Especialidad {
     this.#estado = estado;
   }
 
-  static crearEspecialidad(data, callback) {
-    conexion.query`
-      INSERT INTO especialidad (nombre, descripcion, estado) 
-      VALUES ('${data.nombre}', '${data.descripcion}', '${data.estado}')
-    `;
+  static async crearEspecialidad(data) {
+    try {
+      const query = `
+        INSERT INTO especialidad (nombre, descripcion, estado) 
+        VALUES (?, ?, ?)
+      `;
+      const [result] = await conexion.query(query, [data.nombre, data.descripcion, data.estado]);
+      return result.insertId; 
+    } catch (error) {
+      console.error("Error al crear especialidad", error);
+      throw error;
+    }
   }
 
-  // obtiene todas las especialidades
-  static obtenerEspecialidades(callback) {
-    conexion.query(
-      `
-      SELECT * FROM especialidad
-    `,
-      callback
-    );
-
-    console.log(callback);
+  // Obtiene todas las especialidades
+  static async obtenerEspecialidades() {
+    try {
+      const query = "SELECT * FROM especialidad";
+      const [rows] = await conexion.query(query);
+      return rows;
+    } catch (error) {
+      console.error("Error al obtener especialidades", error);
+      throw error;
+    }
   }
 
-  // Actualizar la especialidad
-  static actualizarEspecialidad(data, idEspecialidad, callback) {
-    cconexion.query`
-      UPDATE especialidad 
-      SET nombre = '${data.nombre}', descripcion = '${data.descripcion}', estado = '${data.estado}'
-      WHERE idEspecialidad = '${idEspecialidad}'
-    `;
+  // Actualiza una especialidad
+  static async actualizarEspecialidad(data, idEspecialidad) {
+    try {
+      const query = `
+        UPDATE especialidad 
+        SET nombre = ?, descripcion = ?, estado = ?
+        WHERE idEspecialidad = ?
+      `;
+      const [result] = await conexion.query(query, [data.nombre, data.descripcion, data.estado, idEspecialidad]);
+      return result.affectedRows;
+    } catch (error) {
+      console.error("Error al actualizar especialidad", error);
+      throw error;
+    }
   }
 
-  // metodo para desactivar una especialidad
-  static eliminarEspecialidad(idEspecialidad, callback) {
-    conexion.query`
-      UPDATE especialidad 
-      SET estado = 0 
-      WHERE idEspecialidad = '${idEspecialidad}'
-    `;
+  // desactivar una especialidad
+  static async eliminarEspecialidad(idEspecialidad) {
+    try {
+      const query = `
+        UPDATE especialidad 
+        SET estado = 0 
+        WHERE idEspecialidad = ?
+      `;
+      const [result] = await conexion.query(query, [idEspecialidad]);
+      return result.affectedRows;
+    } catch (error) {
+      console.error("Error al eliminar especialidad", error);
+      throw error;
+    }
   }
 
-  // Metoo para activar una especialidad
-  static activarEspecialidad(idEspecialidad, callback) {
-    conexion.query`
-      UPDATE especialidad 
-      SET estado = 1 
-      WHERE idEspecialidad = '${idEspecialidad}'
-    `;
+  //  activar una especialidad
+  static async activarEspecialidad(idEspecialidad) {
+    try {
+      const query = `
+        UPDATE especialidad 
+        SET estado = 1 
+        WHERE idEspecialidad = ?
+      `;
+      const [result] = await conexion.query(query, [idEspecialidad]);
+      return result.affectedRows;
+    } catch (error) {
+      console.error("Error al activar especialidad", error);
+      throw error;
+    }
   }
 }
+
 export default Especialidad;

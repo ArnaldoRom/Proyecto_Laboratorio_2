@@ -6,48 +6,86 @@ class ProfesionalEspecializado {
   #idProfecional;
   #matricula;
 
-  constructor(
-    idEspecialidadidProfecional,
-    idEspecialidad,
-    idProfecional,
-    matricula
-  ) {
-    this.#idProfecionalEspecializado = idEspecialidadidProfecional;
+  constructor(idProfecionalEspecializado, idEspecialidad, idProfecional, matricula) {
+    this.#idProfecionalEspecializado = idProfecionalEspecializado;
     this.#idEspecialidad = idEspecialidad;
     this.#idProfecional = idProfecional;
     this.#matricula = matricula;
   }
 
- // Crear los profesionales especializados
- static crearProfesionalEspecializado(data, callback) {
-  conexion.query`INSERT INTO profesional_especializado (idEspecialidad, idProfecional, matricula) 
-    VALUES ('${data.idEspecialidad}', '${data.idProfecional}', '${data.matricula}')`;
+  // Crear un nuevo profesional especializado
+  static async crearProfesionalEspecializado(data) {
+    try {
+      const query = `
+        INSERT INTO profesional_especializado (idEspecialidad, idProfecional, matricula) 
+        VALUES (?, ?, ?)
+      `;
+      const values = [
+        data.idEspecialidad,
+        data.idProfecional,
+        data.matricula,
+      ];
+      const [result] = await conexion.query(query, values);
+      return result.insertId;
+    } catch (error) {
+      console.error("Error al crear un profesional especializado", error);
+      throw error;
+    }
+  }
+
+  // Obtener todos los profesionales especializados
+  static async obtenerProfesionalesEspecializados() {
+    try {
+      const query = `
+        SELECT profesional.nombre, profesional.apellido, especialidad.nombre AS especialidadNombre, especialidad.descripcion 
+        FROM profesional_especializado
+        JOIN profesional ON profesional.idProfesional = profesional_especializado.idProfecional
+        JOIN especialidad ON especialidad.idEspecialidad = profesional_especializado.idEspecialidad
+      `;
+      const [rows] = await conexion.query(query);
+      return rows;
+    } catch (error) {
+      console.error("Error al obtener profesionales especializados", error);
+      throw error;
+    }
+  }
+
+  // Actualizar un profesional especializado por id
+  static async actualizarProfesionalEspecializado(data, idProfecionalEspecializado) {
+    try {
+      const query = `
+        UPDATE profesional_especializado 
+        SET idEspecialidad = ?, idProfecional = ?, matricula = ?
+        WHERE idProfecionalEspecializado = ?
+      `;
+      const values = [
+        data.idEspecialidad,
+        data.idProfecional,
+        data.matricula,
+        idProfecionalEspecializado,
+      ];
+      const [result] = await conexion.query(query, values);
+      return result.affectedRows;
+    } catch (error) {
+      console.error("Error al actualizar un profesional especializado", error);
+      throw error;
+    }
+  }
+
+  // Eliminar (desactivar) un profesional especializado por id
+  static async eliminarProfesionalEspecializado(idProfecionalEspecializado) {
+    try {
+      const query = `
+        DELETE FROM profesional_especializado 
+        WHERE idProfecionalEspecializado = ?
+      `;
+      const [result] = await conexion.query(query, [idProfecionalEspecializado]);
+      return result.affectedRows;
+    } catch (error) {
+      console.error("Error al eliminar un profesional especializado", error);
+      throw error;
+    }
+  }
 }
 
-// Obtener todos los profesionales especializados
-static obtenerProfesionalesEspecializados(callback) { //tengo que ver en la base de datos si es asi
-  //Verificar la consulta en la base de datos
-  conexion.query`
-    SELECT profesional.nombre, profesional.apellido, especialidad.nombre, especialidad.descripcion FROM profesionalEspecializado
-    JOIN profesional ON profesiona.idProfesional = profesionalEspecializado.idProfesioanl JOIN 
-  `;
-}
-
-// Actualizar profesional especializado por id
-static actualizarProfesionalEspecializado(data, idProfecionalEspecializado, callback) {
-  conexion.query`
-    UPDATE profesional_especializado 
-    SET idEspecialidad = '${data.idEspecialidad}', idProfecional = '${data.idProfecional}', matricula = '${data.matricula}'
-    WHERE idProfecionalEspecializado = '${idProfecionalEspecializado}'
-  `;
-}
-
-// Eliminar profesionales especializado
-static eliminarProfesionalEspecializado(idProfecionalEspecializado, callback) {
-  conexion.query` DELETE FROM profesional_especializado 
-  WHERE idProfecionalEspecializado = '${idProfecionalEspecializado}'
-  `;
-}
-
-}
 export default ProfesionalEspecializado;

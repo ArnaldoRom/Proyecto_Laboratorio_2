@@ -12,33 +12,94 @@ class Usuario {
     this.#rol = rol;
     this.#estado = estado;
   }
- //crear un nuevo usuario
- static crearUsuario(data, callback) {
-  conexion.query`
-    INSERT INTO usuario (nombreUsuario, contraseña, rol, estado) 
-    VALUES ('${data.nombreUsuario}', '${data.contraseña}', 'Paciente', '${data.estado}')`;
+
+  // Crear un nuevo usuario
+  static async crearUsuario(data) {
+    try {
+      const query = `
+        INSERT INTO usuario (nombreUsuario, contraseña, rol, estado) 
+        VALUES (?, ?, ?, ?)
+      `;
+      const values = [
+        data.nombreUsuario,
+        data.contraseña,
+        data.rol || 'Paciente', // Asignar 'Paciente' por defecto si no se proporciona
+        data.estado,
+      ];
+      const [result] = await conexion.query(query, values);
+      return result.insertId;
+    } catch (error) {
+      console.error("Error al crear un usuario", error);
+      throw error;
+    }
+  }
+
+  // Obtener todos los usuarios
+  static async obtenerUsuarios() {
+    try {
+      const [rows] = await conexion.query("SELECT * FROM usuario");
+      return rows;
+    } catch (error) {
+      console.error("Error al obtener usuarios", error);
+      throw error;
+    }
+  }
+
+  // Actualizar un usuario por id
+  static async actualizarUsuario(data, idUsuario) {
+    try {
+      const query = `
+        UPDATE usuario 
+        SET nombreUsuario = ?, contraseña = ?, rol = ?, estado = ?
+        WHERE idUsuario = ?
+      `;
+      const values = [
+        data.nombreUsuario,
+        data.contraseña,
+        data.rol,
+        data.estado,
+        idUsuario,
+      ];
+      const [result] = await conexion.query(query, values);
+      return result.affectedRows;
+    } catch (error) {
+      console.error("Error al actualizar un usuario", error);
+      throw error;
+    }
+  }
+
+  // Eliminar (desactivar) un usuario por id
+  static async eliminarUsuario(idUsuario) {
+    try {
+      const query = `
+        UPDATE usuario 
+        SET estado = 0 
+        WHERE idUsuario = ?
+      `;
+      const [result] = await conexion.query(query, [idUsuario]);
+      return result.affectedRows;
+    } catch (error) {
+      console.error("Error al eliminar un usuario", error);
+      throw error;
+    }
+  }
+
+  // Activar un usuario por id
+  static async activarUsuario(idUsuario) {
+    try {
+      const query = `
+        UPDATE usuario 
+        SET estado = 1 
+        WHERE idUsuario = ?
+      `;
+      const [result] = await conexion.query(query, [idUsuario]);
+      return result.affectedRows;
+    } catch (error) {
+      console.error("Error al activar un usuario", error);
+      throw error;
+    }
+  }
 }
 
-// Método para obtener todos los usuarios
-static obtenerUsuarios(callback) {
-  conexion.query`SELECT * FROM usuario `;
-}
-
-//actualizar un usuario por id
-static actualizarUsuario(data, idUsuario, callback) {
-  conexion.query`UPDATE usuario SET nombreUsuario = '${data.nombreUsuario}', contraseña = '${data.contraseña}', 
-        rol = '${data.rol}', estado = '${data.estado}' WHERE idUsuario = '${idUsuario}'`;
-}
-
-// eliminar (desactivar) un usuario por id
-static eliminarUsuario(idUsuario, callback) {
-  conexion.query`UPDATE usuario SET estado = 0 WHERE idUsuario = '${idUsuario}'`;
-}
-
-//activar un usuario por id
-static activarUsuario(idUsuario, callback) {
-  conexion.query`UPDATE usuario  SET estado = 1  WHERE idUsuario = '${idUsuario}'`;
-}
-
-}
 export default Usuario;
+
