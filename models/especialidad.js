@@ -15,16 +15,16 @@ class Especialidad {
     try {
       const query = `
         INSERT INTO especialidad (nombre, descripcion, estado) 
-        VALUES (?, ?, ?)
+        VALUES (?, ?, 1)
       `;
-      const [result] = await conexion.query(query, [data.nombre, data.descripcion, data.estado]);
+      const [result] = await conexion.query(query, [data.nombre, data.descripcion]);
       return result.insertId; 
     } catch (error) {
       console.error("Error al crear especialidad", error);
       throw error;
     }
   }
-
+/*
   // Obtiene todas las especialidades
   static async obtenerEspecialidades() {
     try {
@@ -36,7 +36,7 @@ class Especialidad {
       throw error;
     }
   }
-
+*/
   // Actualiza una especialidad
   static async actualizarEspecialidad(data, idEspecialidad) {
     try {

@@ -47,14 +47,12 @@ class Profesional {
   static async crearProfesional(data) {
     try {
       const query = `
-        INSERT INTO profesional (nombre, apellido, especialidad, estado) 
-        VALUES (?, ?, ?, ?)
+        INSERT INTO profesional (nombre, apellido, estado) 
+        VALUES (?, ?, 1)
       `;
       const values = [
         data.nombre,
         data.apellido,
-        data.especialidad,
-        data.estado,
       ];
       const [result] = await conexion.query(query, values);
       return result.insertId;
@@ -69,13 +67,12 @@ class Profesional {
     try {
       const query = `
         UPDATE profesional 
-        SET nombre = ?, apellido = ?, especialidad = ? 
+        SET nombre = ?, apellido = ? 
         WHERE idProfesional = ?
       `;
       const values = [
         data.nombre,
         data.apellido,
-        data.especialidad,
         idProfesional,
       ];
       const [result] = await conexion.query(query, values);

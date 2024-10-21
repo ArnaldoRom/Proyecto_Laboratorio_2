@@ -17,7 +17,7 @@ class ProfesionalEspecializado {
   static async crearProfesionalEspecializado(data) {
     try {
       const query = `
-        INSERT INTO profesional_especializado (idEspecialidad, idProfecional, matricula) 
+        INSERT INTO profesionalEspecializado (idEspecialidad, idProfecional, matricula) 
         VALUES (?, ?, ?)
       `;
       const values = [
@@ -34,13 +34,12 @@ class ProfesionalEspecializado {
   }
 
   // Obtener todos los profesionales especializados
+  /*
   static async obtenerProfesionalesEspecializados() {
     try {
       const query = `
         SELECT profesional.nombre, profesional.apellido, especialidad.nombre AS especialidadNombre, especialidad.descripcion 
-        FROM profesional_especializado
-        JOIN profesional ON profesional.idProfesional = profesional_especializado.idProfecional
-        JOIN especialidad ON especialidad.idEspecialidad = profesional_especializado.idEspecialidad
+        FROM profecionalespecializado JOIN profesional ON profesional.idProfesional = profecionalespecializado.idProfesional JOIN especialidad ON especialidad.idEspecialidad = profecionalespecializado.idEspecialidad;
       `;
       const [rows] = await conexion.query(query);
       return rows;
@@ -49,12 +48,12 @@ class ProfesionalEspecializado {
       throw error;
     }
   }
-
+*/
   // Actualizar un profesional especializado por id
   static async actualizarProfesionalEspecializado(data, idProfecionalEspecializado) {
     try {
       const query = `
-        UPDATE profesional_especializado 
+        UPDATE profesionalEspecializado 
         SET idEspecialidad = ?, idProfecional = ?, matricula = ?
         WHERE idProfecionalEspecializado = ?
       `;
@@ -73,10 +72,12 @@ class ProfesionalEspecializado {
   }
 
   // Eliminar (desactivar) un profesional especializado por id
+  /*
   static async eliminarProfesionalEspecializado(idProfecionalEspecializado) {
     try {
       const query = `
-        DELETE FROM profesional_especializado 
+        UPDATE FROM profesionalEspecializado SET
+
         WHERE idProfecionalEspecializado = ?
       `;
       const [result] = await conexion.query(query, [idProfecionalEspecializado]);
@@ -86,6 +87,7 @@ class ProfesionalEspecializado {
       throw error;
     }
   }
+    */
 }
 
 export default ProfesionalEspecializado;

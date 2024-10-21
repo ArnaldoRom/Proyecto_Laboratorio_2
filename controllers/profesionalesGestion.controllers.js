@@ -39,7 +39,7 @@ export const crearEspecialidad = async (req, res) => {
     res.status(500).json({ message: "Error al crear la especialidad." });
   }
 };
-
+/*
 export const obtenerEspecialidades = async (req, res) => {
   try {
     const especialidades = await Especialidad.obtenerEspecialidades();
@@ -49,7 +49,7 @@ export const obtenerEspecialidades = async (req, res) => {
     res.status(500).json({ message: "Error al obtener las especialidades." });
   }
 }
-
+*/
 // Controlador para Profesionales ---------------------------------------------
 
 export const altaProfesional = async (req, res) => {
@@ -118,7 +118,7 @@ export const crearProfesionalEspecializado = async (req, res) => {
       .json({ message: "Error al crear el profesional especializado." });
   }
 };
-
+/*
 export const obtenerProfesionalesEspecializados = async (req, res) => {
   try {
     const profesionales =
@@ -131,7 +131,7 @@ export const obtenerProfesionalesEspecializados = async (req, res) => {
       .json({ message: "Error al obtener los profesionales especializados." });
   }
 };
-
+*/
 export const actualizarProfesionalEspecializado = async (req, res) => {
   const id = req.params.id;
   const data = req.body;
