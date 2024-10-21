@@ -43,7 +43,7 @@ class Calendario {
         "SELECT * FROM calendario WHERE idCalendario = ?",
         [id]
       );
-      return rows[0];
+      return rows;
     } catch (error) {
       console.error("Error al recuperar Calendariopor Id");
       throw error;
@@ -51,6 +51,14 @@ class Calendario {
   }
 
   static async crearCalendario(data) {
+    const {
+      descripcion,
+      diasNoLaborables = null,
+      fechaInicio = null,
+      fechaFin = null,
+      anio,
+      estado = 1,
+    } = data;
     try {
       const query = `
         INSERT INTO calendario (descripcion, diasNoLaborables, fechaInicio, fechaFin, anio,  estado)
@@ -58,12 +66,12 @@ class Calendario {
     `;
 
       const values = [
-        data.descripcion,
-        data.diasNoLaborables,
-        data.fechaInicio,
-        data.fechaFin,
-        data.anio,
-        data.estado,
+        descripcion,
+        diasNoLaborables,
+        fechaInicio,
+        fechaFin,
+        anio,
+        estado,
       ];
 
       const [result] = await conexion.query(query, values);
@@ -76,18 +84,25 @@ class Calendario {
 
   static async actualizarCalendario(data, id) {
     try {
+      const {
+        descripcion,
+        diasNoLaborables = null,
+        fechaInicio = null,
+        fechaFin = null,
+        anio,
+      } = data;
+
       const query =
         "UPDATE calendario SET descripcion = IFNULL(?, descripcion), diasNoLaborables = IFNULL(?, diasNoLaborables), fechaInicio = IFNULL(?, fechaInicio), fechaFin = IFNULL(?, fechaFin), anio = IFNULL(?, anio) WHERE idCalendario = ?";
 
       const values = [
-        data.descripcion,
-        data.diasNoLaborables,
-        data.fechaInicio,
-        data.fechaFin,
-        data.anio,
+        descripcion,
+        diasNoLaborables,
+        fechaInicio,
+        fechaFin,
+        anio,
         id,
       ];
-
       const [rows] = await conexion.query(query, values);
       return rows;
     } catch (error) {

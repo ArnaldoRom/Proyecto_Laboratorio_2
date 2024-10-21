@@ -29,7 +29,7 @@ class Sucursal {
         "SELECT * FROM sucursal WHERE idSucursal = ?",
         [id]
       );
-      return rows[0];
+      return rows;
     } catch (error) {
       console.error("Error al recuperar la Sucursal");
       throw error;
@@ -39,7 +39,7 @@ class Sucursal {
   static async cargarSucursal(data) {
     try {
       const query = `
-        INSERT INTO sucursal (nombre, direccion, clasificacion, estado) VALUES (?, ?, ?, ?,) `;
+        INSERT INTO sucursal (nombre, direccion, clasificacion, estado) VALUES (?, ?, ?, ?) `;
 
       const values = [
         data.nombre,

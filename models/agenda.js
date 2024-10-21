@@ -118,6 +118,22 @@ class Agenda {
       throw error;
     }
   }
+
+  static crearIntervalosTurno(hora, duracion) {
+    const [horas, minutos] = hora.split(":").map(Number);
+
+    const fecha = new Date();
+    fecha.setHours(horas);
+    fecha.setMinutes(minutos);
+
+    fecha.setMinutes(fecha.getMinutes() + duracion);
+
+    const nuevaHora = `${String(fecha.getHours()).padStart(2, "0")}:${String(
+      fecha.getMinutes()
+    ).padStart(2, "0")}`;
+
+    return nuevaHora;
+  }
 }
 
 export default Agenda;
