@@ -51,6 +51,5 @@ class Especialidad {
       WHERE idEspecialidad = '${idEspecialidad}'
     `;
   }
-  
 }
 export default Especialidad;

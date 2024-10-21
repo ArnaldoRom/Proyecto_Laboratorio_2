@@ -1,12 +1,16 @@
-import Especialidad from "../models/Especialidad.js";
-import Profesional from "../models/Profesional.js";
-import ProfesionalEspecializado from "../models/ProfesionalEspecializado.js";
+import Especialidad from "../models/especialidad.js";
+import Profesional from "../models/profesional.js";
+import ProfesionalEspecializado from "../models/ProfecionalEspecializado.js";
 
 // Controlador para Especialidades ---------------------------------------------
 export const crearEspecialidad = async (req, res) => {
   const especialidad = req.body;
 
-  if (!especialidad.nombre || !especialidad.descripcion || especialidad.estado === undefined) {
+  if (
+    !especialidad.nombre ||
+    !especialidad.descripcion ||
+    especialidad.estado === undefined
+  ) {
     return res.status(400).json({ message: "Faltan datos" });
   }
 
@@ -79,7 +83,11 @@ export const activarEspecialidad = async (req, res) => {
 export const crearProfesional = async (req, res) => {
   const profesional = req.body;
 
-  if (!profesional.nombre || !profesional.apellido || profesional.estado === undefined) {
+  if (
+    !profesional.nombre ||
+    !profesional.apellido ||
+    profesional.estado === undefined
+  ) {
     return res.status(400).json({ message: "Faltan datos" });
   }
 
@@ -134,32 +142,42 @@ export const bajaProfesional = async (req, res) => {
   }
 };
 
-
 // Controlador para Profesionales Especializados ---------------------------
 
 export const crearProfesionalEspecializado = async (req, res) => {
   const profesionalEspecializado = req.body;
 
-  if (!profesionalEspecializado.idEspecialidad || !profesionalEspecializado.idProfecional || !profesionalEspecializado.matricula) {
+  if (
+    !profesionalEspecializado.idEspecialidad ||
+    !profesionalEspecializado.idProfecional ||
+    !profesionalEspecializado.matricula
+  ) {
     return res.status(400).json({ message: "Faltan datos necesarios." });
   }
 
   try {
-    await ProfesionalEspecializado.crearProfesionalEspecializado(profesionalEspecializado);
+    await ProfesionalEspecializado.crearProfesionalEspecializado(
+      profesionalEspecializado
+    );
     res.status(201).json({ message: "Profesional especializado creado " });
   } catch (error) {
     console.error("Error al crear el profesional especializado:", error);
-    res.status(500).json({ message: "Error al crear el profesional especializado." });
+    res
+      .status(500)
+      .json({ message: "Error al crear el profesional especializado." });
   }
 };
 
 export const obtenerProfesionalesEspecializados = async (req, res) => {
   try {
-    const profesionales = await ProfesionalEspecializado.obtenerProfesionalesEspecializados();
+    const profesionales =
+      await ProfesionalEspecializado.obtenerProfesionalesEspecializados();
     res.json(profesionales);
   } catch (error) {
     console.error("Error al obtener profesionales especializados:", error);
-    res.status(500).json({ message: "Error al obtener profesionales especializados." });
+    res
+      .status(500)
+      .json({ message: "Error al obtener profesionales especializados." });
   }
 };
 
@@ -168,16 +186,24 @@ export const actualizarProfesionalEspecializado = async (req, res) => {
   const profesionalEspecializado = req.body;
 
   try {
-    const result = await ProfesionalEspecializado.actualizarProfesionalEspecializado(profesionalEspecializado, id);
+    const result =
+      await ProfesionalEspecializado.actualizarProfesionalEspecializado(
+        profesionalEspecializado,
+        id
+      );
 
     if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "El profesional especializado no existe" });
+      return res
+        .status(404)
+        .json({ message: "El profesional especializado no existe" });
     }
 
     res.status(200).json({ message: "Profesional especializado actualizado" });
   } catch (error) {
     console.error("Error al actualizar el profesional especializado:", error);
-    res.status(500).json({ message: "Error al actualizar el profesional especializado." });
+    res
+      .status(500)
+      .json({ message: "Error al actualizar el profesional especializado." });
   }
 };
 
@@ -190,6 +216,8 @@ export const eliminarProfesionalEspecializado = async (req, res) => {
     res.status(200).json({ message: "Profesional especializado eliminado" });
   } catch (error) {
     console.error("Error al eliminar el profesional especializado", error);
-    res.status(500).json({ message: "Error al eliminar el profesional especializado" });
+    res
+      .status(500)
+      .json({ message: "Error al eliminar el profesional especializado" });
   }
 };
