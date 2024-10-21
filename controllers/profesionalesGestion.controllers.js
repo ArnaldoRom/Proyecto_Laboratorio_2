@@ -156,7 +156,9 @@ export const crearProfesionalEspecializado = async (req, res) => {
   }
 
   try {
-    const result =  await ProfesionalEspecializado.crearProfesionalEspecializado(profesionalEspecializado);
+    const result = await ProfesionalEspecializado.crearProfesionalEspecializado(
+      profesionalEspecializado
+    );
     res.status(201).json({ message: "Profesional especializado creado " });
   } catch (error) {
     console.error("Error al crear el profesional especializado:", error);
@@ -186,7 +188,9 @@ export const actualizarProfesionalEspecializado = async (req, res) => {
   try {
     const result =
       await ProfesionalEspecializado.actualizarProfesionalEspecializado(
-        profesionalEspecializado, id);
+        profesionalEspecializado,
+        id
+      );
 
     if (result.affectedRows === 0) {
       return res
@@ -208,7 +212,8 @@ export const eliminarProfesionalEspecializado = async (req, res) => {
   const id = req.params.id;
 
   try {
-    const result = await ProfesionalEspecializado.eliminarProfesionalEspecializado(id);
+    const result =
+      await ProfesionalEspecializado.eliminarProfesionalEspecializado(id);
     res.status(200).json({ message: "Profesional especializado eliminado" });
   } catch (error) {
     console.error("Error al eliminar el profesional especializado", error);

@@ -20,9 +20,14 @@ class Especialidad {
 
   // obtiene todas las especialidades
   static obtenerEspecialidades(callback) {
-    conexion.query`
+    conexion.query(
+      `
       SELECT * FROM especialidad
-    `,callback;
+    `,
+      callback
+    );
+
+    console.log(callback);
   }
 
   // Actualizar la especialidad
