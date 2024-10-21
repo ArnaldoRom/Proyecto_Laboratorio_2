@@ -1,6 +1,6 @@
-import Especialidad from "../models/especialidad.js";
-import Profesional from "../models/profesional.js";
-import ProfesionalEspecializado from "../models/ProfecionalEspecializado.js";
+import Especialidad from "./models/especialidad.js";
+import Profesional from "./models/profesional.js";
+import ProfesionalEspecializado from "./models/profecionalEspecializado.js";
 
 // Controlador para Especialidades ---------------------------------------------
 export const crearEspecialidad = async (req, res) => {
@@ -92,7 +92,7 @@ export const crearProfesional = async (req, res) => {
   }
 
   try {
-    await Profesional.crearProfesional(profesional);
+    const result = await Profesional.crearProfesional(profesional);
     res.status(201).json({ message: "Profesional creado" });
   } catch (error) {
     console.error("Error al crear el profesional:", error);
@@ -122,7 +122,7 @@ export const altaProfesional = async (req, res) => {
   const id = req.params.id;
 
   try {
-    await Profesional.altaProfesional(id);
+    const result = await Profesional.altaProfesional(id);
     res.status(200).json({ message: "Profesional activado" });
   } catch (error) {
     console.error("Error al activar el profesional:", error);
@@ -134,7 +134,7 @@ export const bajaProfesional = async (req, res) => {
   const id = req.params.id;
 
   try {
-    await Profesional.bajaProfesional(id);
+    const result = await Profesional.bajaProfesional(id);
     res.status(200).json({ message: "Profesional desactivado" });
   } catch (error) {
     console.error("Error al desactivar el profesional:", error);
@@ -156,9 +156,7 @@ export const crearProfesionalEspecializado = async (req, res) => {
   }
 
   try {
-    await ProfesionalEspecializado.crearProfesionalEspecializado(
-      profesionalEspecializado
-    );
+    const result =  await ProfesionalEspecializado.crearProfesionalEspecializado(profesionalEspecializado);
     res.status(201).json({ message: "Profesional especializado creado " });
   } catch (error) {
     console.error("Error al crear el profesional especializado:", error);
@@ -188,9 +186,7 @@ export const actualizarProfesionalEspecializado = async (req, res) => {
   try {
     const result =
       await ProfesionalEspecializado.actualizarProfesionalEspecializado(
-        profesionalEspecializado,
-        id
-      );
+        profesionalEspecializado, id);
 
     if (result.affectedRows === 0) {
       return res
@@ -212,7 +208,7 @@ export const eliminarProfesionalEspecializado = async (req, res) => {
   const id = req.params.id;
 
   try {
-    await ProfesionalEspecializado.eliminarProfesionalEspecializado(id);
+    const result = await ProfesionalEspecializado.eliminarProfesionalEspecializado(id);
     res.status(200).json({ message: "Profesional especializado eliminado" });
   } catch (error) {
     console.error("Error al eliminar el profesional especializado", error);
@@ -221,3 +217,4 @@ export const eliminarProfesionalEspecializado = async (req, res) => {
       .json({ message: "Error al eliminar el profesional especializado" });
   }
 };
+
