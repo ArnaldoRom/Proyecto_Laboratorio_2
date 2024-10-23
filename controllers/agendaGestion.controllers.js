@@ -1,4 +1,4 @@
-import Agenda from "../models/Agenda.js";
+import Agenda from "../models/agenda.js";
 import ListaEspera from "../models/ListaEspera.js";
 import Turno from "../models/turno.mjs";
 import SobreTurno from "../models/SobreTurno.js";
@@ -133,6 +133,18 @@ export const filtroEstadoTurno = async (req, res) => {
     });
   }
 };
+
+export const filtroClasificacion = async (req, res) =>{
+  console.log(req.params.clasificacion)
+  try{
+    const rows = await Agenda.porClasificacion(req.params.nombre);
+    
+    res.json(rows);
+  }catch(error){
+    console.error(error);
+    res.status(500).json({message: "Error al obtener agenda por clasificacion"});
+  }
+}
 
 //------------ SOBRE TURNO -------------------------//
 

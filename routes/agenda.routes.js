@@ -6,13 +6,16 @@ import {
   filtroEspecialidad,
   filtroProfecional,
   filtroEstadoTurno,
-} from "../controllers/agenda.controllers.js";
+  filtroClasificacion
+} from "../controllers/agendaGestion.controllers.js";
 
 const router = Router();
 
 router.post("/agenda/nueva", crearAgenda);
 
 router.get("/agendas", getAgendas);
+
+router.get("/agendas/clasificacion/:nombre", filtroClasificacion)
 
 router.get("/agenda/especialidad/:nombre", filtroEspecialidad);
 

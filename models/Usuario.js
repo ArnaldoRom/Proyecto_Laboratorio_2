@@ -2,13 +2,13 @@ import { conexion } from "../config/db.js";
 
 class Usuario {
   #nombreUsuario;
-  #contraseña;
+  #contrasena;
   #rol;
   #estado;
 
-  constructor(nombreUsuario, contraseña, rol, estado) {
+  constructor(nombreUsuario, contrasena, rol, estado) {
     this.#nombreUsuario = nombreUsuario;
-    this.#contraseña = contraseña;
+    this.#contrasena = contrasena;
     this.#rol = rol;
     this.#estado = estado;
   }
@@ -17,14 +17,13 @@ class Usuario {
   static async crearUsuario(data) {
     try {
       const query = `
-        INSERT INTO usuario (nombreUsuario, contraseña, rol, estado) 
-        VALUES (?, ?, ?, ?)
+        INSERT INTO usuario (nombreUsuario, contrasena, rol, estado) 
+        VALUES (?, ?, ?, 1)
       `;
       const values = [
         data.nombreUsuario,
-        data.contraseña,
+        data.contrasena,
         data.rol || 'Paciente', // Asignar 'Paciente' por defecto si no se proporciona
-        data.estado,
       ];
       const [result] = await conexion.query(query, values);
       return result.insertId;

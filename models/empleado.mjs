@@ -20,14 +20,13 @@ class Empleado {
     try {
       const query = `
         INSERT INTO empleado (nombre, numeroLegajo, idSucursal, idUsuario, estado) 
-        VALUES (?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, 1)
       `;
       const values = [
         data.nombre,
         data.numeroLegajo,
         data.idSucursal,
         data.idUsuario,
-        data.estado,
       ];
       const [result] = await conexion.query(query, values);
       return result.insertId;
