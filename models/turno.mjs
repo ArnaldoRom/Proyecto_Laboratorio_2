@@ -48,11 +48,13 @@ class Turno {
     try {
       const query = `
         INSERT INTO turno (fecha, hora, clasificacion, idPaciente, idAgenda, idEmpleado, idEstadoHorario)
-        VALUES (NULL, NULL, NULL, NULL, ?, NULL, ?)
+        VALUES (NULL, ?, NULL, NULL, ?, NULL, ?)
       `;
       const values = [
+        data.hora,
         data.idAgenda,
         data.idEstadoHorario,
+
       ];
       const [result] = await conexion.query(query, values);
       return result.insertId;
