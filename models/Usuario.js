@@ -12,7 +12,7 @@ class Usuario {
     this.#rol = rol;
     this.#estado = estado;
   }
-
+//crearUsuario, obtenerUsuario, actualizarUsuario, eliminarUsuario, activarUsuario
   // Crear un nuevo usuario
   static async crearUsuario(data) {
     try {
