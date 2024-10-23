@@ -57,20 +57,31 @@ class Agenda {
   }
 
   static async agregarAgenda(data) {
+    const {
+      dia,
+      duacionHorario,
+      hora_inicio,
+      hora_Fin,
+      limiteTurno,
+      idProfesionalEspecializado,
+      idSucursal,
+      idCalendario,
+      estado = 1,
+    } = data;
     try {
       const query =
-        "INSERT INTO agenda (dia, duracionHorario, hora_inicio, hora_Fin, limiteTurno, idProfesionalEspecializado, idSucursal, idCalendario, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        "INSERT INTO agenda (dia, duacionHorario, hora_inicio, hora_Fin, limiteTurno, idProfesionalEspecializado, idSucursal, idCalendario, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
       const values = [
-        data.dia,
-        data.duracionHorario,
-        data.hora_inicio,
-        data.hora_fin,
-        data.limiteTurno,
-        data.idProfecionalEspecializado,
-        data.idSucursal,
-        data.idCalendario,
-        data.estado,
+        dia,
+        duacionHorario,
+        hora_inicio,
+        hora_Fin,
+        limiteTurno,
+        idProfesionalEspecializado,
+        idSucursal,
+        idCalendario,
+        estado,
       ];
       const [result] = await conexion.query(query, values);
       return result.insertId;
@@ -120,17 +131,9 @@ class Agenda {
   }
 
   static crearIntervalosTurno(hora, duracion) {
-    const [horas, minutos] = hora.split(":").map(Number);
+    const nuevaHora = new Date(hora);
 
-    const fecha = new Date();
-    fecha.setHours(horas);
-    fecha.setMinutes(minutos);
-
-    fecha.setMinutes(fecha.getMinutes() + duracion);
-
-    const nuevaHora = `${String(fecha.getHours()).padStart(2, "0")}:${String(
-      fecha.getMinutes()
-    ).padStart(2, "0")}`;
+    nuevaHora.setMinutes(nuevaHora.getMinutes() + duracion);
 
     return nuevaHora;
   }

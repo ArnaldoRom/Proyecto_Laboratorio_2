@@ -1,50 +1,50 @@
 import Agenda from "../models/Agenda.js";
+import ListaEspera from "../models/ListaEspera.js";
 import Turno from "../models/turno.mjs";
 import SobreTurno from "../models/SobreTurno.js";
 
-// Arreglar  la creacion de la agenda agregar  creacion de sobreturno
 export const crearAgenda = async (req, res) => {
-  const {
-    dia,
-    duracionHorario,
-    hora_inicio,
-    hora_Fin,
-    limiteTurno,
-    idProfecionalEspecializado,
-    idSucursal,
-    idCalendario,
-    estado,
-  } = req.body;
-
+  const agenda = req.body;
+  const { hora_inicio, hora_Fin, duacionHorario } = req.body;
   try {
-    const agendaNueva = await Agenda.crearAgenda(
-      dia,
-      duracionHorario,
-      hora_inicio,
-      hora_Fin,
-      limiteTurno,
-      idProfecionalEspecializado,
-      idSucursal,
-      idCalendario,
-      estado
-    );
+    const agendaNueva = await Agenda.agregarAgenda(agenda);
 
-    let tiempo = hora_inicio;
+    let [horasInicio, minutosInicio] = hora_inicio.split(":").map(Number);
+    let [horasFin, minutosFin] = hora_Fin.split(":").map(Number);
+
+    const tiempoInicio = new Date();
+    tiempoInicio.setHours(horasInicio, minutosInicio, 0, 0);
+
+    const tiempoFin = new Date();
+    tiempoFin.setHours(horasFin, minutosFin, 0, 0);
+
+    let tiempo = new Date(tiempoInicio);
+
+    const [horasDuracion, minutosDuracion] = duacionHorario
+      .split(":")
+      .map(Number);
+    const duracionTurno = horasDuracion * 60 + minutosDuracion;
+
+    console.log(duracionTurno);
+
     const turnos = [];
 
-    while (tiempo < hora_Fin) {
+    while (tiempo < tiempoFin) {
       const turno = await Turno.crearTurnoConNull({
         fecha: null,
-        hora: null,
+        hora: `${String(tiempo.getHours()).padStart(2, "0")}:${String(
+          tiempo.getMinutes()
+        ).padStart(2, "0")}:00`,
         idPaciente: null,
         idAgenda: agendaNueva,
         idEmpleado: null,
         idListaEspera: null,
-        idEstadoHorario: "Libre",
+        idEstadoHorario: 2, // "LIBRE"
       }); // FUNCION PARA CREEAR TURNO
 
       turnos.push(turno);
-      tiempo = Agenda.crearIntervalosTurno(tiempo, duracionHorario);
+      tiempo = Agenda.crearIntervalosTurno(tiempo, duracionTurno);
+      console.log(tiempo);
     }
 
     res.status(201).json({ agenda: agendaNueva, turnos });
@@ -150,7 +150,9 @@ export const getSobreTurnos = async (req, res) => {
 
 export const incorporarPaciente = async (req, res) => {
   try {
-    const nuevoPaciente = await SobreTurno.agregarPaciente(req.params.id);
+    const hora = req.params.hora;
+    const id = req.params.id;
+    const nuevoPaciente = await SobreTurno.agregarPaciente(hora, id);
 
     res.status(201).json({ Sucursal: nuevoPaciente });
   } catch (error) {
@@ -161,12 +163,43 @@ export const incorporarPaciente = async (req, res) => {
 
 export const retirarPaciente = async (req, res) => {
   try {
-    const primero = await SobreTurno.primerPaciente(req.params.id);
-    const paciente = await SobreTurno.sacarPaciente(primero, req.params.id);
+    const paciente = await SobreTurno.sacarPaciente(req.params.id);
 
     res.status(201).json({ Sucursal: paciente });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error retirar paciente" });
+  }
+};
+
+//--------------- LISTA ESPERA ----------------------//
+
+export const getLista = async (req, res) => {
+  try {
+    const rows = await ListaEspera.getListaEspera();
+    res.json(rows);
+  } catch (error) {
+    console.error("Error al obtener lista ", error);
+    res.status(500).json({
+      message: "Error al obtener lista de espera",
+    });
+  }
+};
+
+export const crearListaEspera = async (req, res) => {
+  const paciente = req.params.idPaciente;
+  const agenda = await Agenda.getAgendaId(req.params.idAgenda);
+
+  if (!paciente || !agenda) {
+    return res.status(400).json({ message: "Faltan parámetros requeridos." });
+  }
+
+  try {
+    const nuevaLista = await ListaEspera.agregarListaEspera(paciente, agenda);
+
+    res.status(201).json({ ListaEspera: nuevaLista });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al crear la agenda y los turnos." });
   }
 };

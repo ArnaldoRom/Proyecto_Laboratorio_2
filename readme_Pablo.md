@@ -20,17 +20,24 @@
 - Se realizo las funciones de sobreturno.
 
 - Se realizo la correccion de las entidades sucursal y calendario, tambien se creo el controler GESTION que va a menejar:
+
   - Crear Sucursales y calendarios
   - Poder ver la lista de las sucursales y los calendarios creados.
   - Filtrar por id.
   - Actualizar los Calendarios.
 
+- Se corrrigio el agenda controler.. ahora se puede :
+  - crear agenda la cual tambien crea los turnos de acuerdo a la duracion de la agenda
+  - filtrar agenda por : especialidad, profecional y por estado del turno
+
 ---
+
+### DUDAS QUE SURGEN
+
+    *_No se si sobreturno y lista esperairian en agenda controller??
 
 ### ERRORES A CORREGIR
 
     *_GREGAR AFFECTER ROWS EN LAS VALIDACIONES AL CREAR
-
-    *_NO SE PUEDE USAR PUTCH...
 
     *_Faltaria agregar un mensaje de EXITO al crear sucursal y calendario....

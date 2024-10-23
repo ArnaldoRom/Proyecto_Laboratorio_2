@@ -34,14 +34,14 @@ class ListaEspera {
     }
   }
 
-  static async agregarListaEspera(id) {
+  static async agregarListaEspera(paciente, agenda) {
     try {
       const [result] = await conexion.query(
         `
-        INSERT INTO listaEspera (idPaciente)
-        VALUES (?)
+        INSERT INTO listaEspera (idPaciente, idAgenda)
+        VALUES (?, ?)
     `,
-        [id]
+        [paciente, agenda]
       );
       return result.insertId;
     } catch (error) {

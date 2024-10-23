@@ -21,14 +21,30 @@ class SobreTurno {
     }
   }
 
-  static async agregarPaciente(id) {
+  static async crearSobreTurno(data) {
+    const { hora = null, idPaciente = null, idAgenda } = data;
+    try {
+      const query = `
+        INSERT INTO sobreturno (hora, idPaciente, idAgenda)
+        VALUES (?, ?, ?)
+    `;
+
+      const values = [hora, idPaciente, idAgenda];
+
+      const [result] = await conexion.query(query, values);
+      return result.insertId;
+    } catch (error) {
+      console.error("Error al crear Sobre turno", error);
+      throw error;
+    }
+  }
+
+  static async agregarPaciente(hora, id) {
     try {
       const [result] = await conexion.query(
         `
-        INSERT INTO sobreturno (idPaciente)
-        VALUES (?)
-    `,
-        [id]
+       UPDATE sobreturno SET hora = ?, idPaciente = ?`,
+        [hora, id]
       );
       return result.insertId;
     } catch (error) {
@@ -40,30 +56,16 @@ class SobreTurno {
     }
   }
 
-  static async sacarPaciente(idPaciente, idAgenda) {
+  static async sacarPaciente(idSobreTurno) {
     try {
-      const query =
-        "DELETE FROM sobreturno WHERE IDPaciente = ? AND IDAgenda = ?";
-      const [result] = await conexion.query(query, [idPaciente, idAgenda]);
+      const query = "DELETE FROM sobreturno WHERE idSobreTurno = ? ";
+      const [result] = await conexion.query(query, [idSobreTurno]);
       return result;
     } catch (error) {
       console.error(
         "Error al Borrar paciente de la lista de sobre turno",
         error
       );
-      throw error;
-    }
-  }
-
-  static async primerPaciente(idAgenda) {
-    try {
-      const [rows] = await conexion.query(
-        "SELECT IDSobreTurno, hora, IDPaciente, IDAgenda FROM sobreturno WHERE IDAgenda = ? ORDER BY IDSobreTurno ASC LIMIT 1;",
-        [idAgenda]
-      );
-      return rows;
-    } catch (error) {
-      console.error("Error al obtener Paciente: ", error);
       throw error;
     }
   }
