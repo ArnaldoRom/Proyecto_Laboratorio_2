@@ -6,4 +6,8 @@ router.get("/", (req, res) => {
   res.render("index");
 });
 
+router.get("/crearProfesional", (req, res) => {
+  res.render("vistasDinamicas/crearProfesional");
+});
+
 export default router;
