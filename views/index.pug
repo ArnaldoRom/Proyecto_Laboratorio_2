@@ -1,17 +1,19 @@
 extends layaout
 
 block content
-  div(class="header")
+  .header
     h1 Clinica Popeye
     p Usuario: nombre_del_usuario
-  div(class="navegadorIzquierdo")
-    nav
-        li
-            a(href="#") nombre1
-        li
-            a(href="#") Nombre2
-        li
+  .main-content
+    .navegadorIzquierdo
+      nav
+        ul
+          li
+            a(href="#") Buscar Turno
+          li
+            a(href="vistasDinamicas/crearProfesional.pug") Cargar Profesional 
+          li
             a(href="#") Opcion3
-        li
-            a(href="#") Opcion3
-  div(class="content")
+          li
+            a(href="#") Opcion4
+    .content
