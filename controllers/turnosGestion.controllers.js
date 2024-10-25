@@ -1,71 +1,145 @@
+import Turno from "../models/turno.mjs";
+import Agenda from "../models/agenda.js";
+import ListaEspera from "../models/ListaEspera.js";
+import SobreTurno from "../models/SobreTurno.js";
 
+export const reservarTurno = async (req, res) => {
+  const data = req.body;
 
-//------------ SOBRE TURNO -------------------------//
+  try {
+    const reservar = await Turno.modificarTurno(data);
+    res.status(201).json({ Turno: reservar });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al reservar el turno" });
+  }
+};
+
+export const getTurno = async (req, res) => {
+  try {
+    const rows = await Turno.getTurno();
+    res.json(rows);
+  } catch (error) {
+    console.error("Error al obtener Turno: ", error);
+    res.status(500).json({
+      message: "Error al obtener los Turnos",
+    });
+  }
+};
+
+export const getTurnoId = async (req, res) => {
+  try {
+    const rows = await Turno.getTurnoId(req.params.id);
+
+    if (rows.length === 0)
+      return res.status(404).json({
+        message: "El turno no existe",
+      });
+    res.json(rows);
+  } catch (error) {
+    console.error("Error al obtener Turno ", error);
+    res.status(500).json({
+      message: "Error al obtener el turno",
+    });
+  }
+};
+
+export const cambiarEstado = async (req, res) => {
+  const data = req.body;
+  try {
+    const result = await Turno.cambiarEstado(data);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "El turno no existe" });
+    }
+
+    return res.status(200).json({ message: "Estado cambiado con exito" });
+  } catch (error) {
+    console.error("Error al Actualizar");
+    return res.status(500).json({
+      message: "Error al cambiar estado del Turno",
+    });
+  }
+};
+
+//----------------------- SOBRE TURNO -----------------//
 
 export const getSobreTurnos = async (req, res) => {
-    try {
-      const rows = await SobreTurno.getlistaSobreTurnos();
-      res.json(rows);
-    } catch (error) {
-      console.error("Error al obtener lista ", error);
-      res.status(500).json({
-        message: "Error al obtener lista de Sobre turnos",
-      });
+  try {
+    const rows = await SobreTurno.getlistaSobreTurnos();
+    res.json(rows);
+  } catch (error) {
+    console.error("Error al obtener lista ", error);
+    res.status(500).json({
+      message: "Error al obtener lista de Sobre turnos",
+    });
+  }
+};
+
+export const crearSobreTurno = async (req, res) => {
+  const data = req.body;
+  const { hora, idAgenda } = req.body;
+  try {
+    const reservados = await Turno.turnosReservadosPorHora(hora, idAgenda);
+
+    if (reservados.length === 0) {
+      throw new Error("No se puede crear sobreturno");
     }
-  };
-  
-  export const incorporarPaciente = async (req, res) => {
-    try {
-      const hora = req.params.hora;
-      const id = req.params.id;
-      const nuevoPaciente = await SobreTurno.agregarPaciente(hora, id);
-  
-      res.status(201).json({ Sucursal: nuevoPaciente });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Error al incorporar paciente" });
+
+    const sobreturnos = await SobreTurno.getlistaSobreTurnoPorAgenda(idAgenda);
+    const sobreTurnosMaximos = await Agenda.limiteSobreTurno(idAgenda);
+
+    if (sobreturnos.length >= sobreTurnosMaximos) {
+      throw new Error("Se alcanzo el limite de Sobre Turnos");
     }
-  };
-  
-  export const retirarPaciente = async (req, res) => {
-    try {
-      const paciente = await SobreTurno.sacarPaciente(req.params.id);
-  
-      res.status(201).json({ Sucursal: paciente });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Error retirar paciente" });
-    }
-  };
-  
-  //--------------- LISTA ESPERA ----------------------//
-  
-  export const getLista = async (req, res) => {
-    try {
-      const rows = await ListaEspera.getListaEspera();
-      res.json(rows);
-    } catch (error) {
-      console.error("Error al obtener lista ", error);
-      res.status(500).json({
-        message: "Error al obtener lista de espera",
-      });
-    }
-  };
-  
-  export const crearListaEspera = async (req, res) => {
-    const paciente = req.params.idPaciente;
-    const agenda = await Agenda.getAgendaId(req.params.idAgenda);
-  
-    if (!paciente || !agenda) {
-      return res.status(400).json({ message: "Faltan parámetros requeridos." });
-    }
-  
-    try {
-      const nuevaLista = await ListaEspera.agregarListaEspera(paciente, agenda);
-  
-      res.status(201).json({ ListaEspera: nuevaLista });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Error al crear la agenda y los turnos." });
-    }
-  };
+
+    const lista = await SobreTurno.crearSobreTurno(data);
+
+    res.status(201).json({ ListaSobreTurno: lista });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al incorporar paciente" });
+  }
+};
+
+export const retirarPaciente = async (req, res) => {
+  try {
+    const paciente = await SobreTurno.sacarPaciente(req.params.id);
+
+    res.status(201).json({ Eliminado: paciente });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error retirar paciente" });
+  }
+};
+
+//--------------- LISTA ESPERA ----------------------//
+
+export const getLista = async (req, res) => {
+  try {
+    const rows = await ListaEspera.getListaEspera();
+    res.json(rows);
+  } catch (error) {
+    console.error("Error al obtener lista ", error);
+    res.status(500).json({
+      message: "Error al obtener lista de espera",
+    });
+  }
+};
+
+export const crearListaEspera = async (req, res) => {
+  const paciente = req.params.idPaciente;
+  const agenda = await Agenda.getAgendaId(req.params.idAgenda);
+
+  if (!paciente || !agenda) {
+    return res.status(400).json({ message: "Faltan parámetros requeridos." });
+  }
+
+  try {
+    const nuevaLista = await ListaEspera.agregarListaEspera(paciente, agenda);
+
+    res.status(201).json({ ListaEspera: nuevaLista });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al crear la agenda y los turnos." });
+  }
+};

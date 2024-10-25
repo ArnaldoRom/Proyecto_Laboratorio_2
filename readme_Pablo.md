@@ -19,16 +19,32 @@
 
 - Se realizo las funciones de sobreturno.
 
-- Se realizo la correccion de las entidades sucursal y calendario, tambien se creo el controler GESTION que va a menejar:
+- Se realizo la correccion de las entidades sucursal y calendario, tambien se creo el controler **_GESTION_** que va a menejar:
 
   - Crear Sucursales y calendarios
   - Poder ver la lista de las sucursales y los calendarios creados.
   - Filtrar por id.
   - Actualizar los Calendarios.
 
-- Se corrrigio el agenda controler.. ahora se puede :
+- Se corrrigio el **_agenda controler_**.. ahora se puede :
+
   - crear agenda la cual tambien crea los turnos de acuerdo a la duracion de la agenda
   - filtrar agenda por : especialidad, profecional y por estado del turno
+
+- Se empeso con el **_Turno controler_** se puede realiar:
+
+  - Cargar lod datos necesarios del **turno**:
+    - paciente
+    - fecha
+    - empleado
+    - clasificacion
+    - el turno automaticamente pasa a **reservado**
+  - Manejar los **Sobre Turnos**:
+    - crear Sobre turno
+    - eliminar
+    - listar
+
+- Se corrigio el view con las indentaciones, tambien se realizo la rutas de las vistas y se configuro el app.js para que trabajara con el motor de plantilla PUG..
 
 ---
 
@@ -41,3 +57,7 @@
     *_GREGAR AFFECTER ROWS EN LAS VALIDACIONES AL CREAR
 
     *_Faltaria agregar un mensaje de EXITO al crear sucursal y calendario....
+
+### LO QUE ME FALTA
+
+    *_ Terminar lista de espera en TURNO GESTION CONTOLER.....

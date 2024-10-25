@@ -9,7 +9,15 @@ class Turno {
   #idEmpleado;
   #idEstadoHorario;
 
-  constructor(fecha, hora, clasificacion, idPaciente, idAgenda, idEmpleado, idEstadoHorario) {
+  constructor(
+    fecha,
+    hora,
+    clasificacion,
+    idPaciente,
+    idAgenda,
+    idEmpleado,
+    idEstadoHorario
+  ) {
     this.#fecha = fecha;
     this.#hora = hora;
     this.#clasificacion = clasificacion;
@@ -50,12 +58,7 @@ class Turno {
         INSERT INTO turno (fecha, hora, clasificacion, idPaciente, idAgenda, idEmpleado, idEstadoHorario)
         VALUES (NULL, ?, NULL, NULL, ?, NULL, ?)
       `;
-      const values = [
-        data.hora,
-        data.idAgenda,
-        data.idEstadoHorario,
-
-      ];
+      const values = [data.hora, data.idAgenda, data.idEstadoHorario];
       const [result] = await conexion.query(query, values);
       return result.insertId;
     } catch (error) {
@@ -65,22 +68,18 @@ class Turno {
   }
 
   // Modificar un turno
-  static async modificarTurno(data, idTurno) {
+  static async modificarTurno(data) {
     try {
       const query = `
-        UPDATE turno 
-        SET fecha = ?, hora = ?, clasificacion = ?, idPaciente = ?, idAgenda = ?, idEmpleado = ?, idEstadoHorario = ?
-        WHERE idTurno = ?
+      UPDATE turno 
+      SET fecha = ?, clasificacion = ?, idPaciente = ?, idEmpleado = ?, idEstadoHorario = 3 WHERE idTurno = ?
       `;
       const values = [
         data.fecha,
-        data.hora,
         data.clasificacion,
         data.idPaciente,
-        data.idAgenda,
         data.idEmpleado,
-        data.idEstadoHorario,
-        idTurno,
+        data.idTurno,
       ];
       const [result] = await conexion.query(query, values);
       return result.affectedRows;
@@ -91,14 +90,16 @@ class Turno {
   }
 
   // Cambiar el estado actual a cualquier otro
-  static async cambiarEstado(estado, idTurno) {
+  static async cambiarEstado(data) {
     try {
       const query = `
         UPDATE turno 
-        SET estado = ?
+        SET idEstadoHorario = ?
         WHERE idTurno = ?
       `;
-      const [result] = await conexion.query(query, [estado, idTurno]);
+
+      const values = [data.idEstadoHorario, data.idTurno];
+      const [result] = await conexion.query(query, values);
       return result.affectedRows;
     } catch (error) {
       console.error("Error al cambiar el estado de un turno", error);
@@ -121,7 +122,42 @@ class Turno {
       throw error;
     }
   }
+
+  static async getTurno() {
+    try {
+      const [rows] = await conexion.query("SELECT * FROM turno");
+      return rows;
+    } catch (error) {
+      console.error("Error al obtener Sucursal", error);
+      throw error;
+    }
+  }
+
+  static async getTurnoId(id) {
+    try {
+      const [rows] = await conexion.query(
+        "SELECT * FROM turno WHERE idTurno = ?",
+        [id]
+      );
+      return rows;
+    } catch (error) {
+      console.error("Error al recuperar Turno");
+      throw error;
+    }
+  }
+
+  static async turnosReservadosPorHora(hora, idAgenda) {
+    try {
+      const [rows] = await conexion.query(
+        "SELECT * FROM turno WHERE hora = ? AND idAgenda = ?",
+        [hora,idAgenda]
+      );
+      return rows;
+    } catch (error) {
+      console.error("Error al obtener Pacientes de la lista", error);
+      throw error;
+    }
+  }
 }
 
 export default Turno;
-

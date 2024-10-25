@@ -138,23 +138,32 @@ class Agenda {
     return nuevaHora;
   }
 
-  static async porClasificacion(clasificacion){
-    try{
-      const query = "SELECT turno.fecha, turno.clasificacion, turno.hora, turno.idPaciente FROM agenda INNER JOIN turno ON turno.idAgenda = agenda.idAgenda WHERE turno.clasificacion = ?";
-      console.log(clasificacion)
-      const [rows] = await conexion.query(query,[clasificacion]);
-      console.log(rows)
+  static async porClasificacion(clasificacion) {
+    try {
+      const query =
+        "SELECT turno.fecha, turno.clasificacion, turno.hora, turno.idPaciente FROM agenda INNER JOIN turno ON turno.idAgenda = agenda.idAgenda WHERE turno.clasificacion = ?";
+      console.log(clasificacion);
+      const [rows] = await conexion.query(query, [clasificacion]);
+      console.log(rows);
       return rows;
-    }catch(error){
+    } catch (error) {
       console.error("Error al obtener por clasificacion");
       throw error;
     }
-  
   }
 
+  static async limiteSobreTurno(idAgenda) {
+    try {
+      const [rows] = await conexion.query(
+        "SELECT limiteTurno FROM agenda WHERE idAgenda = ?",
+        [idAgenda]
+      );
+      return rows;
+    } catch (error) {
+      console.error("Error al obtener Pacientes de la lista", error);
+      throw error;
+    }
+  }
 }
-
-
-
 
 export default Agenda;
