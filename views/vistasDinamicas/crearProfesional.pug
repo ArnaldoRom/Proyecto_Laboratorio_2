@@ -4,9 +4,9 @@ block content
   .form-container
     h2 Cargar Profesional Especializado
 
-    form(action="/profesionales" method="POST")
+    
       
-      //- Información del Profesional
+     
       h3 Datos del Profesional
       div.form-group
         label(for="nombre") Nombre:
@@ -16,7 +16,7 @@ block content
         label(for="apellido") Apellido:
         input(type="text" id="apellido" name="apellido" required)
 
-      //- Información de la Especialidad
+     
       h3 Datos de la Especialidad
       div.form-group
         label(for="especialidadNombre") Nombre de la especialidad:
@@ -26,11 +26,11 @@ block content
         label(for="especialidadDescripcion") Descripción:
         input(type="text" id="especialidadDescripcion" name="especialidadDescripcion" required)
 
-      //- Matrícula para Profesional Especializado
+      
       h3 Datos de Registro
       div.form-group
         label(for="matricula") Matrícula:
         input(type="text" id="matricula" name="matricula" required)
 
-      //- Botón de envío
+     
       button(type="submit") Guardar Profesional Especializado
