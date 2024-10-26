@@ -43,21 +43,28 @@
     - crear Sobre turno
     - eliminar
     - listar
+  - Manejo de la **Lista de Espera**:
+    - crear lista espera
+    - verificar si un turno se cancelo y se saca al primer paciente de la lista de espera
+    - borrar paciente de lista de espera
 
 - Se corrigio el view con las indentaciones, tambien se realizo la rutas de las vistas y se configuro el app.js para que trabajara con el motor de plantilla PUG..
+- Se empezo con las vistas enlazamos dos vistas para ver si se pódia cargar en el mismo index sin la necesidad de ir a otra pagina..
 
 ---
 
 ### DUDAS QUE SURGEN
 
-    *_No se si sobreturno y lista esperairian en agenda controller??
+    *_No se si sobreturno y lista esperairian en agenda controller?? ------------// CORREGIDO
 
 ### ERRORES A CORREGIR
 
     *_GREGAR AFFECTER ROWS EN LAS VALIDACIONES AL CREAR
 
+    *_UTILIZAR SOLO GET y POST--------- // CORREGIDO
+
     *_Faltaria agregar un mensaje de EXITO al crear sucursal y calendario....
 
 ### LO QUE ME FALTA
 
-    *_ Terminar lista de espera en TURNO GESTION CONTOLER.....
+    *_ Terminar lista de espera en TURNO GESTION CONTOLER..... -----------------// CORREGIDO

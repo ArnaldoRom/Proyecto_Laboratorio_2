@@ -7,7 +7,11 @@ router.get("/", (req, res) => {
 });
 
 router.get("/crearProfesional", (req, res) => {
-  res.render("vistasDinamicas/crearProfesional");
+  res.render("vistasDinamicas/crearProfesional", { layaout: false });
+});
+
+router.get("/cargarSucursal", (req, res) => {
+  res.render("vistasDinamicas/cargarSucursal", { layaout: false });
 });
 
 export default router;

@@ -127,7 +127,7 @@ export const getLista = async (req, res) => {
 };
 
 export const crearListaEspera = async (req, res) => {
-  const paciente = req.params.idPaciente;
+  const paciente = req.body.idPaciente;
   const agenda = await Agenda.getAgendaId(req.params.idAgenda);
 
   if (!paciente || !agenda) {
@@ -135,11 +135,49 @@ export const crearListaEspera = async (req, res) => {
   }
 
   try {
-    const nuevaLista = await ListaEspera.agregarListaEspera(paciente, agenda);
+    const turnoDisponible = await Turno.turnosReservadosPorAgenda(agenda);
 
-    res.status(201).json({ ListaEspera: nuevaLista });
+    if (turnoDisponible.length === 0) {
+      const nuevaLista = await ListaEspera.agregarListaEspera(paciente, agenda);
+      return res.status(201).json({ ListaEspera: nuevaLista });
+    } else {
+      return res.status(400).json({ message: "Existen turnos disponibles" });
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error al crear la agenda y los turnos." });
+  }
+};
+
+export const sacarPacienteDeListaEspera = async (req, res) => {
+  try {
+    const { idTurno } = req.body;
+    const turnoCancelado = await Turno.getTurnoId(idTurno);
+
+    if (turnoCancelado[0].idestadoHorario === 5) {
+      const primero = await ListaEspera.primerPaciente(
+        turnoCancelado[0].idAgenda
+      );
+      if (primero) {
+        await Turno.asignarPaciente(
+          primero.idPaciente,
+          turnoCancelado[0].idTurno
+        );
+        await ListaEspera.sacarPacienteDeListaEspera(
+          primero.idPaciente,
+          turnoCancelado[0].idAgenda
+        );
+        return res
+          .status(200)
+          .json({ message: "Paciente agregado al turno calncelado" });
+      } else {
+        return res
+          .status(400)
+          .json({ message: "No queda ningun paciente en la LIsta de Espera" });
+      }
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error retirar paciente" });
   }
 };

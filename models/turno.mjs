@@ -123,6 +123,23 @@ class Turno {
     }
   }
 
+  static async asignarPaciente(idPaciente, idTurno) {
+    try {
+      const query = `
+        UPDATE turno 
+        SET idPaciente = ?
+        WHERE idTurno = ?
+      `;
+
+      const values = [idPaciente, idTurno];
+      const [result] = await conexion.query(query, values);
+      return result.affectedRows;
+    } catch (error) {
+      console.error("Error al agregar paciente al turno", error);
+      throw error;
+    }
+  }
+
   static async getTurno() {
     try {
       const [rows] = await conexion.query("SELECT * FROM turno");
@@ -150,11 +167,23 @@ class Turno {
     try {
       const [rows] = await conexion.query(
         "SELECT * FROM turno WHERE hora = ? AND idAgenda = ?",
-        [hora,idAgenda]
+        [hora, idAgenda]
       );
       return rows;
     } catch (error) {
       console.error("Error al obtener Pacientes de la lista", error);
+      throw error;
+    }
+  }
+
+  static async turnosReservadosPorAgenda(idAgenda) {
+    try {
+      const query =
+        "SELECT * FROM turno WHERE idAgenda = ? AND idEstadoHorario = 2";
+      const [rows] = await conexion.query(query, [idAgenda]);
+      return rows;
+    } catch (error) {
+      console.error("Error al verificar turnos de la agenda", error);
       throw error;
     }
   }

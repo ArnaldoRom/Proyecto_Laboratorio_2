@@ -1,36 +1,30 @@
-extends ../layaout
+.form-container
+  h2 Cargar Profesional Especializado
+  
+    h3 Datos del Profesional
+    div.form-group
+      label(for="nombre") Nombre:
+      input(type="text" id="nombre" name="nombre" required)
 
-block content
-  .form-container
-    h2 Cargar Profesional Especializado
+    div.form-group
+      label(for="apellido") Apellido:
+      input(type="text" id="apellido" name="apellido" required)
 
     
-      
-     
-      h3 Datos del Profesional
-      div.form-group
-        label(for="nombre") Nombre:
-        input(type="text" id="nombre" name="nombre" required)
+    h3 Datos de la Especialidad
+    div.form-group
+      label(for="especialidadNombre") Nombre de la especialidad:
+      input(type="text" id="especialidadNombre" name="especialidadNombre" required)
 
-      div.form-group
-        label(for="apellido") Apellido:
-        input(type="text" id="apellido" name="apellido" required)
-
-     
-      h3 Datos de la Especialidad
-      div.form-group
-        label(for="especialidadNombre") Nombre de la especialidad:
-        input(type="text" id="especialidadNombre" name="especialidadNombre" required)
-
-      div.form-group
-        label(for="especialidadDescripcion") Descripción:
-        input(type="text" id="especialidadDescripcion" name="especialidadDescripcion" required)
+    div.form-group
+      label(for="especialidadDescripcion") Descripción:
+      input(type="text" id="especialidadDescripcion" name="especialidadDescripcion" required)
 
       
-      h3 Datos de Registro
-      div.form-group
-        label(for="matricula") Matrícula:
-        input(type="text" id="matricula" name="matricula" required)
+    h3 Datos de Registro
+    div.form-group
+      label(for="matricula") Matrícula:
+      input(type="text" id="matricula" name="matricula" required)
 
      
       button(type="submit") Guardar Profesional Especializado

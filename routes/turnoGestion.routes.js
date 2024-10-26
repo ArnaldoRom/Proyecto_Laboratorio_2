@@ -7,6 +7,9 @@ import {
   getSobreTurnos,
   crearSobreTurno,
   retirarPaciente,
+  getLista,
+  crearListaEspera,
+  sacarPacienteDeListaEspera,
 } from "../controllers/turnosGestion.controllers.js";
 
 const routes = Router();
@@ -30,5 +33,11 @@ routes.post("/SobreTurno/agregar", crearSobreTurno);
 routes.post("/SobreTurno/retirarPaciente/:id", retirarPaciente);
 
 //--------------------- LISTA ESPERA ----------------------//
+
+routes.get("/ListaEspera", getLista);
+
+routes.post("/ListaEspera/nueva", crearListaEspera);
+
+routes.post("/ListaEspera/eliminar", sacarPacienteDeListaEspera);
 
 export default routes;
