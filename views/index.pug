@@ -9,12 +9,12 @@ block content
       nav
         ul
           li
-            a(href="#") Buscar Turno
+            a(href="/agenda", onclick="mostrar('cargarAgenda'); return false;") Cargar Agenda
           li
-            a(href="#", onclick="mostrar('crearProfesional')") Cargar Profesional 
+            a(href="/profesional", onclick="mostrar('crearProfesional'); return false;") Cargar Profesional 
           li
-            a(href="#", onclick="mostrar('cargarSucursal')") Carga Sucursal
+            a(href="/sucursal", onclick="mostrar('cargarSucursal'); return false;") Carga Sucursal
           li
-            a(href="#") Opcion4
+            a(href="/calendario", onclick="mostrar('cargarCalendario'); return false;") Cargar Calendario
     .content     
      

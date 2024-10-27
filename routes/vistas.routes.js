@@ -14,4 +14,12 @@ router.get("/cargarSucursal", (req, res) => {
   res.render("vistasDinamicas/cargarSucursal", { layaout: false });
 });
 
+router.get("/cargarAgenda", (req, res) => {
+  res.render("vistasDinamicas/cargarAgenda", { layaout: false });
+});
+
+router.get("/cargarCalendario", (req, res) => {
+  res.render("vistasDinamicas/cargarCalendario", { layaout: false });
+});
+
 export default router;

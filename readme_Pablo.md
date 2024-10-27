@@ -49,13 +49,20 @@
     - borrar paciente de lista de espera
 
 - Se corrigio el view con las indentaciones, tambien se realizo la rutas de las vistas y se configuro el app.js para que trabajara con el motor de plantilla PUG..
-- Se empezo con las vistas enlazamos dos vistas para ver si se pódia cargar en el mismo index sin la necesidad de ir a otra pagina..
+
+- Se empezo con las vistas enlazamos dos vistas para
+  ver si se pódia cargar en el mismo index sin la necesidad de ir a otra pagina..
+
+- Se enlazo las plantillas pug al index.. que eso va a ser la vita del **ADMINISTRADOR**,
+  tambien se colocaron hojas de estilos **CSS** para cada plantilla..
 
 ---
 
 ### DUDAS QUE SURGEN
 
     *_No se si sobreturno y lista esperairian en agenda controller?? ------------// CORREGIDO
+
+    *_ Se podra elegir una vista para cada perfil (USUARIOS) diferentes?..
 
 ### ERRORES A CORREGIR
 
@@ -68,3 +75,5 @@
 ### LO QUE ME FALTA
 
     *_ Terminar lista de espera en TURNO GESTION CONTOLER..... -----------------// CORREGIDO
+
+    *_ Realizar la vista del administrador....
