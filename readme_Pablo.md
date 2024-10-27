@@ -56,6 +56,8 @@
 - Se enlazo las plantillas pug al index.. que eso va a ser la vita del **ADMINISTRADOR**,
   tambien se colocaron hojas de estilos **CSS** para cada plantilla..
 
+-Se esta trabajando enm la vista de **Sucursal** del ADMINISTRADOR....
+
 ---
 
 ### DUDAS QUE SURGEN
@@ -72,8 +74,12 @@
 
     *_Faltaria agregar un mensaje de EXITO al crear sucursal y calendario....
 
+    *_Corregir la carga de las sucursales que trae desde la base de datos
+
 ### LO QUE ME FALTA
 
     *_ Terminar lista de espera en TURNO GESTION CONTOLER..... -----------------// CORREGIDO
 
     *_ Realizar la vista del administrador....
+
+    *_ Terminar la vista cargar Sucursal-....

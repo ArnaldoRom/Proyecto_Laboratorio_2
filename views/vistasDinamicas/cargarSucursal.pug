@@ -1,2 +1,25 @@
 link(rel="stylesheet", href="/css/sucursalCarga.css")
-h2 soy la carga SUCURSAL 
+div(id="tabla-sucursales")
+  table(id="tabla") 
+    thead 
+      tr  
+        th NOMBRE 
+        th DIRECCION 
+        th CLASIFICACION 
+    tbody 
+  button(id="abrir-modal") AGREGAR SUCURSAL
+
+  dialog(id="modal")
+    h2 Nueva Sucursal 
+    form(method="dialog")
+      label(for="nombre")  Nombre 
+      input(type="text", id="nombre")
+    
+      label(for="direccion") Direccion
+      input(type="text", id="direccion")
+
+      label(for="clasificacion") Clasificacion 
+      input(type="text", id="clasificacion")
+
+      button(type="submit", id="enviar-form") ENVIAR
+

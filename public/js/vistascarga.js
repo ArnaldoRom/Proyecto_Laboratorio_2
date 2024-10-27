@@ -33,6 +33,10 @@ function mostrar(vista, push = true) {
     .then((response) => response.text())
     .then((html) => {
       contenedor.innerHTML = html;
+      if (vista === "cargarSucursal") {
+        listaSucursales();
+        abrirModal();
+      }
     })
     .catch((error) => console.error("error", error));
 }
