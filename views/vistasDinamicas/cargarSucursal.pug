@@ -1,15 +1,15 @@
 link(rel="stylesheet", href="/css/sucursalCarga.css")
-div(id="tabla-sucursales")
-  table(id="tabla") 
+div(id="tabla-sucursales", class="contenedor-tabla")
+  table(id="tabla", class="tabla-sucursales") 
     thead 
       tr  
         th NOMBRE 
         th DIRECCION 
         th CLASIFICACION 
     tbody 
-  button(id="abrir-modal") AGREGAR SUCURSAL
+  button(id="abrir-modal", class="boton-agregar") AGREGAR SUCURSAL
 
-  dialog(id="modal")
+  dialog(id="modal", class="contenedor-modal")
     h2 Nueva Sucursal 
     form(method="dialog")
       label(for="nombre")  Nombre 
@@ -23,3 +23,4 @@ div(id="tabla-sucursales")
 
       button(type="submit", id="enviar-form") ENVIAR
 
+  dialog(id="exito", class="contenedor-exito") ✅ Agregado con éxito

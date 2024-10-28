@@ -56,7 +56,11 @@
 - Se enlazo las plantillas pug al index.. que eso va a ser la vita del **ADMINISTRADOR**,
   tambien se colocaron hojas de estilos **CSS** para cada plantilla..
 
--Se esta trabajando enm la vista de **Sucursal** del ADMINISTRADOR....
+- Se esta trabajando enm la vista de **Sucursal** del ADMINISTRADOR....
+
+- Se termino la vits **Sucursal**se puede:
+  - ver una lista de las sucursales
+  - agregar sucursales nuevas
 
 ---
 
@@ -72,9 +76,9 @@
 
     *_UTILIZAR SOLO GET y POST--------- // CORREGIDO
 
-    *_Faltaria agregar un mensaje de EXITO al crear sucursal y calendario....
+    *_Faltaria agregar un mensaje de EXITO al crear sucursal y calendario....---------------------//CORREGIDO
 
-    *_Corregir la carga de las sucursales que trae desde la base de datos
+    *_Corregir la carga de las sucursales que trae desde la base de datos--------------------//CORREGIDO
 
 ### LO QUE ME FALTA
 
@@ -82,4 +86,4 @@
 
     *_ Realizar la vista del administrador....
 
-    *_ Terminar la vista cargar Sucursal-....
+    *_ Terminar la vista cargar Sucursal-....---------------------------// TERMINADO

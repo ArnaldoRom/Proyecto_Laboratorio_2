@@ -39,14 +39,9 @@ class Sucursal {
   static async cargarSucursal(data) {
     try {
       const query = `
-        INSERT INTO sucursal (nombre, direccion, clasificacion, estado) VALUES (?, ?, ?, ?) `;
+        INSERT INTO sucursal (nombre, direccion, clasificacion, estado) VALUES (?, ?, ?, 1) `;
 
-      const values = [
-        data.nombre,
-        data.direccion,
-        data.clasificacion,
-        data.estado,
-      ];
+      const values = [data.nombre, data.direccion, data.clasificacion];
 
       const [result] = await conexion.query(query, values);
       return result.insertId;

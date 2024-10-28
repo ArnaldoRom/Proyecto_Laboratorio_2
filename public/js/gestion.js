@@ -12,8 +12,7 @@ async function listaSucursales() {
 }
 
 function cargarSucursales(sucursales) {
-  const resultado = document.getElementById("tabla");
-  console.log("tbody encontrado:", resultado);
+  const resultado = document.querySelector("#tabla-sucursales tbody");
 
   if (!resultado) {
     console.error("No se encontró el tbody, revisa la estructura HTML.");
@@ -32,6 +31,44 @@ function cargarSucursales(sucursales) {
   });
 }
 
+async function registrarSucursal() {
+  const nombre = document.getElementById("nombre").value;
+  const direccion = document.getElementById("direccion").value;
+  const clasificacion = document.getElementById("clasificacion").value;
+  const exito = document.getElementById("exito");
+
+  try {
+    const response = await fetch("/gestion/sucursal", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        nombre,
+        direccion,
+        clasificacion,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al agregar la Sucursal");
+    }
+
+    await listaSucursales();
+
+    document.getElementById("modal").close();
+    exito.style.display = "block";
+    exito.showModal();
+
+    setTimeout(() => {
+      exito.close();
+      exito.style.display = "none";
+    }, 3000);
+  } catch (error) {
+    console.error("Error al registrar sucursal: ", error);
+  }
+}
+
 function abrirModal() {
   const agregarSucursal = document.getElementById(`abrir-modal`);
   const nuevaSucursal = document.getElementById(`enviar-form`);
@@ -42,6 +79,14 @@ function abrirModal() {
   });
 
   nuevaSucursal.addEventListener("click", () => {
-    modalSucursal.closest();
+    event.preventDefault();
+    registrarSucursal();
   });
 }
+
+window.onclick = function (event) {
+  const modal = document.getElementById("modal");
+  if (event.target === modal) {
+    modal.close();
+  }
+};
