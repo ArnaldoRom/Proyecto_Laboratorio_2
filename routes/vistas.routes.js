@@ -6,6 +6,14 @@ router.get("/", (req, res) => {
   res.render("index");
 });
 
+router.get("/vistaProfecional", (req, res) => {
+  res.render("vistaProfecional/index");
+});
+
+router.get("/vista", (req, res) => {
+  res.render("vistaProfecional/vista", { layout: false });
+});
+
 router.get("/crearProfesional", (req, res) => {
   res.render("vistasDinamicas/crearProfesional", { layaout: false });
 });

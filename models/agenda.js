@@ -107,7 +107,7 @@ class Agenda {
   static async porProfecional(nombre) {
     try {
       const query =
-        "SELECT * FROM agenda JOIN profecionalespecializado ON agenda.idProfesionalEspecializado = profecionalespecializado.idProfesionalEspecializado JOIN profesional ON profecionalespecializado.idProfesional = profesional.idProfesional WHERE profesional.nombre = ?";
+        "SELECT * FROM agenda JOIN profecionalespecializado ON agenda.idProfesionalEspecializado = profecionalespecializado.idProfesionalEspecializado JOIN profesional ON profecionalespecializado.idProfesional = profesional.idProfesional JOIN especialidad on especialidad.idEspecialidad = profecionalespecializado.idEspecialidad WHERE profesional.nombre = ?";
 
       const [rows] = await conexion.query(query, [nombre]);
       return rows;
