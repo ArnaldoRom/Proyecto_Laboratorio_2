@@ -20,8 +20,8 @@ function cargarProfesionales(profesionales) {
   profesionales.forEach((profesionalEspecializado) => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
+                    <td>${profesionalEspecializado.nombreProfesional}</td>                
                     <td>${profesionalEspecializado.apellido}</td>
-                    <td>${profesionalEspecializado.nombreProfesional}</td>
                     <td>${profesionalEspecializado.nombre}</td>
                     <td>${profesionalEspecializado.matricula}</td>`; 
     resultado.appendChild(tr);
@@ -132,4 +132,4 @@ function abrirModalProfesional() {
 }
 
 //crear usuario
-//se tiene que crear autom
+//se tiene que crear automaticamente
