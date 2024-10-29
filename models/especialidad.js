@@ -24,7 +24,7 @@ class Especialidad {
       throw error;
     }
   }
-/*
+
   // Obtiene todas las especialidades
   static async obtenerEspecialidades() {
     try {
@@ -36,7 +36,7 @@ class Especialidad {
       throw error;
     }
   }
-*/
+
   // Actualiza una especialidad
   static async actualizarEspecialidad(data, idEspecialidad) {
     try {

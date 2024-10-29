@@ -1,31 +1,33 @@
 link(rel="stylesheet", href="/css/profesional.css")
-.form-container
-  h2 Cargar Profesional Especializado
-  
-    h3 Datos del Profesional
-    div.form-group
-      label(for="nombre") Nombre:
-      input(type="text" id="nombre" name="nombre" required)
 
-    div.form-group
-      label(for="apellido") Apellido:
-      input(type="text" id="apellido" name="apellido" required)
+div(id="tabla-profesionales", class="contenedor-tabla")
+  table(id="tabla", class="tabla-profesionales")
+    thead
+      tr
+        th NOMBRE
+        th APELLIDO
+        th ESPECIALIDAD
+    tbody
 
-    
-    h3 Datos de la Especialidad
-    div.form-group
-      label(for="especialidadNombre") Nombre de la especialidad:
-      input(type="text" id="especialidadNombre" name="especialidadNombre" required)
+button(id="abrir-modal", class="boton-agregar") AGREGAR PROFESIONAL
 
-    div.form-group
-      label(for="especialidadDescripcion") Descripción:
-      input(type="text" id="especialidadDescripcion" name="especialidadDescripcion" required)
+dialog(id="modal", class="contenedor-modal")
+  h2 Nuevo Profesional
+  form
+    label(for="nombre") Nombre
+    input(type="text", id="nombre")
 
-      
-    h3 Datos de Registro
-    div.form-group
-      label(for="matricula") Matrícula:
-      input(type="text" id="matricula" name="matricula" required)
+    label(for="apellido") Apellido
+    input(type="text", id="apellido")
 
-     
-      button(type="submit") Guardar Profesional Especializado
+    label(for="matricula") Matrícula
+    input(type="text", id="matricula")
+
+    label(for="especialidad") Especialidad
+    select(id="especialidad")
+
+    button(type="submit", id="enviar-form") ENVIAR
+
+dialog(id="exito", class="contenedor-exito") ✅ Profesional agregado con éxito
+
+

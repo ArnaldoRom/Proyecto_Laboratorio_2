@@ -1,40 +1,133 @@
-function mostrarFormulario(tipoFormulario) {
-  const container = document.getElementById("formulario-container");
 
-  // Limpiar el contenedor
-  container.innerHTML = "";
-
-  if (tipoFormulario === "crearProfesional") {
-    container.innerHTML = `
-        div
-          h2 Cargar Profesional Especializado
-          h3 Datos del Profesional
-          label(for="nombre") Nombre:
-          input(type="text" id="nombre" name="nombre" required)
-          label(for="apellido") Apellido:
-          input(type="text" id="apellido" name="apellido" required)
-          h3 Datos de la Especialidad
-          label(for="especialidadNombre") Nombre de la especialidad:
-          input(type="text" id="especialidadNombre" name="especialidadNombre" required)
-          label(for="especialidadDescripcion") Descripción:
-          input(type="text" id="especialidadDescripcion" name="especialidadDescripcion" required)
-          h3 Datos de Registro
-          label(for="matricula") Matrícula:
-          input(type="text" id="matricula" name="matricula" required)
-          button(type="button" onclick="guardarProfesionalEspecializado()") Guardar Profesional Especializado
-      `;
-  } else if (tipoFormulario === "cargarPaciente") {
-  } else if (tipoFormulario === "crearUsuario") {
+async function listaProfesionales() {
+  try {
+    const response = await fetch("/profesionales");
+    if (!response.ok) throw new Error("Error al obtener profesionales");
+    const profesionales = await response.json();
+    cargarProfesionales(profesionales);
+  } catch (error) {
+    console.error("Error al obtener profesionales: ", error);
   }
 }
 
-function guardarProfesionalEspecializado() {
+function cargarProfesionales(profesionales) {
+  const resultado = document.querySelector("#tabla-profesionales tbody");
+  if (!resultado) {
+    console.error("No se encontró el tbody, revisa la estructura HTML.");
+    return;
+  }
+  resultado.innerHTML = "";
+  profesionales.forEach((profesional) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${profesional.nombre}</td>
+                    <td>${profesional.apellido}</td>
+                    <td>${especialidad}</td>`; //Hay que cargar la especialidad aca
+    resultado.appendChild(tr);
+  });
+}
+
+// Obtener y cargar especialidades en el select 
+async function cargarEspecialidades() {
+  try {
+    const response = await fetch("/especialidades");
+    if (!response.ok) throw new Error("Error al obtener especialidades");
+    const especialidades = await response.json();
+    const selectEspecialidad = document.getElementById("especialidad");
+    if (!selectEspecialidad) {
+      console.error("No se encontró el select con el ID 'especialidad', revisa la estructura HTML.");
+      return;
+    }
+    especialidades.forEach((especialidad) => {
+      const option = document.createElement("option");
+      option.value = especialidad.idEspecialidad;
+      option.textContent = especialidad.nombre;
+      selectEspecialidad.appendChild(option);
+    });
+  } catch (error) {
+    console.error("Error al cargar especialidades: ", error);
+  }
+}
+
+// Registrar profesional y su especialidad
+async function registrarProfesional() {
   const nombre = document.getElementById("nombre").value;
   const apellido = document.getElementById("apellido").value;
-  const especialidadNombre =
-    document.getElementById("especialidadNombre").value;
-  const especialidadDescripcion = document.getElementById(
-    "especialidadDescripcion"
-  ).value;
+  const idEspecialidad = document.getElementById("especialidad").value;
   const matricula = document.getElementById("matricula").value;
+  const exito = document.getElementById("exito");
+  try {
+    // Paso 1: Crear profesional
+    const responseProfesional = await fetch("/gestion/profesionales", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        nombre,
+        apellido,
+      }),
+    });
+    if (!responseProfesional.ok) throw new Error("Error al crear profesional");
+    const profesionalId = await responseProfesional.json();
+    
+    // Paso 2: Crear relación en profesionalEspecializado
+    const responseEspecializado = await fetch("/gestion/profesionales-especializados", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        idEspecialidad,
+        idProfesional: profesionalId,
+        matricula,
+      }),
+    });
+    if (!responseEspecializado.ok) throw new Error("Error al asignar especialidad");
+    
+    // Actualizar la lista y mostrar mensaje de éxito
+    await listaProfesionales();
+    document.getElementById("modal").close();
+    exito.style.display = "block";
+    exito.showModal();
+    setTimeout(() => {
+      exito.close();
+      exito.style.display = "none";
+    }, 3000);
+  } catch (error) {
+    console.error("Error al registrar profesional: ", error);
+  }
 }
+
+function abrirModal() {
+  const agregarProfesional = document.getElementById("abrir-modal ");
+  const nuevoProfesional = document.getElementById("enviar-form");
+  const modalProfesional = document.getElementById("modal");
+  
+  if (!agregarProfesional || !nuevoProfesional || !modalProfesional) {
+    console.error("No se encontraron los elementos necesarios para abrir el modal, revisa la estructura HTML.");
+    return;
+  }
+  
+  agregarProfesional.addEventListener("click", () => {
+    modalProfesional.showModal();
+  });
+  
+  nuevoProfesional.addEventListener("click", (event) => {
+    event.preventDefault();
+    registrarProfesional();
+  });
+  
+  // Cerrar el modal si se hace clic fuera de él
+  window.onclick = function (event) {
+    if (event.target === modalProfesional) {
+      modalProfesional.close();
+    }
+  };
+}
+
+// carga de especialidades y lista de profesionales
+document.addEventListener("DOMContentLoaded", () => {
+  cargarEspecialidades();
+  listaProfesionales();
+  abrirModal();
+});

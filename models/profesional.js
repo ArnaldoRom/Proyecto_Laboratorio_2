@@ -43,6 +43,24 @@ class Profesional {
     }
   }
 
+
+  static async obtenerProfesional(nombre){
+    try{
+      const query = "select idProfesional FROM profesional WHERE nombre = ?";
+      const [result] = await conexion.query(query, [nombre]);
+    }catch(error){
+      console.error("error al obtener el preofesional")
+    }
+  }
+  static async obtenerLista() {
+    try {
+      const query = "SELECT * FROM profesional";
+      const [result] = await conexion.query(query);
+      return result; 
+    } catch (error) {
+      console.error("Error al obtener el profesional: ", error); 
+    }
+  }
   // Crear un nuevo profesional
   static async crearProfesional(data) {
     try {
