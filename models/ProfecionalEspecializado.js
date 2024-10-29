@@ -3,13 +3,13 @@ import { conexion } from "../config/db.js";
 class ProfesionalEspecializado {
   #idProfecionalEspecializado;
   #idEspecialidad;
-  #idProfecional;
+  #idProfesional;
   #matricula;
 
-  constructor(idProfecionalEspecializado, idEspecialidad, idProfecional, matricula) {
+  constructor(idProfecionalEspecializado, idEspecialidad, idProfesional, matricula) {
     this.#idProfecionalEspecializado = idProfecionalEspecializado;
     this.#idEspecialidad = idEspecialidad;
-    this.#idProfecional = idProfecional;
+    this.#idProfesional = idProfesional;
     this.#matricula = matricula;
   }
 
@@ -17,12 +17,12 @@ class ProfesionalEspecializado {
   static async crearProfesionalEspecializado(data) {
     try {
       const query = `
-        INSERT INTO profesionalEspecializado (idEspecialidad, idProfecional, matricula) 
+        INSERT INTO profecionalespecializado (idEspecialidad, idProfesional, matricula) 
         VALUES (?, ?, ?)
       `;
       const values = [
         data.idEspecialidad,
-        data.idProfecional,
+        data.idProfesional,
         data.matricula,
       ];
       const [result] = await conexion.query(query, values);
@@ -34,11 +34,11 @@ class ProfesionalEspecializado {
   }
 
   // Obtener todos los profesionales especializados
-  /*
+
   static async obtenerProfesionalesEspecializados() {
     try {
       const query = `
-        SELECT profesional.nombre, profesional.apellido, especialidad.nombre AS especialidadNombre, especialidad.descripcion 
+        SELECT profesional.nombre AS nombreProfesional, profesional.apellido, especialidad.nombre, matricula   
         FROM profecionalespecializado JOIN profesional ON profesional.idProfesional = profecionalespecializado.idProfesional JOIN especialidad ON especialidad.idEspecialidad = profecionalespecializado.idEspecialidad;
       `;
       const [rows] = await conexion.query(query);
@@ -48,7 +48,7 @@ class ProfesionalEspecializado {
       throw error;
     }
   }
-*/
+
   // Actualizar un profesional especializado por id
   static async actualizarProfesionalEspecializado(data, idProfecionalEspecializado) {
     try {

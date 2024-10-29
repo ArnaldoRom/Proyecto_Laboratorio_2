@@ -11,7 +11,8 @@ import {
   obtenerProfesional,
   crearProfesionalEspecializado,
   obtenerLista,
-  //obtenerProfesionalesEspecializados,
+  obtenerEspecialidadPorID,
+  obtenerProfesionalesEspecializados,
   actualizarProfesionalEspecializado,
   eliminarProfesionalEspecializado,
 } from "../controllers/profesionalesGestion.controllers.js";
@@ -21,6 +22,7 @@ const router = Router();
 // Rutas para Especialidades
 router.post("/especialidades", crearEspecialidad);
 router.get("/especialidades", obtenerEspecialidades);
+router.get("/especialidad/:id", obtenerEspecialidadPorID);
 router.post("/especialidades/:id/desactivar", desactivarEspecialidad);
 router.post("/especialidades/:id/activar", activarEspecialidad);
 
@@ -36,7 +38,7 @@ router.post("/profesionales/baja/:id", bajaProfesional);
 
 // Rutas para Profesionales Especializados
 router.post("/profesionales-especializados", crearProfesionalEspecializado);
-//router.get("/profesionales-especializados", obtenerProfesionalesEspecializados);
+router.get("/profesionales-especializados", obtenerProfesionalesEspecializados);
 router.post("/profesionales-especializados/:id/actualizar", actualizarProfesionalEspecializado);
 router.post("/profesionales-especializados/:id/eliminar", eliminarProfesionalEspecializado);
 

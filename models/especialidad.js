@@ -36,6 +36,16 @@ class Especialidad {
       throw error;
     }
   }
+  static async obtenerEspecialidadesPorID(id) {
+    try {
+      const query = "SELECT * FROM especialidad where idEspecialidad = ?";
+      const [rows] = await conexion.query(query, [id]);
+      return rows;
+    } catch (error) {
+      console.error("Error al obtener especialidades", error);
+      throw error;
+    }
+  }
 
   // Actualiza una especialidad
   static async actualizarEspecialidad(data, idEspecialidad) {

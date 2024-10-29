@@ -37,9 +37,9 @@ function mostrar(vista, push = true) {
         listaSucursales();
         abrirModal();
       } else  if (vista === "crearProfesional") {
-        cargarEspecialidades();
         listaProfesionales();
-        abrirModal();
+        abrirModalProfesional();
+        cargarEspecialidades();
       }
     })
     .catch((error) => console.error("error", error));

@@ -1,7 +1,7 @@
 
 async function listaProfesionales() {
   try {
-    const response = await fetch("/profesionales");
+    const response = await fetch("/profesionales-especializados");
     if (!response.ok) throw new Error("Error al obtener profesionales");
     const profesionales = await response.json();
     cargarProfesionales(profesionales);
@@ -9,7 +9,7 @@ async function listaProfesionales() {
     console.error("Error al obtener profesionales: ", error);
   }
 }
-
+//profesional.nombre, profesional.apellido, especialidad.nombre, matricula 
 function cargarProfesionales(profesionales) {
   const resultado = document.querySelector("#tabla-profesionales tbody");
   if (!resultado) {
@@ -17,11 +17,13 @@ function cargarProfesionales(profesionales) {
     return;
   }
   resultado.innerHTML = "";
-  profesionales.forEach((profesional) => {
+  profesionales.forEach((profesionalEspecializado) => {
     const tr = document.createElement("tr");
-    tr.innerHTML = `<td>${profesional.nombre}</td>
-                    <td>${profesional.apellido}</td>
-                    <td>${especialidad}</td>`; //Hay que cargar la especialidad aca
+    tr.innerHTML = `
+                    <td>${profesionalEspecializado.apellido}</td>
+                    <td>${profesionalEspecializado.nombreProfesional}</td>
+                    <td>${profesionalEspecializado.nombre}</td>
+                    <td>${profesionalEspecializado.matricula}</td>`; 
     resultado.appendChild(tr);
   });
 }
@@ -52,12 +54,14 @@ async function cargarEspecialidades() {
 async function registrarProfesional() {
   const nombre = document.getElementById("nombre").value;
   const apellido = document.getElementById("apellido").value;
-  const idEspecialidad = document.getElementById("especialidad").value;
+  const idEspecialidad = parseInt(document.getElementById("especialidad").value, 10);
   const matricula = document.getElementById("matricula").value;
   const exito = document.getElementById("exito");
+
+
   try {
     // Paso 1: Crear profesional
-    const responseProfesional = await fetch("/gestion/profesionales", {
+    const responseProfesional = await fetch("/profesionales", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -67,18 +71,20 @@ async function registrarProfesional() {
         apellido,
       }),
     });
+  
     if (!responseProfesional.ok) throw new Error("Error al crear profesional");
     const profesionalId = await responseProfesional.json();
-    
+    const idProfesional = profesionalId.id
+   console.log(idEspecialidad, idProfesional, matricula)
     // Paso 2: Crear relación en profesionalEspecializado
-    const responseEspecializado = await fetch("/gestion/profesionales-especializados", {
+    const responseEspecializado = await fetch("/profesionales-especializados", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         idEspecialidad,
-        idProfesional: profesionalId,
+        idProfesional,
         matricula,
       }),
     });
@@ -98,8 +104,8 @@ async function registrarProfesional() {
   }
 }
 
-function abrirModal() {
-  const agregarProfesional = document.getElementById("abrir-modal ");
+function abrirModalProfesional() {
+  const agregarProfesional = document.getElementById("abrir-modal");
   const nuevoProfesional = document.getElementById("enviar-form");
   const modalProfesional = document.getElementById("modal");
   
@@ -125,9 +131,5 @@ function abrirModal() {
   };
 }
 
-// carga de especialidades y lista de profesionales
-document.addEventListener("DOMContentLoaded", () => {
-  cargarEspecialidades();
-  listaProfesionales();
-  abrirModal();
-});
+//crear usuario
+//se tiene que crear autom

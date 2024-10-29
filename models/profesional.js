@@ -52,6 +52,7 @@ class Profesional {
       console.error("error al obtener el preofesional")
     }
   }
+  
   static async obtenerLista() {
     try {
       const query = "SELECT * FROM profesional";
