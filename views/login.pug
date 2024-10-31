@@ -1,2 +1,53 @@
-h2 soy logi 
+doctype html
+html
+  head
+    title Iniciar Sesión
+    link(rel="stylesheet", href="/css/login.css") 
+  body
+    .contenedor-login
+      h2 Iniciar Sesión
+    
+     
+        label(for="usuario") Usuario
+        input(type="text", id="usuario", name="usuario" required)
+        
+        label(for="contrasena") Contraseña
+        input(type="password", id="contrasena", name="contrasena" required)
+        
+        button(type="submit") Ingresar
+
+      p ¿No tienes cuenta? 
+        button(id="abrir-modal", class="boton-registrarse") Registrarse
+
+    // Modal para registro
+    dialog(id="modal", class="contenedor-modal")
+      h2 Registro de Paciente
+       
+        // Campo para Nombre
+        label(for="nombre") Nombre
+        input(type="text", id="nombre", name="nombre" required)
+        
+        // Campo para Apellido
+        label(for="apellido") Apellido
+        input(type="text", id="apellido", name="apellido" required)
+        
+        // Campo para DNI
+        label(for="dni") DNI
+        input(type="text", id="dni", name="dni" required)
+        
+        // Campo para Datos de Contacto
+        label(for="datosContacto") Datos de Contacto
+        input(type="text", id="datosContacto", name="datosContacto" required)
+        
+        // Campo para Obra Social
+        label(for="obraSocial") Obra Social
+        input(type="text", id="obraSocial", name="obraSocial")
+        
+        // Campo para Contraseña
+        label(for="contrasenaNueva") Contraseña
+        input(type="password", id="contrasenaNueva", name="contrasenaNueva" required)
+        
+        button(type="submit") Registrar
+
+    dialog(id="exito", class="contenedor-exito") ✅ Usuario registrado con éxito
 

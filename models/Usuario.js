@@ -33,6 +33,7 @@ class Usuario {
       throw error;
     }
   }
+  
 
   // Obtener todos los usuarios
   static async obtenerUsuarios() {
