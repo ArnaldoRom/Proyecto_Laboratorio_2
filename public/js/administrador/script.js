@@ -9,6 +9,14 @@ async function listaProfesionales() {
     console.error("Error al obtener profesionales: ", error);
   }
 }
+function crearUsuario(profesionales) {
+  try{
+
+  }catch(errir){
+    console.erroe("Error al crear usuario")
+  }
+ 
+};
 //profesional.nombre, profesional.apellido, especialidad.nombre, matricula 
 function cargarProfesionales(profesionales) {
   const resultado = document.querySelector("#tabla-profesionales tbody");
@@ -58,7 +66,6 @@ async function registrarProfesional() {
   const matricula = document.getElementById("matricula").value;
   const exito = document.getElementById("exito");
 
-
   try {
     // Paso 1: Crear profesional
     const responseProfesional = await fetch("/profesionales", {
@@ -73,9 +80,11 @@ async function registrarProfesional() {
     });
   
     if (!responseProfesional.ok) throw new Error("Error al crear profesional");
+
+    // Obtener el ID del profesional recien creado
     const profesionalId = await responseProfesional.json();
-    const idProfesional = profesionalId.id
-   console.log(idEspecialidad, idProfesional, matricula)
+    const idProfesional = profesionalId.id;
+
     // Paso 2: Crear relación en profesionalEspecializado
     const responseEspecializado = await fetch("/profesionales-especializados", {
       method: "POST",
@@ -88,8 +97,28 @@ async function registrarProfesional() {
         matricula,
       }),
     });
-    if (!responseEspecializado.ok) throw new Error("Error al asignar especialidad");
     
+    if (!responseEspecializado.ok) throw new Error("Error al asignar especialidad");
+
+    // Paso 3: Crear el usuario automaticamente
+    const nombreUsuario = apellido;
+    const contrasena = `clinica${apellido}`;
+    const rol = "profesional";
+
+    const responseUsuario = await fetch("/usuarios", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        nombreUsuario,
+        contrasena,
+        rol,
+      }),
+    });
+
+    if (!responseUsuario.ok) throw new Error("Error al crear usuario");
+
     // Actualizar la lista y mostrar mensaje de éxito
     await listaProfesionales();
     document.getElementById("modal").close();
@@ -103,6 +132,8 @@ async function registrarProfesional() {
     console.error("Error al registrar profesional: ", error);
   }
 }
+
+
 
 function abrirModalProfesional() {
   const agregarProfesional = document.getElementById("abrir-modal");
@@ -131,5 +162,9 @@ function abrirModalProfesional() {
   };
 }
 
-//crear usuario
-//se tiene que crear automaticamente
+
+
+
+
+
+

@@ -16,6 +16,7 @@ class Usuario {
   // Crear un nuevo usuario
   static async crearUsuario(data) {
     try {
+      
       const query = `
         INSERT INTO usuario (nombreUsuario, contrasena, rol, estado) 
         VALUES (?, ?, ?, 1)
