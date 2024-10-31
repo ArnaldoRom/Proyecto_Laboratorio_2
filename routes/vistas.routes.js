@@ -2,20 +2,26 @@ import { Router } from "express";
 
 const router = Router();
 
+//---------------- VISTA PRINCIPAL DE LA APP --------------------//
+
 router.get("/", (req, res) => {
   res.render("login");
 });
+
+//--------------- VISTA PROFECIONAL ---------------------------//
 
 router.get("/vistaProfecional", (req, res) => {
   res.render("vistaProfecional/index");
 });
 
-router.get("/vistaAdministradora", (req, res) =>{
-  res.render("vistaAdministradora/index");
-});
-
 router.get("/vista", (req, res) => {
   res.render("vistaProfecional/vista", { layout: false });
+});
+
+//---------------- VISTAS ADMINISTRADOR ----------------------//
+
+router.get("/vistaAdministradora", (req, res) => {
+  res.render("vistaAdministradora/index");
 });
 
 router.get("/crearProfesional", (req, res) => {
@@ -33,6 +39,5 @@ router.get("/cargarAgenda", (req, res) => {
 router.get("/cargarCalendario", (req, res) => {
   res.render("vistaAdministradora/cargarCalendario", { layaout: false });
 });
-
 
 export default router;

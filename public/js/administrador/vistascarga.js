@@ -36,21 +36,14 @@ function mostrar(vista, push = true) {
       if (vista === "cargarSucursal") {
         listaSucursales();
         abrirModal();
-      } else  if (vista === "crearProfesional") {
+      } else if (vista === "crearProfesional") {
         listaProfesionales();
         abrirModalProfesional();
         cargarEspecialidades();
       }
     })
     .catch((error) => console.error("error", error));
-
-     
-
 }
-
-
-
-
 
 window.addEventListener("popstate", (event) => {
   const path = location.pathname;

@@ -61,6 +61,23 @@ export const cambiarEstado = async (req, res) => {
   }
 };
 
+export const recuperarTurnosConfirmados = async (req, res) => {
+  try {
+    const rows = await Turno.turnosConfirmadosPorAgenda(req.params.id);
+
+    if (rows.length === 0)
+      return res.status(404).json({
+        message: "Ningun Turno confirmado",
+      });
+    res.json(rows);
+  } catch (error) {
+    console.error("Error al obtener Turno ", error);
+    res.status(500).json({
+      message: "Error al obtener el turno",
+    });
+  }
+};
+
 //----------------------- SOBRE TURNO -----------------//
 
 export const getSobreTurnos = async (req, res) => {

@@ -17,8 +17,9 @@ async function recuperarAgendas() {
 
       opcion.href = "#";
       opcion.textContent = agenda.nombre;
-
-      opcion.addEventListener("click", () => mostrar("agenda", agenda.nombre));
+      opcion.addEventListener("click", () => {
+        mostrar("agenda", agenda.nombre, agenda.idAgenda);
+      });
 
       li.appendChild(opcion);
       especialidades.appendChild(li);
@@ -28,11 +29,18 @@ async function recuperarAgendas() {
   }
 }
 
-async function recuperarTurnosReservados(especialidad) {
-  const tablaTurnos = document.getElementById("tablaTurnos");
+async function recuperarTurnosConfirmados(idAgenda) {
+  const tablaTurnos = document.querySelector("#tabla-agendas tbody");
+
+  if (!tablaTurnos) {
+    console.error(
+      "El elemento con id 'agendas' y su tbody no existen en el DOM."
+    );
+    return;
+  }
 
   try {
-    const response = await fetch(`/turnos/profecional/${especialidad}`);
+    const response = await fetch(`/turnosConfirmados/${idAgenda}`);
     if (!response.ok) throw new Error("Error al obtener turnos");
 
     const turnos = await response.json();
@@ -41,22 +49,26 @@ async function recuperarTurnosReservados(especialidad) {
     turnos.forEach((turno) => {
       const tr = document.createElement("tr");
 
-      const tdPaciente = document.createElement("td");
-      tdPaciente.textContent = turno.paciente;
-
-      const tdFecha = document.createElement("td");
-      tdFecha.textContent = turno.fecha;
-
       const tdHora = document.createElement("td");
       tdHora.textContent = turno.hora;
 
-      const tdEstado = document.createElement("td");
-      tdEstado.textContent = turno.estado;
+      const tdNombre = document.createElement("td");
+      tdNombre.textContent = turno.nombre;
 
-      tr.appendChild(tdPaciente);
-      tr.appendChild(tdFecha);
+      const tdApellido = document.createElement("td");
+      tdApellido.textContent = turno.apellido;
+
+      const tdMotivoConsulta = document.createElement("td");
+      tdMotivoConsulta.textContent = turno.motivoConsulta;
+
+      const tdObraSocial = document.createElement("td");
+      tdObraSocial.textContent = turno.obraSocial;
+
       tr.appendChild(tdHora);
-      tr.appendChild(tdEstado);
+      tr.appendChild(tdNombre);
+      tr.appendChild(tdApellido);
+      tr.appendChild(tdMotivoConsulta);
+      tr.appendChild(tdObraSocial);
 
       tablaTurnos.appendChild(tr);
     });

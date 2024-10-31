@@ -1,14 +1,10 @@
 link(rel="stylesheet", href="/css/profesional/vista.css")
-h2 Turnos para la especialidad seleccionada
-  
-button(onclick="recuperarTurnos()") Actualizar Turnos
-
-div#agendas.contenedor-agendas
-  table
-    thead
-      tr
-        th Paciente
-        th Fecha
-        th Hora
-        th Estado
-    tbody(id="tablaTurnos")
+h2 Turnos para la especialidad seleccionada  
+div(id="tabla-agendas", class="contenedor-tabla")
+  table(id="tabla", class="tabla-agendas") 
+    thead 
+      tr  
+        th NOMBRE 
+        th DIRECCION 
+        th CLASIFICACION 
+    tbody 

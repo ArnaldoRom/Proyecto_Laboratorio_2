@@ -80,6 +80,8 @@
 
     *_Corregir la carga de las sucursales que trae desde la base de datos--------------------//CORREGIDO
 
+    *_ Corregir la vista de turnos confirmados al volver atras debo apretar dos veces
+
 ### LO QUE ME FALTA
 
     *_ Terminar lista de espera en TURNO GESTION CONTOLER..... -----------------// CORREGIDO

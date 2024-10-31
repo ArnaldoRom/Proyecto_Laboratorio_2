@@ -187,6 +187,18 @@ class Turno {
       throw error;
     }
   }
+
+  static async turnosConfirmadosPorAgenda(idAgenda) {
+    try {
+      const query =
+        "SELECT * FROM turno JOIN paciente on paciente.idPaciente = turno.idPaciente WHERE idAgenda = ? AND idEstadoHorario = 4";
+      const [rows] = await conexion.query(query, [idAgenda]);
+      return rows;
+    } catch (error) {
+      console.error("Error al verificar turnos de la agenda", error);
+      throw error;
+    }
+  }
 }
 
 export default Turno;

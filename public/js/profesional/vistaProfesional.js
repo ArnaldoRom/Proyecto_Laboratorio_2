@@ -1,19 +1,22 @@
-function mostrar(vista, especialidad = "", push = true) {
+function mostrar(vista, especialidad = "", idAgenda = "", push = true) {
   const contenedor = document.querySelector(".content");
   let url = "";
   let newurl = "";
 
+  console.log(especialidad);
+  console.log(idAgenda);
+
   switch (vista) {
     case "agenda":
-      url = `/vista/${especialidad}`;
-      newurl = `/agendaProfecional/${especialidad}`;
+      url = `/vista`;
+      newurl = `/agendaProfecional/${especialidad}/${idAgenda}`;
       break;
     default:
       console.error("No existe vista");
       return;
   }
 
-  if (push) {
+  if (push && location.pathname !== newurl) {
     history.pushState({}, "", newurl);
   }
 
@@ -22,7 +25,7 @@ function mostrar(vista, especialidad = "", push = true) {
     .then((html) => {
       contenedor.innerHTML = html;
       if (vista === "agenda") {
-        recuperarTurnosReservados(especialidad);
+        recuperarTurnosConfirmados(idAgenda);
       }
     })
     .catch((error) => console.error("error", error));
@@ -30,9 +33,11 @@ function mostrar(vista, especialidad = "", push = true) {
 
 window.addEventListener("popstate", (event) => {
   const path = location.pathname;
+  const especialidad = path.split("/")[2];
+  const idAgenda = path.split("/")[3];
 
-  if (path) {
-    mostrar("agenda", path, false);
+  if (especialidad) {
+    mostrar("agenda", especialidad, idAgenda, false);
   } else {
     console.warn("Ruta no reconocida:", path);
   }
