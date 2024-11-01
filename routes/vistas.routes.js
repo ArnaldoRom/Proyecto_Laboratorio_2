@@ -40,4 +40,22 @@ router.get("/cargarCalendario", (req, res) => {
   res.render("vistaAdministradora/cargarCalendario", { layaout: false });
 });
 
+//---------------------- VISTA SECRETARIA -----------------//
+
+router.get("/vistaSecretaria", (req, res) => {
+  res.render("vistaSecretaria/index");
+});
+
+router.get("/listaAgendas", (req, res) => {
+  res.render("vistaSecretaria/agendas", { layaut: false });
+});
+
+router.get("/cargaturnos", (rea, res) => {
+  res.render("vistaSecretaria/turnos", { layout: false });
+});
+
+router.get("/gestionPacientes", (req, res) => {
+  res.render("vistaSecretaria/paciente", { layaut: false });
+});
+
 export default router;
