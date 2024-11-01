@@ -1,122 +1,139 @@
 /* Estilos generales */
 body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    background-color: #e0f2ff;
-  }
-  
-  /* Contenedor del login */
-  .contenedor-login {
-    background-color: #fff;
-    padding: 40px;
-    width: 100%;
-    max-width: 400px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    text-align: center;
-  }
-  
-  h2 {
-    color: #004080;
-    margin-bottom: 20px;
-    font-size: 24px;
-  }
-  
-  /* Formulario de login y registro */
-  form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  label {
-    text-align: left;
-    margin-bottom: 5px;
-    color: #004080;
-    font-weight: bold;
-  }
-  
-  input[type="text"],
-  input[type="password"] {
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 16px;
-  }
-  
-  button {
-    padding: 10px;
-    background-color: #0066cc;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  
-  button:hover {
-    background-color: #004080;
-  }
-  
-  /* Enlace de registro */
-  p {
-    margin-top: 15px;
-  }
-  
-  .boton-registrarse {
-    background-color: transparent;
-    color: #0066cc;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  
-  .boton-registrarse:hover {
-    text-decoration: underline;
-  }
-  
-  /* Estilos para el modal de registro */
-  .contenedor-modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    max-width: 400px;
-    padding: 30px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-  }
-  
-  .contenedor-modal::backdrop {
-    background-color: rgba(0, 0, 0, 0.5);
-  }
-  
-  /* Mensaje de éxito */
-  .contenedor-exito {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    max-width: 300px;
-    padding: 20px;
-    background-color: #d1f0ff;
-    color: #004080;
-    text-align: center;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    font-weight: bold;
-    z-index: 1000;
-  }
-  
-  .contenedor-exito::backdrop {
-    background-color: rgba(0, 0, 0, 0.5);
-  }
-  
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  background-color: #e0f2ff;
+}
+
+/* Contenedor del login */
+.contenedor-login {
+  background-color: #fff;
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+h2 {
+  color: #004080;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+/* Estilos para los campos de formulario */
+label {
+  text-align: left;
+  margin-bottom: 5px;
+  color: #004080;
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="password"] {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Botones generales */
+button {
+  padding: 10px;
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+button:hover {
+  background-color: #004080;
+}
+
+/* Enlace de registro */
+p {
+  margin-top: 15px;
+}
+
+.boton-registrarse {
+  background-color: transparent;
+  color: #0066cc;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.boton-registrarse:hover {
+  text-decoration: underline;
+}
+
+/* Estilos para el modal de registro */
+.contenedor-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 400px;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.contenedor-modal::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+#boton-registrar {
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 10px;
+  width: 100%;
+}
+
+#boton-registrar:hover {
+  background-color: #004080;
+}
+
+/* Mensaje de éxito */
+.contenedor-exito {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 300px;
+  padding: 20px;
+  background-color: #d1f0ff;
+  color: #004080;
+  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  font-weight: bold;
+  z-index: 1000;
+}
+
+.contenedor-exito::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}

@@ -19,6 +19,9 @@ import {
 } from "../controllers/usuariosGestion.controllers.js";
 
 const router = Router();
+//rutas valicadion usuario
+
+
 
 // Rutas para Usuarios
 router.post("/usuarios", crearUsuario);

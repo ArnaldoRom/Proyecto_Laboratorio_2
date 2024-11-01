@@ -56,19 +56,17 @@ class Paciente {
   static async cargarPaciente(data) {
     try {
       const query = `
-        INSERT INTO paciente (nombre, apellido, DNI, motivoConsulta, obraSocial, datosContacto, idUsuario, estado)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO paciente (nombre, apellido, DNI, obraSocial, datosContacto, idUsuario, estado)
+        VALUES (?, ?, ?, ?,  ?, ?, 1)
     `;
 
       const values = [
         data.nombre,
         data.apellido,
         data.DNI,
-        data.motivoConsulta,
         data.obraSocial,
         data.datosContacto,
         data.idUsuario,
-        data.estado,
       ];
 
       const [result] = await conexion.query(query, values);

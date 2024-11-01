@@ -42,6 +42,8 @@ export const actualizarUsuario = async (req, res) => {
 
 
 
+
+
 export const eliminarUsuario = async (req, res) => {
   const id = req.params.id;
 
