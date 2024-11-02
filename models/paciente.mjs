@@ -57,7 +57,7 @@ class Paciente {
     try {
       const query = `
         INSERT INTO paciente (nombre, apellido, DNI, obraSocial, datosContacto, idUsuario, estado)
-        VALUES (?, ?, ?, ?,  ?, ?, 1)
+        VALUES (?, ?, ?, ?, ?, ?, 1)
     `;
 
       const values = [

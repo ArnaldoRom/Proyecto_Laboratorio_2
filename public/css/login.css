@@ -1,139 +1,140 @@
 /* Estilos generales */
-body {
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
   font-family: Arial, sans-serif;
+}
+
+body {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  margin: 0;
-  background-color: #e0f2ff;
-}
-
-/* Contenedor del login */
-.contenedor-login {
-  background-color: #fff;
-  padding: 40px;
-  width: 100%;
-  max-width: 400px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  text-align: center;
+  height: 100vh;
+  background-color: #f3f4f6;
 }
 
 h2 {
-  color: #004080;
+  color: #333;
+  text-align: center;
   margin-bottom: 20px;
-  font-size: 24px;
 }
 
-/* Estilos para los campos de formulario */
+/* Contenedor de Login */
+.contenedor-login {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 30px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.contenedor-login form {
+  display: flex;
+  flex-direction: column;
+}
+
 label {
-  text-align: left;
-  margin-bottom: 5px;
-  color: #004080;
+  margin-top: 15px;
   font-weight: bold;
+  color: #555;
 }
 
 input[type="text"],
 input[type="password"] {
   padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top: 5px;
   font-size: 16px;
-  width: 100%;
-  box-sizing: border-box;
 }
 
-/* Botones generales */
-button {
+button[type="submit"],
+.boton-registrarse {
+  margin-top: 20px;
   padding: 10px;
-  background-color: #0066cc;
-  color: white;
+  background-color: #4CAF50;
+  color: #fff;
+  font-size: 16px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
-  width: 100%;
-  box-sizing: border-box;
+  transition: background-color 0.3s ease;
 }
 
-button:hover {
-  background-color: #004080;
-}
-
-/* Enlace de registro */
-p {
-  margin-top: 15px;
-}
-
-.boton-registrarse {
-  background-color: transparent;
-  color: #0066cc;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-}
-
+button[type="submit"]:hover,
 .boton-registrarse:hover {
-  text-decoration: underline;
+  background-color: #45a049;
 }
 
-/* Estilos para el modal de registro */
-.contenedor-modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  max-width: 400px;
-  padding: 30px;
+/* Estilos para el modal */
+.contenedor-modal,
+.contenedor-exito {
   background-color: #fff;
+  padding: 30px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.contenedor-modal::backdrop {
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-#boton-registrar {
-  background-color: #0066cc;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  padding: 10px;
   width: 100%;
-}
-
-#boton-registrar:hover {
-  background-color: #004080;
-}
-
-/* Mensaje de éxito */
-.contenedor-exito {
+  max-width: 400px;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 100%;
-  max-width: 300px;
-  padding: 20px;
-  background-color: #d1f0ff;
-  color: #004080;
+  z-index: 10;
+  display: none;
   text-align: center;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  font-weight: bold;
-  z-index: 1000;
 }
 
-.contenedor-exito::backdrop {
-  background-color: rgba(0, 0, 0, 0.5);
+.contenedor-modal[open],
+.contenedor-exito[open] {
+  display: block;
+}
+
+.contenedor-modal form {
+  display: flex;
+  flex-direction: column;
+}
+
+.contenedor-exito {
+  background-color: #4CAF50;
+  color: #fff;
+  font-weight: bold;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+/* Botón de cerrar el modal */
+.contenedor-modal button {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #007BFF;
+  color: #fff;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.contenedor-modal button:hover {
+  background-color: #0056b3;
+}
+
+/* Fondo de la página cuando el modal está abierto */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+}
+
+.contenedor-modal[open] ~ body::before,
+.contenedor-exito[open] ~ body::before {
+  display: block;
 }

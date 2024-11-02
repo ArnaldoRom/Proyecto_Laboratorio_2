@@ -27,6 +27,31 @@ export const obtenerUsuario = async (req, res) => {
   }
 };
 
+export const iniciarSesion = async (req, res) => {
+  const data = req.body;
+
+  try {
+    const usuario = await Usuario.iniciarSesion(data);
+    res.status(200).json(usuario); // Enviar usuario con rol
+  } catch (error) {
+    console.error("Error al iniciar sesión:", error);
+    res.status(401).json({ message: "Credenciales incorrectas." }); // Cambia el estado HTTP si es necesario
+  }
+};
+
+
+
+export const traerUsuarios = async (req, res) => {
+ 
+  try {
+    const usuario = await Usuario.traerUsuarios();
+    res.status(200).json(usuario);
+  } catch (error) {
+    console.error("Error al obtener el usuario:", error);
+    res.status(500).json({ message: "Error al obtener el usuario." });
+  }
+};
+
 export const actualizarUsuario = async (req, res) => {
   const id = req.params.id;
   const data = req.body;

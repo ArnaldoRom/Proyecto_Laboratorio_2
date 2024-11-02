@@ -2,14 +2,14 @@ doctype html
 html
   head
     title Iniciar Sesión
-    link(rel="stylesheet", href="/css/login.css") 
-    script(src="/js/usuario/creacionUsuario.js", type="module", defer) 
+    link(rel="stylesheet", href="/css/login.css")
+    script(src="/js/usuario/creacionUsuario.js", type="module", defer)
+    script(src="/js/usuario/inicioSesion.js",  defer)
 
   body
     .contenedor-login
       h2 Iniciar Sesión
-    
-     
+      form
         label(for="usuario") Usuario
         input(type="text", id="usuario", name="usuario" required)
         
@@ -18,38 +18,33 @@ html
         
         button(type="submit") Ingresar
 
-      p ¿No tienes cuenta? 
+        p ¿No tienes cuenta?
         button(id="abrir-modal", class="boton-registrarse") Registrarse
 
     // Modal para registro
     dialog(id="modal", class="contenedor-modal")
       h2 Registro de Paciente
-       
-        // Campo para Nombre
+      form 
         label(for="nombre") Nombre
         input(type="text", id="nombre", name="nombre" required)
         
-        // Campo para Apellido
         label(for="apellido") Apellido
         input(type="text", id="apellido", name="apellido" required)
         
-        // Campo para DNI
         label(for="dni") DNI
         input(type="text", id="dni", name="dni" required)
         
-        // Campo para Obra Social
         label(for="obraSocial") Obra Social
         input(type="text", id="obraSocial", name="obraSocial")
         
-        // Campo para Datos de Contacto
         label(for="datosContacto") Datos de Contacto
         input(type="text", id="datosContacto", name="datosContacto" required)
 
-        
         label(for="contrasenaRegistro") Contraseña
         input(type="password", id="contrasenaRegistro", name="contrasenaRegistro" required)
         
         button(id="boton-registrar") Registrar
 
     dialog(id="exito", class="contenedor-exito") ✅ Usuario registrado con éxito
+
 
