@@ -34,10 +34,10 @@ function mostrar(vista, push = true) {
     .then((html) => {
       contenedor.innerHTML = html;
       if (vista === "cargarSucursal") {
-        listaSucursales();
+        iniciarDataTableSucursal();
         abrirModal();
       } else if (vista === "crearProfesional") {
-        listaProfesionales();
+        iniciarDataTableProfesional();
         abrirModalProfesional();
         cargarEspecialidades();
       }

@@ -1,24 +1,45 @@
+let dataTableSucursal;
+let dataTableSucursalInicializado = false;
+
+const sucursalOpciones = {
+  destroy: true,
+  pageLength: 10,
+  language: {
+    url: "/js/dataTable/es_AR.json",
+  },
+};
+const iniciarDataTableSucursal = async () => {
+  if (dataTableSucursalInicializado) {
+    dataTableSucursal.destroy();
+  }
+  await listaSucursales();
+
+  dataTableSucursal = $("#tabla-sucursal").DataTable(sucursalOpciones);
+
+  dataTableSucursalInicializado = true;
+};
+
 async function listaSucursales() {
   try {
     const response = await fetch(`/gestion/sucursal`);
 
     if (!response.ok) throw new Error("Error al obtener Sucursales");
 
-    const data = await response.json();
-    cargarSucursales(data);
+    const sucursales = await response.json();
+    cargarSucursales(sucursales);
   } catch (error) {
     console.error("Error al obtener Sucursales: ", error);
   }
 }
 
 function cargarSucursales(sucursales) {
-  const resultado = document.querySelector("#tabla-sucursales tbody");
+  const datos = document.querySelector("#tabla-sucursales tbody");
 
-  if (!resultado) {
+  if (!datos) {
     console.error("No se encontró el tbody, revisa la estructura HTML.");
     return; // Sal de la función si tbody no está disponible
   }
-  resultado.innerHTML = "";
+  datos.innerHTML = "";
 
   sucursales.forEach((sucursal) => {
     const tr = document.createElement("tr");
@@ -27,7 +48,7 @@ function cargarSucursales(sucursales) {
       <td>${sucursal.direccion}</td>
       <td>${sucursal.clasificacion}</td>
     `;
-    resultado.appendChild(tr);
+    datos.appendChild(tr);
   });
 }
 
@@ -78,15 +99,14 @@ function abrirModal() {
     modalSucursal.showModal();
   });
 
-  nuevaSucursal.addEventListener("click", () => {
+  nuevaSucursal.addEventListener("click", (event) => {
     event.preventDefault();
     registrarSucursal();
   });
-}
 
-window.onclick = function (event) {
-  const modal = document.getElementById("modal");
-  if (event.target === modal) {
-    modal.close();
-  }
-};
+  window.onclick = function (event) {
+    if (event.target === modal) {
+      modal.close();
+    }
+  };
+}

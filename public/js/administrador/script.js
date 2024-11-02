@@ -1,3 +1,23 @@
+let dataTableProfesional;
+let dataTableProfesionalInicializado = false;
+
+const profesionalOpciones = {
+  destroy: true,
+  pageLength: 10,
+  language: {
+    url: "/js/dataTable/es_AR.json",
+  },
+};
+const iniciarDataTableProfesional = async () => {
+  if (dataTableProfesionalInicializado) {
+    dataTableProfesional.destroy();
+  }
+  await listaProfesionales();
+
+  dataTableProfesional = $("#tabla-profesional").DataTable(profesionalOpciones);
+
+  dataTableProfesionalInicializado = true;
+};
 
 async function listaProfesionales() {
   try {
@@ -10,14 +30,12 @@ async function listaProfesionales() {
   }
 }
 function crearUsuario(profesionales) {
-  try{
-
-  }catch(errir){
-    console.erroe("Error al crear usuario")
+  try {
+  } catch (errir) {
+    console.erroe("Error al crear usuario");
   }
- 
-};
-//profesional.nombre, profesional.apellido, especialidad.nombre, matricula 
+}
+//profesional.nombre, profesional.apellido, especialidad.nombre, matricula
 function cargarProfesionales(profesionales) {
   const resultado = document.querySelector("#tabla-profesionales tbody");
   if (!resultado) {
@@ -31,12 +49,12 @@ function cargarProfesionales(profesionales) {
                     <td>${profesionalEspecializado.nombreProfesional}</td>                
                     <td>${profesionalEspecializado.apellido}</td>
                     <td>${profesionalEspecializado.nombre}</td>
-                    <td>${profesionalEspecializado.matricula}</td>`; 
+                    <td>${profesionalEspecializado.matricula}</td>`;
     resultado.appendChild(tr);
   });
 }
 
-// Obtener y cargar especialidades en el select 
+// Obtener y cargar especialidades en el select
 async function cargarEspecialidades() {
   try {
     const response = await fetch("/especialidades");
@@ -44,7 +62,9 @@ async function cargarEspecialidades() {
     const especialidades = await response.json();
     const selectEspecialidad = document.getElementById("especialidad");
     if (!selectEspecialidad) {
-      console.error("No se encontró el select con el ID 'especialidad', revisa la estructura HTML.");
+      console.error(
+        "No se encontró el select con el ID 'especialidad', revisa la estructura HTML."
+      );
       return;
     }
     especialidades.forEach((especialidad) => {
@@ -62,7 +82,10 @@ async function cargarEspecialidades() {
 async function registrarProfesional() {
   const nombre = document.getElementById("nombre").value;
   const apellido = document.getElementById("apellido").value;
-  const idEspecialidad = parseInt(document.getElementById("especialidad").value, 10);
+  const idEspecialidad = parseInt(
+    document.getElementById("especialidad").value,
+    10
+  );
   const matricula = document.getElementById("matricula").value;
   const exito = document.getElementById("exito");
 
@@ -78,7 +101,7 @@ async function registrarProfesional() {
         apellido,
       }),
     });
-  
+
     if (!responseProfesional.ok) throw new Error("Error al crear profesional");
 
     // Obtener el ID del profesional recien creado
@@ -97,8 +120,9 @@ async function registrarProfesional() {
         matricula,
       }),
     });
-    
-    if (!responseEspecializado.ok) throw new Error("Error al asignar especialidad");
+
+    if (!responseEspecializado.ok)
+      throw new Error("Error al asignar especialidad");
 
     // Paso 3: Crear el usuario automaticamente
     const nombreUsuario = apellido;
@@ -133,27 +157,27 @@ async function registrarProfesional() {
   }
 }
 
-
-
 function abrirModalProfesional() {
   const agregarProfesional = document.getElementById("abrir-modal");
   const nuevoProfesional = document.getElementById("enviar-form");
   const modalProfesional = document.getElementById("modal");
-  
+
   if (!agregarProfesional || !nuevoProfesional || !modalProfesional) {
-    console.error("No se encontraron los elementos necesarios para abrir el modal, revisa la estructura HTML.");
+    console.error(
+      "No se encontraron los elementos necesarios para abrir el modal, revisa la estructura HTML."
+    );
     return;
   }
-  
+
   agregarProfesional.addEventListener("click", () => {
     modalProfesional.showModal();
   });
-  
+
   nuevoProfesional.addEventListener("click", (event) => {
     event.preventDefault();
     registrarProfesional();
   });
-  
+
   // Cerrar el modal si se hace clic fuera de él
   window.onclick = function (event) {
     if (event.target === modalProfesional) {
@@ -161,10 +185,3 @@ function abrirModalProfesional() {
     }
   };
 }
-
-
-
-
-
-
-
