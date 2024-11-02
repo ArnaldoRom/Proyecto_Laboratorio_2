@@ -23,7 +23,7 @@ router.get("/vista", (req, res) => {
 router.get("/vistaAdministradora", (req, res) => {
   res.render("vistaAdministradora/index");
 });
-
+// /vistaAdministradora  /vistaSecretaria
 router.get("/crearProfesional", (req, res) => {
   res.render("vistaAdministradora/crearProfesional", { layaout: false });
 });

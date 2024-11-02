@@ -33,13 +33,19 @@ if (form) {
       const data = await response.json();
       console.log('Datos recibidos:', data);
 
-      // Redirigir según el rol
+      // Redirigir segun el rol
       if (data.rol === 'Administrador') {
-        window.location.href = '/vista-administrador'; // Cambia esta ruta según tu configuración
+        window.location.href = '/vistaAdministradora'; 
+
       } else if (data.rol === 'Paciente') {
-        window.location.href = '/vista-paciente'; // Cambia esta ruta según tu configuración
-      } else {
-        console.error('Rol no reconocido:', data.rol);
+        window.location.href = '/vistaPaciente'; 
+
+      } else if(data.rol === 'Secretaria'){
+        window.location.href = '/vistaSecretaria'; 
+      } else if(data.rol === 'Profesional'){
+        window.location.href = '/vistaProfesional'; 
+      } else{
+        console.error('el rol no es correcto', data.rol);
       }
 
     } catch (error) {
