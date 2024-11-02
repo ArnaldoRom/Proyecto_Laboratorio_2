@@ -1,3 +1,4 @@
+/* Estilos principales */
 .content {
   padding: 20px;
   background-color: #fff;
@@ -8,35 +9,36 @@
 /* Estilos para la tabla */
 .contenedor-tabla {
   width: 100%;
-  max-width: 600px;
+  max-width: 90%;
   margin: 20px auto;
 }
 
-.tabla-sucursales {
+.tabla-profesionales {
   width: 100%;
   border-collapse: collapse;
 }
 
-.tabla-sucursales th,
-.tabla-sucursales td {
+.tabla-profesionales th,
+.tabla-profesionales td {
   padding: 10px;
   text-align: left;
   border: 1px solid #ddd;
 }
 
-.tabla-sucursales th {
+.tabla-profesionales th {
   background-color: #004080;
   color: white;
 }
 
-.tabla-sucursales tr:nth-child(even) {
+.tabla-profesionales tr:nth-child(even) {
   background-color: #f9f9f9;
 }
 
-.tabla-sucursales tr:hover {
+.tabla-profesionales tr:hover {
   background-color: #f1f1f1;
 }
 
+/* Estilo del botón para agregar */
 .boton-agregar {
   display: block;
   margin: 20px auto;
@@ -53,6 +55,7 @@
   background-color: #45a049;
 }
 
+/* Estilos para el modal */
 .contenedor-modal {
   position: fixed;
   top: 50%;
@@ -81,7 +84,8 @@ label {
   font-weight: bold;
 }
 
-input {
+input,
+select {
   padding: 8px;
   margin-top: 5px;
   border: 1px solid #ddd;
@@ -102,6 +106,7 @@ button:hover {
   background-color: #45a049;
 }
 
+/* Estilos para la ventana de éxito */
 .contenedor-exito {
   position: fixed;
   top: 50%;

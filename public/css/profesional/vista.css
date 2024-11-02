@@ -22,3 +22,42 @@ h2 {
   font-size: 16px;
   cursor: pointer;
 }
+
+.content {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos para la tabla */
+.contenedor-tabla {
+  width: 100%;
+  max-width: 80%;
+  margin: 20px auto;
+}
+
+.tabla-agendas {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla-agendas th,
+.tabla-agendas td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.tabla-agendas th {
+  background-color: #004080;
+  color: white;
+}
+
+.tabla-agendas tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.tabla-agendas tr:hover {
+  background-color: #f1f1f1;
+}

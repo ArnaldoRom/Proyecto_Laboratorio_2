@@ -1,3 +1,26 @@
+let dataTableAgendaPro;
+let dataTableAgendaProInicializado = false;
+
+const agendaProOpciones = {
+  destroy: true,
+  pageLength: 10,
+  language: {
+    url: "/js/dataTable/es_AR.json",
+  },
+};
+const iniciarDataTableAgendaPro = async () => {
+  if (dataTableAgendaProInicializado) {
+    dataTableAgendaPro.destroy();
+  }
+  const tablaTurnos = document.querySelector("#tabla-agendas tbody");
+  if (tablaTurnos.childElementCount > 0) {
+    dataTableAgendaPro = $("#tabla-agenda-profecional").DataTable(
+      agendaProOpciones
+    );
+    dataTableAgendaProInicializado = true;
+  }
+};
+
 async function recuperarAgendas() {
   const nombre = document.querySelector(".header p").textContent.trim();
   const especialidades = document.getElementById("especialidades");
@@ -49,14 +72,8 @@ async function recuperarTurnosConfirmados(idAgenda) {
     turnos.forEach((turno) => {
       const tr = document.createElement("tr");
 
-      const tdHora = document.createElement("td");
-      tdHora.textContent = turno.hora;
-
-      const tdNombre = document.createElement("td");
-      tdNombre.textContent = turno.nombre;
-
-      const tdApellido = document.createElement("td");
-      tdApellido.textContent = turno.apellido;
+      const tdPaciente = document.createElement("td");
+      tdPaciente.textContent = `${turno.apellido} ${turno.nombre}`;
 
       const tdMotivoConsulta = document.createElement("td");
       tdMotivoConsulta.textContent = turno.motivoConsulta;
@@ -64,14 +81,22 @@ async function recuperarTurnosConfirmados(idAgenda) {
       const tdObraSocial = document.createElement("td");
       tdObraSocial.textContent = turno.obraSocial;
 
-      tr.appendChild(tdHora);
-      tr.appendChild(tdNombre);
-      tr.appendChild(tdApellido);
+      const tdFecha = document.createElement("td");
+      tdFecha.textContent = new Date(turno.fecha).toLocaleDateString("en-GB");
+
+      const tdHora = document.createElement("td");
+      tdHora.textContent = turno.hora;
+
+      tr.appendChild(tdPaciente);
       tr.appendChild(tdMotivoConsulta);
       tr.appendChild(tdObraSocial);
+      tr.appendChild(tdFecha);
+      tr.appendChild(tdHora);
 
       tablaTurnos.appendChild(tr);
     });
+
+    await iniciarDataTableAgendaPro();
   } catch (error) {
     console.error("Error al obtener turnos", error);
   }

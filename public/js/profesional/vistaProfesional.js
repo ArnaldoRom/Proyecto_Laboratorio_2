@@ -1,10 +1,12 @@
+let cargando = false;
+
 function mostrar(vista, especialidad = "", idAgenda = "", push = true) {
+  if (cargando) return;
+  cargando = true;
+
   const contenedor = document.querySelector(".content");
   let url = "";
   let newurl = "";
-
-  console.log(especialidad);
-  console.log(idAgenda);
 
   switch (vista) {
     case "agenda":
@@ -13,11 +15,13 @@ function mostrar(vista, especialidad = "", idAgenda = "", push = true) {
       break;
     default:
       console.error("No existe vista");
+      cargando = false;
       return;
   }
 
+  const datos = { vista, especialidad, idAgenda };
   if (push && location.pathname !== newurl) {
-    history.pushState({}, "", newurl);
+    history.pushState(datos, "", newurl);
   }
 
   fetch(url)
@@ -25,21 +29,25 @@ function mostrar(vista, especialidad = "", idAgenda = "", push = true) {
     .then((html) => {
       contenedor.innerHTML = html;
       if (vista === "agenda") {
+        iniciarDataTableAgendaPro();
         recuperarTurnosConfirmados(idAgenda);
       }
     })
-    .catch((error) => console.error("error", error));
+    .catch((error) => console.error("error", error))
+    .finally(() => {
+      cargando = false;
+    });
 }
 
 window.addEventListener("popstate", (event) => {
-  const path = location.pathname;
-  const especialidad = path.split("/")[2];
-  const idAgenda = path.split("/")[3];
+  const path = location.pathname.split("/");
+  const especialidad = path[2];
+  const idAgenda = path[3];
 
-  if (especialidad) {
+  if (especialidad && idAgenda) {
     mostrar("agenda", especialidad, idAgenda, false);
   } else {
-    console.warn("Ruta no reconocida:", path);
+    console.warn("Ruta no reconocida:", location.pathname);
   }
 });
 
