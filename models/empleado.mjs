@@ -1,14 +1,23 @@
 import { conexion } from "../config/db.js";
 
 class Empleado {
-  #nombre;
+  #nombreEmpleado;
+  #apellido;
   #numeroLegajo;
   #idSucursal;
   #idUsuario;
   #estado;
 
-  constructor(nombre, numeroLegajo, idSucursal, idUsuario, estado) {
-    this.#nombre = nombre;
+  constructor(
+    nombreEmpleado,
+    apellido,
+    numeroLegajo,
+    idSucursal,
+    idUsuario,
+    estado
+  ) {
+    this.#nombreEmpleado = nombreEmpleado;
+    this.#apellido = apellido;
     this.#numeroLegajo = numeroLegajo;
     this.#idSucursal = idSucursal;
     this.#idUsuario = idUsuario;
@@ -19,11 +28,12 @@ class Empleado {
   static async crearEmpleado(data) {
     try {
       const query = `
-        INSERT INTO empleado (nombre, numeroLegajo, idSucursal, idUsuario, estado) 
-        VALUES (?, ?, ?, ?, 1)
+        INSERT INTO empleado (nombreEmpleado, apellido, numeroLegajo, idSucursal, idUsuario, estado) 
+        VALUES (?, ?, ?, ?, ?, 1)
       `;
       const values = [
-        data.nombre,
+        data.nombreEmpleado,
+        data.apellido,
         data.numeroLegajo,
         data.idSucursal,
         data.idUsuario,
@@ -39,7 +49,9 @@ class Empleado {
   // Obtener todos los empleados
   static async obtenerEmpleados() {
     try {
-      const [rows] = await conexion.query("SELECT * FROM empleado");
+      const [rows] = await conexion.query(
+        "SELECT * FROM empleado JOIN usuario on empleado.idUsuario = usuario.idUsuario JOIN sucursal on empleado.idSucursal=sucursal.idSucursal;"
+      );
       return rows;
     } catch (error) {
       console.error("Error al obtener empleados", error);
@@ -52,11 +64,12 @@ class Empleado {
     try {
       const query = `
         UPDATE empleado 
-        SET nombre = ?, numeroLegajo = ?, idSucursal = ?, idUsuario = ?, estado = ?
+        SET nombreEmpleado = ?, apellido = ?, numeroLegajo = ?, idSucursal = ?, idUsuario = ?, estado = ?
         WHERE idEmpleado = ?
       `;
       const values = [
         data.nombre,
+        data.apellido,
         data.numeroLegajo,
         data.idSucursal,
         data.idUsuario,

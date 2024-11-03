@@ -12,6 +12,10 @@ function mostrar(vista, push = true) {
       url = "/crearProfesional";
       newurl = "/profesional";
       break;
+    case "cargarEmpleado":
+      url = "/cargarEmpleado";
+      newurl = "/empleado";
+      break;
     case "cargarSucursal":
       url = "/cargarSucursal";
       newurl = "/sucursal";
@@ -34,7 +38,7 @@ function mostrar(vista, push = true) {
     .then((html) => {
       contenedor.innerHTML = html;
       if (vista === "cargarSucursal") {
-        niciarDataTableSucursal();
+        iniciarDataTableSucursal();
         abrirModal();
       } else if (vista === "crearProfesional") {
         iniciarDataTableProfesional();
@@ -42,6 +46,10 @@ function mostrar(vista, push = true) {
         cargarEspecialidades();
         abrirModalEspecialidad();
         cargarProfesionalesSelect();
+      } else if (vista === "cargarEmpleado") {
+        iniciarDataTableEmpleado();
+        abrirModalEmpleado();
+        cargarSucursalesEmpleados();
       }
     })
     .catch((error) => console.error("error", error));
@@ -54,6 +62,8 @@ window.addEventListener("popstate", (event) => {
     mostrar("cargarAgenda", false);
   } else if (path === "/profesional") {
     mostrar("crearProfesional", false);
+  } else if (path === "/empleado") {
+    mostrar("cargarEmpleado", false);
   } else if (path === "/sucursal") {
     mostrar("cargarSucursal", false);
   } else if (path === "/calendario") {

@@ -23,7 +23,7 @@ router.get("/vista", (req, res) => {
 router.get("/vistaAdministradora", (req, res) => {
   res.render("vistaAdministradora/index");
 });
-// /vistaAdministradora  /vistaSecretaria
+
 router.get("/crearProfesional", (req, res) => {
   res.render("vistaAdministradora/crearProfesional", { layaout: false });
 });
@@ -38,6 +38,10 @@ router.get("/cargarAgenda", (req, res) => {
 
 router.get("/cargarCalendario", (req, res) => {
   res.render("vistaAdministradora/cargarCalendario", { layaout: false });
+});
+
+router.get("/cargarEmpleado", (req, res) => {
+  res.render("vistaAdministradora/cargarEmpleado", { layaout: false });
 });
 
 //---------------------- VISTA SECRETARIA -----------------//

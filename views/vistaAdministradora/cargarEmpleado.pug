@@ -1,0 +1,32 @@
+link(rel="stylesheet", href="/css/administrador/empleado.css")
+
+div(id="tabla-empleados", class="contenedor-tabla")
+  table(id="tabla-empleado", class="tabla-empleados") 
+    thead 
+      tr  
+        th NOMBRE 
+        th APELLIDO
+        th LEGAJO 
+        th SUCURSAL 
+        th USUARIO
+    tbody 
+  button(id="abrir-modal-empleado", class="boton-agregar") AGREGAR EMPLEADO
+
+  dialog(id="modal-empleado", class="contenedor-modal")
+    h2 Nuevo Empleado
+    form
+      label(for="nombre")  Nombre 
+      input(type="text", id="nombre")
+    
+      label(for="apellido") Apellido
+      input(type="text", id="apellido")
+
+      label(for="legajo") Legajo 
+      input(type="text", id="legajo")
+
+      label(for="sucursal") Sucursal 
+      select(id="sucursales") 
+
+      button(type="submit", id="enviar-form-empleado") ENVIAR
+
+  dialog(id="exito-empleado", class="contenedor-exito") ✅ Agregado con éxito
