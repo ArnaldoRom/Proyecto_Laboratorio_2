@@ -10,25 +10,49 @@ div(id="tabla-profesionales", class="contenedor-tabla")
         th MATRICULA
     tbody
 
-button(id="abrir-modal", class="boton-agregar") AGREGAR PROFESIONAL
+div(id="contenedor-botones", class="contenedor-botones")
+  button(id="abrir-modal", class="boton-agregar") AGREGAR PROFESIONAL
+  button(id="abrir-modal-especialidad", class="boton agregar") AGREGAR ESPECIALIDAD
 
 dialog(id="modal", class="contenedor-modal")
   h2 Nuevo Profesional
   form
-    label(for="nombre") Nombre
-    input(type="text", id="nombre")
+   label(for="titulo") Título y Nombre:
+    div(class="nombre-contenedor")
+      select(id="titulo")
+        option(value="Dr") Dr
+        option(value="Dra") Dra
 
-    label(for="apellido") Apellido
+      input(type="text", id="nombre")
+
+    label(for="apellido") Apellido:
     input(type="text", id="apellido")
 
-    label(for="matricula") Matrícula
+    label(for="matricula") Matrícula:
     input(type="text", id="matricula")
 
     label(for="especialidad") Especialidad
     select(id="especialidad")
 
-    button(type="submit", id="enviar-form") ENVIAR
+    button(type="submit", id="enviar-form", class="enviar-boton") ENVIAR
 
 dialog(id="exito", class="contenedor-exito") ✅ Profesional agregado con éxito
+
+dialog(id="modal-especialidad", class="contenedor-modal")
+  h2 Agregar Especialidad
+  form
+    label(for="nombre") Nombre Especialidad
+    input(type="text", id="nombre-especialidad") 
+
+    label(for="profesionales") Profesionales
+    select(id="profesionales")
+
+    label(for="matricula") Matrícula
+    input(type="text", id="matricula-especialidad")
+
+    
+    button(type="submit", id="enviar-form-especialidad") AGREGAR
+
+dialog(id="exito-especialidad", class="contenedor-exito") ✅ Especialidad agregado con éxito
 
 

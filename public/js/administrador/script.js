@@ -11,6 +11,7 @@ const profesionalOpciones = {
 const iniciarDataTableProfesional = async () => {
   if (dataTableProfesionalInicializado) {
     dataTableProfesional.destroy();
+    dataTableProfesionalInicializado = false;
   }
   await listaProfesionales();
 
@@ -29,12 +30,7 @@ async function listaProfesionales() {
     console.error("Error al obtener profesionales: ", error);
   }
 }
-function crearUsuario(profesionales) {
-  try {
-  } catch (errir) {
-    console.erroe("Error al crear usuario");
-  }
-}
+
 //profesional.nombre, profesional.apellido, especialidad.nombre, matricula
 function cargarProfesionales(profesionales) {
   const resultado = document.querySelector("#tabla-profesionales tbody");
@@ -80,6 +76,7 @@ async function cargarEspecialidades() {
 
 // Registrar profesional y su especialidad
 async function registrarProfesional() {
+  const genero = document.getElementById("titulo").value;
   const nombre = document.getElementById("nombre").value;
   const apellido = document.getElementById("apellido").value;
   const idEspecialidad = parseInt(
@@ -89,6 +86,8 @@ async function registrarProfesional() {
   const matricula = document.getElementById("matricula").value;
   const exito = document.getElementById("exito");
 
+  const nombreProfecional = `${genero} ${nombre}`;
+
   try {
     // Paso 1: Crear profesional
     const responseProfesional = await fetch("/profesionales", {
@@ -97,7 +96,7 @@ async function registrarProfesional() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        nombre,
+        nombre: nombreProfecional,
         apellido,
       }),
     });
@@ -127,7 +126,7 @@ async function registrarProfesional() {
     // Paso 3: Crear el usuario automaticamente
     const nombreUsuario = apellido;
     const contrasena = `clinica${apellido}`;
-    const rol = "profesional";
+    const rol = "Profesional";
 
     const responseUsuario = await fetch("/usuarios", {
       method: "POST",
@@ -157,6 +156,85 @@ async function registrarProfesional() {
   }
 }
 
+async function cargarNuevaEspecialidad() {
+  const especialidad = document.getElementById("nombre-especialidad").value;
+  const profesional = parseInt(
+    document.getElementById("profesionales").value,
+    10
+  );
+  const matricula = document.getElementById("matricula-especialidad").value;
+  const exitoEspeacialidad = document.getElementById("exito-especialidad");
+
+  try {
+    const response = await fetch("/especialidades", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        nombre: especialidad,
+      }),
+    });
+
+    if (!response.ok) throw new Error("Error al agregar Especialidad");
+
+    const idEspecialidad = await response.json();
+
+    const resEspecializado = await fetch("/profesionales-especializados", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        idEspecialidad: idEspecialidad.id,
+        idProfesional: profesional,
+        matricula,
+      }),
+    });
+
+    if (!resEspecializado.ok) throw new Error("Error al asignar especialidad");
+
+    await cargarEspecialidades();
+    await listaProfesionales();
+    document.getElementById("modal-especialidad").close();
+    exitoEspeacialidad.style.display = "block";
+    exitoEspeacialidad.showModal();
+    setTimeout(() => {
+      exitoEspeacialidad.close();
+      exitoEspeacialidad.style.display = "none";
+    }, 3000);
+  } catch (error) {
+    console.error("Error al registrar profesional: ", error);
+  }
+}
+
+async function cargarProfesionalesSelect() {
+  try {
+    const response = await fetch("/profesionales");
+
+    if (!response.ok) throw new Error("Error al obtener profesionales");
+
+    const profesionales = await response.json();
+    const selectProfesional = document.getElementById("profesionales");
+
+    if (!selectProfesional) {
+      console.error(
+        "No se encontró el select con el ID 'especialidad', revisa la estructura HTML."
+      );
+      return;
+    }
+    profesionales.forEach((profesional) => {
+      const optionProfesional = document.createElement("option");
+      optionProfesional.value = profesional.idProfesional;
+      optionProfesional.textContent = `${profesional.nombre} ${profesional.apellido}`;
+      selectProfesional.appendChild(optionProfesional);
+    });
+  } catch (error) {
+    console.error("Error al cargar especialidades: ", error);
+  }
+}
+
+//-----------------------------------MODALES
 function abrirModalProfesional() {
   const agregarProfesional = document.getElementById("abrir-modal");
   const nuevoProfesional = document.getElementById("enviar-form");
@@ -179,9 +257,40 @@ function abrirModalProfesional() {
   });
 
   // Cerrar el modal si se hace clic fuera de él
-  window.onclick = function (event) {
+  modalProfesional.addEventListener("click", (event) => {
     if (event.target === modalProfesional) {
       modalProfesional.close();
     }
-  };
+  });
+}
+
+function abrirModalEspecialidad() {
+  const agregarEspecialidad = document.getElementById(
+    "abrir-modal-especialidad"
+  );
+  const nuevoEspecialidad = document.getElementById("enviar-form-especialidad");
+  const modalEspecialidad = document.getElementById("modal-especialidad");
+
+  if (!agregarEspecialidad || !nuevoEspecialidad || !modalEspecialidad) {
+    console.error(
+      "No se encontraron los elementos necesarios para abrir el modal, revisa la estructura HTML."
+    );
+    return;
+  }
+
+  agregarEspecialidad.addEventListener("click", () => {
+    modalEspecialidad.showModal();
+  });
+
+  nuevoEspecialidad.addEventListener("click", (event) => {
+    event.preventDefault();
+    cargarNuevaEspecialidad();
+  });
+
+  // Cerrar el modal si se hace clic fuera de él
+  modalEspecialidad.addEventListener("click", (event) => {
+    if (event.target === modalEspecialidad) {
+      modalEspecialidad.close();
+    }
+  });
 }

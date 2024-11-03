@@ -34,12 +34,14 @@ function mostrar(vista, push = true) {
     .then((html) => {
       contenedor.innerHTML = html;
       if (vista === "cargarSucursal") {
-        iniciarDataTableSucursal();
+        niciarDataTableSucursal();
         abrirModal();
       } else if (vista === "crearProfesional") {
         iniciarDataTableProfesional();
         abrirModalProfesional();
         cargarEspecialidades();
+        abrirModalEspecialidad();
+        cargarProfesionalesSelect();
       }
     })
     .catch((error) => console.error("error", error));

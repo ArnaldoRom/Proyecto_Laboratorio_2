@@ -52,8 +52,9 @@ export const obtenerEspecialidades = async (req, res) => {
 
 export const obtenerEspecialidadPorID = async (req, res) => {
   try {
-    const especialidad =
-      await Especialidad.obtenerEspecialidadesPorID(req.params.id);
+    const especialidad = await Especialidad.obtenerEspecialidadesPorID(
+      req.params.id
+    );
     res.json(especialidad);
   } catch (error) {
     console.error("Error al obtener los profesionales especializados:", error);
@@ -64,23 +65,26 @@ export const obtenerEspecialidadPorID = async (req, res) => {
 };
 
 // Controlador para Profesionales ---------------------------------------------
-export const obtenerProfesional = async (req, res) =>{
-  try{
+export const obtenerProfesional = async (req, res) => {
+  try {
     const profesional = await Profesional.obtenerProfesional();
-    res.status(200).json(profesional)
-  }catch{error}{
-    console.error("Error al traer el profesional")
+    res.status(200).json(profesional);
+  } catch {
+    error;
   }
-}
+  {
+    console.error("Error al traer el profesional");
+  }
+};
 
-export const obtenerLista = async (req, res) =>{
-  try{
+export const obtenerLista = async (req, res) => {
+  try {
     const profesional = await Profesional.obtenerLista();
-    res.status(200).json(profesional)
-  }catch{error}{
-    console.error("Error al traer el profesional")
+    res.json(profesional);
+  } catch (error) {
+    console.error("Error al traer el profesional", error);
   }
-}
+};
 
 export const altaProfesional = async (req, res) => {
   const id = req.params.id;
@@ -135,9 +139,10 @@ export const actualizarProfesional = async (req, res) => {
 
 export const crearProfesionalEspecializado = async (req, res) => {
   const data = req.body;
-  console.log(data)
   try {
-    const id = await ProfesionalEspecializado.crearProfesionalEspecializado(data);
+    const id = await ProfesionalEspecializado.crearProfesionalEspecializado(
+      data
+    );
     res.status(201).json({ message: "Profesional especializado creado", id });
   } catch (error) {
     console.error("Error al crear el profesional especializado:", error);
@@ -159,8 +164,6 @@ export const obtenerProfesionalesEspecializados = async (req, res) => {
       .json({ message: "Error al obtener los profesionales especializados." });
   }
 };
-
-
 
 export const actualizarProfesionalEspecializado = async (req, res) => {
   const id = req.params.id;

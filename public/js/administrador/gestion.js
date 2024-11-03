@@ -56,7 +56,7 @@ async function registrarSucursal() {
   const nombre = document.getElementById("nombre").value;
   const direccion = document.getElementById("direccion").value;
   const clasificacion = document.getElementById("clasificacion").value;
-  const exito = document.getElementById("exito");
+  const exito = document.getElementById("exito-sucursal");
 
   try {
     const response = await fetch("/gestion/sucursal", {
@@ -105,8 +105,8 @@ function abrirModal() {
   });
 
   window.onclick = function (event) {
-    if (event.target === modal) {
-      modal.close();
+    if (event.target === modalSucursal) {
+      modalSucursal.close();
     }
   };
 }

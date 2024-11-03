@@ -2,23 +2,21 @@ import { conexion } from "../config/db.js";
 
 class Especialidad {
   #nombre;
-  #descripcion;
   #estado;
 
-  constructor(nombre, descripcion, estado) {
+  constructor(nombre, estado) {
     this.#nombre = nombre;
-    this.#descripcion = descripcion;
     this.#estado = estado;
   }
 
   static async crearEspecialidad(data) {
     try {
       const query = `
-        INSERT INTO especialidad (nombre, descripcion, estado) 
-        VALUES (?, ?, 1)
+        INSERT INTO especialidad (nombre, estado) 
+        VALUES (?, 1)
       `;
-      const [result] = await conexion.query(query, [data.nombre, data.descripcion]);
-      return result.insertId; 
+      const [result] = await conexion.query(query, [data.nombre]);
+      return result.insertId;
     } catch (error) {
       console.error("Error al crear especialidad", error);
       throw error;
@@ -52,10 +50,14 @@ class Especialidad {
     try {
       const query = `
         UPDATE especialidad 
-        SET nombre = ?, descripcion = ?, estado = ?
+        SET nombre = ?, estado = ?
         WHERE idEspecialidad = ?
       `;
-      const [result] = await conexion.query(query, [data.nombre, data.descripcion, data.estado, idEspecialidad]);
+      const [result] = await conexion.query(query, [
+        data.nombre,
+        data.estado,
+        idEspecialidad,
+      ]);
       return result.affectedRows;
     } catch (error) {
       console.error("Error al actualizar especialidad", error);
