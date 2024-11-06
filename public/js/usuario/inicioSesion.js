@@ -31,19 +31,30 @@ if (form) {
       if (!response.ok) throw new Error("Credenciales incorrectas");
 
       const data = await response.json();
-      console.log("Datos recibidos:", data);
+      console.log("Datos recibidos:", data); // Log adicional
 
-      // Redirigir segun el rol
-      if (data.rol === "Administrador") {
-        window.location.href = "/vistaAdministradora";
-      } else if (data.rol === "Paciente") {
-        window.location.href = "/vistaPaciente";
-      } else if (data.rol === "Secretaria") {
-        window.location.href = "/vistaSecretaria";
-      } else if (data.rol === "Profesional") {
-        window.location.href = "/vistaProfecional";
+      // Redirigir según el rol
+      if (data.rol) {
+        console.log("Redirigiendo a la vista:", data.rol); // Log de redirección
+        switch (data.rol) {
+          case "Administrador":
+            window.location.href = "/vistaAdministradora";
+            break;
+          case "Paciente":
+            window.location.href = "/vistaPaciente";
+            break;
+          case "Secretaria":
+            window.location.href = "/vistaSecretaria";
+            break;
+          case "Profesional":
+            window.location.href = "/vistaProfecional";
+            break;
+          default:
+            console.error("El rol no es correcto", data.rol);
+            alert("Rol no reconocido.");
+        }
       } else {
-        console.error("el rol no es correcto", data.rol);
+        console.error("No se recibió el rol en la respuesta.");
       }
     } catch (error) {
       console.error("Error al iniciar sesión:", error);
