@@ -30,7 +30,9 @@ function mostrar(vista, push = true) {
     .then((html) => {
       contenedor.innerHTML = html;
       if (vista === "agendas") {
+        buscar();
       } else if (vista === "turnos") {
+        iniciarCalendarioTurno();
       } else if (vista === "paciente") {
       }
     })

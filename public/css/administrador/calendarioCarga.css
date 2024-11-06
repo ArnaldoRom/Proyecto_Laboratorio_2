@@ -1,7 +1,94 @@
-.content {
-  background-color: bisque;
+/* Contenedor principal para el formulario y el calendario */
+.contenedor-principal {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-h2 {
-  color: aquamarine;
+/* Estilo para el formulario */
+.form-calendario {
+  width: 30%;
+  margin-right: 20px;
+}
+
+.form-calendario h2 {
+  font-size: 20px;
+  color: #004080;
+  margin-bottom: 20px;
+}
+
+.form-calendario form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-calendario label {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.form-calendario input {
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.form-calendario button {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.form-calendario button:hover {
+  background-color: #45a049;
+}
+
+/* Contenedor del calendario */
+.contenedor-calendario {
+  flex: 1;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 60%;
+}
+
+.contenedor-calendario h2 {
+  font-size: 20px;
+  color: #004080;
+  margin-bottom: 10px;
+}
+
+/* Calendario FullCalendar */
+.calendario {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.contenedor-exito {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  padding: 20px;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  background-color: white;
+  z-index: 1000;
+  text-align: center;
+}
+
+.contenedor-exito::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
 }

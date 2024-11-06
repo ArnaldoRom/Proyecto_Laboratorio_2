@@ -50,7 +50,9 @@ export const getSucursalId = async (req, res) => {
 export const agregarCalendario = async (req, res) => {
   const calendario = req.body;
 
-  if (!calendario || !calendario.descripcion || !calendario.anio) {
+  console.log(calendario);
+
+  if (!calendario || !calendario.descripcion) {
     return res.status(400).json({ message: "El dato es requerido" });
   }
 

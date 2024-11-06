@@ -50,6 +50,9 @@ function mostrar(vista, push = true) {
         iniciarDataTableEmpleado();
         abrirModalEmpleado();
         cargarSucursalesEmpleados();
+      } else if (vista === "cargarCalendario") {
+        iniciarCalendario();
+        enviarDatos();
       }
     })
     .catch((error) => console.error("error", error));

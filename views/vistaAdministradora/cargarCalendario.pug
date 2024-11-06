@@ -1,8 +1,26 @@
 link(rel="stylesheet", href="/css/administrador/calendarioCarga.css")
-table 
-  thead 
-    tr  
-      th DESCRIPCION 
-      th DIAS NO LABORABLES
-      th VACACIONES
-  tbody 
+div(id="contenedor-principal", class="contenedor-principal")
+  div(id="formulario-calendario", class="form-calendario")
+    h2 Nuevo Evento 
+    form
+      label(for="descripcion") Descipcion
+      input(type="text", id="descripcion")
+
+      label(for="dias-no-laborables") Dias no Laboral
+      input(type="date", id="dias-no-laborables")
+
+      label(for="desde") Desde
+      input(type="date", id="desde")
+
+      label(for="hasta") Hasta
+      input(type="date", id="hasta")  
+
+      label(for="color") Color del evento 
+      input(type="color", id="color")
+
+      button(type="submit", id="enviar-form") ENVIAR
+
+  div(id="contenedor-calendario",class="contenedor-calendario")
+    h2 Calendario de Trabajo
+    div(id="calendar", class="calendario")
+  dialog(id="exito-calendario", class="contenedor-exito") ✅ Agregado con éxito

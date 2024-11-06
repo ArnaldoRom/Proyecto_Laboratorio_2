@@ -6,7 +6,6 @@ class Calendario {
   #diasNoLaborables;
   #fechaInicio;
   #fechaFin;
-  #anio;
   #estado;
 
   constructor(
@@ -15,7 +14,6 @@ class Calendario {
     diasNoLaborables,
     fechaInicio,
     fechaFin,
-    anio,
     estado
   ) {
     this.#idCalendario = idCalendario;
@@ -23,7 +21,6 @@ class Calendario {
     this.#diasNoLaborables = diasNoLaborables;
     this.#fechaInicio = fechaInicio;
     this.#fechaFin = fechaFin;
-    this.#anio = anio;
     this.#estado = estado;
   }
 
@@ -56,23 +53,14 @@ class Calendario {
       diasNoLaborables = null,
       fechaInicio = null,
       fechaFin = null,
-      anio,
-      estado = 1,
     } = data;
     try {
       const query = `
-        INSERT INTO calendario (descripcion, diasNoLaborables, fechaInicio, fechaFin, anio,  estado)
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO calendario (descripcion, diasNoLaborables, fechaInicio, fechaFin, estado)
+        VALUES (?, ?, ?, ?, 1)
     `;
 
-      const values = [
-        descripcion,
-        diasNoLaborables,
-        fechaInicio,
-        fechaFin,
-        anio,
-        estado,
-      ];
+      const values = [descripcion, diasNoLaborables, fechaInicio, fechaFin];
 
       const [result] = await conexion.query(query, values);
       return result.insertId;
@@ -89,20 +77,12 @@ class Calendario {
         diasNoLaborables = null,
         fechaInicio = null,
         fechaFin = null,
-        anio,
       } = data;
 
       const query =
-        "UPDATE calendario SET descripcion = IFNULL(?, descripcion), diasNoLaborables = IFNULL(?, diasNoLaborables), fechaInicio = IFNULL(?, fechaInicio), fechaFin = IFNULL(?, fechaFin), anio = IFNULL(?, anio) WHERE idCalendario = ?";
+        "UPDATE calendario SET descripcion = IFNULL(?, descripcion), diasNoLaborables = IFNULL(?, diasNoLaborables), fechaInicio = IFNULL(?, fechaInicio), fechaFin = IFNULL(?, fechaFin), WHERE idCalendario = ?";
 
-      const values = [
-        descripcion,
-        diasNoLaborables,
-        fechaInicio,
-        fechaFin,
-        anio,
-        id,
-      ];
+      const values = [descripcion, diasNoLaborables, fechaInicio, fechaFin, id];
       const [rows] = await conexion.query(query, values);
       return rows;
     } catch (error) {

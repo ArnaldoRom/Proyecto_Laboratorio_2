@@ -1,2 +1,17 @@
 link(rel="stylesheet", href="/css/secretaria/turnos.css")
-h2 SOY EL TURNO DE SECRETARIA 
+div(id="contenedor-principal", class="contenedor-principal")
+  div(id="formulario-turnos", class="form-turnos")
+    h2 Nuevo Evento 
+    form
+      label(for="nombre") Profecional
+      input(type="text", id="nombre", placeholder="Nombre del profesional")
+
+      label(for="especialidad") Especialidad 
+      input(type="text", id="especialidad", placeholder="Especialidad")
+
+      button(type="submit", id="enviar-form-turno") BUSCAR
+
+  div(id="contenedor-turno",class="contenedor-turno")
+    h2 Turnos Disponibles
+    div(id="calendar", class="calendario")
+  dialog(id="exito-turnos", class="contenedor-exito") ✅ Agregado con éxito
