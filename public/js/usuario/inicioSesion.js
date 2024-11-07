@@ -60,6 +60,7 @@ if (form) {
       console.error("Error al iniciar sesión:", error);
       alert(error.message);
     }
+    
   });
 } else {
   console.error("Formulario de inicio de sesión no encontrado");

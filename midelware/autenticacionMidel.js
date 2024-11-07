@@ -8,13 +8,13 @@ export const validarToken = (roles = []) => {
   return (req, res, next) => {
     // Verificar si hay un token en las cookies
     const token = req.cookies.token;
-    console.log("Token recibido:", token); // Log del token
+    console.log("TOKEN RECIVID:", token); 
 
     if (!token) {
       console.log("No hay token, acceso denegado."); // Log de error
       return res.status(403).json({ message: "No hay token, acceso denegado." });
     }
-
+  console.log("Entrando en validar")
     // Verificar y decodificar el token
     jwt.verify(token, JWT_SECRET, (err, user) => {
       if (err) {
@@ -22,7 +22,7 @@ export const validarToken = (roles = []) => {
         return res.status(403).json({ message: "Token no válido." });
       }
 
-      console.log("Usuario autenticado:", user); // Log del usuario autenticado
+      console.log("Usuario autenticado:", user); // Loog del usuario autenticad
 
       // Si se especifican roles, comprobar si el usuario tiene uno de ellos
       if (roles.length && !roles.includes(user.rol)) {
