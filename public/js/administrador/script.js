@@ -57,6 +57,7 @@ async function cargarEspecialidades() {
     if (!response.ok) throw new Error("Error al obtener especialidades");
     const especialidades = await response.json();
     const selectEspecialidad = document.getElementById("especialidad");
+    selectEspecialidad.innerHTML = "";
     if (!selectEspecialidad) {
       console.error(
         "No se encontró el select con el ID 'especialidad', revisa la estructura HTML."
@@ -144,6 +145,8 @@ async function registrarProfesional() {
 
     // Actualizar la lista y mostrar mensaje de éxito
     await listaProfesionales();
+    await cargarProfesionalesSelect();
+    await iniciarDataTableProfesional();
     document.getElementById("modal").close();
     exito.style.display = "block";
     exito.showModal();
@@ -196,6 +199,7 @@ async function cargarNuevaEspecialidad() {
 
     await cargarEspecialidades();
     await listaProfesionales();
+    await iniciarDataTableProfesional();
     document.getElementById("modal-especialidad").close();
     exitoEspeacialidad.style.display = "block";
     exitoEspeacialidad.showModal();
@@ -216,6 +220,7 @@ async function cargarProfesionalesSelect() {
 
     const profesionales = await response.json();
     const selectProfesional = document.getElementById("profesionales");
+    selectProfesional.innerHTML = "";
 
     if (!selectProfesional) {
       console.error(
@@ -233,6 +238,8 @@ async function cargarProfesionalesSelect() {
     console.error("Error al cargar especialidades: ", error);
   }
 }
+
+function LimpiarSelect() {}
 
 //-----------------------------------MODALES
 function abrirModalProfesional() {

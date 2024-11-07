@@ -62,4 +62,9 @@ router.get("/gestionPacientes", (req, res) => {
   res.render("vistaSecretaria/paciente", { layaut: false });
 });
 
+//---------------------- VISTA PACIENTE-----------------//
+
+router.get("/vistaPaciente", (req, res) => {
+  res.render("vistaPaciente/index");
+});
 export default router;
