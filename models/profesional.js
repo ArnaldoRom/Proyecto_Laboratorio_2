@@ -1,13 +1,13 @@
 import { conexion } from "../config/db.js";
 
 class Profesional {
-  #nombre;
-  #apellido;
+  #nombrePro;
+  #apellidoPro;
   #estado;
 
-  constructor(nombre, apellido, estado) {
-    this.#nombre = nombre;
-    this.#apellido = apellido;
+  constructor(nombrePro, apellidoPro, estado) {
+    this.#nombrePro = nombrePro;
+    this.#apellidoPro = apellidoPro;
     this.#estado = estado;
   }
 
@@ -43,36 +43,32 @@ class Profesional {
     }
   }
 
-
-  static async obtenerProfesional(nombre){
-    try{
-      const query = "select idProfesional FROM profesional WHERE nombre = ?";
+  static async obtenerProfesional(nombre) {
+    try {
+      const query = "select idProfesional FROM profesional WHERE nombrePro = ?";
       const [result] = await conexion.query(query, [nombre]);
-    }catch(error){
-      console.error("error al obtener el preofesional")
+    } catch (error) {
+      console.error("error al obtener el preofesional");
     }
   }
-  
+
   static async obtenerLista() {
     try {
       const query = "SELECT * FROM profesional";
       const [result] = await conexion.query(query);
-      return result; 
+      return result;
     } catch (error) {
-      console.error("Error al obtener el profesional: ", error); 
+      console.error("Error al obtener el profesional: ", error);
     }
   }
   // Crear un nuevo profesional
   static async crearProfesional(data) {
     try {
       const query = `
-        INSERT INTO profesional (nombre, apellido, estado) 
+        INSERT INTO profesional (nombrePro, apellidoPro, estado) 
         VALUES (?, ?, 1)
       `;
-      const values = [
-        data.nombre,
-        data.apellido,
-      ];
+      const values = [data.nombrePro, data.apellidoPro];
       const [result] = await conexion.query(query, values);
       return result.insertId;
     } catch (error) {
@@ -86,14 +82,10 @@ class Profesional {
     try {
       const query = `
         UPDATE profesional 
-        SET nombre = ?, apellido = ? 
+        SET nombrePro = ?, apellidoPro = ? 
         WHERE idProfesional = ?
       `;
-      const values = [
-        data.nombre,
-        data.apellido,
-        idProfesional,
-      ];
+      const values = [data.nombrePro, data.apellidoPro, idProfesional];
       const [result] = await conexion.query(query, values);
       return result.affectedRows;
     } catch (error) {

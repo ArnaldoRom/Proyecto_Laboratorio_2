@@ -43,8 +43,8 @@ function cargarProfesionales(profesionales) {
     const tr = document.createElement("tr");
     tr.innerHTML = `
                     <td>${profesionalEspecializado.nombreProfesional}</td>                
-                    <td>${profesionalEspecializado.apellido}</td>
-                    <td>${profesionalEspecializado.nombre}</td>
+                    <td>${profesionalEspecializado.apellidoPro}</td>
+                    <td>${profesionalEspecializado.nombreEsp}</td>
                     <td>${profesionalEspecializado.matricula}</td>`;
     resultado.appendChild(tr);
   });
@@ -67,7 +67,7 @@ async function cargarEspecialidades() {
     especialidades.forEach((especialidad) => {
       const option = document.createElement("option");
       option.value = especialidad.idEspecialidad;
-      option.textContent = especialidad.nombre;
+      option.textContent = especialidad.nombreEsp;
       selectEspecialidad.appendChild(option);
     });
   } catch (error) {
@@ -97,8 +97,8 @@ async function registrarProfesional() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        nombre: nombreProfecional,
-        apellido,
+        nombrePro: nombreProfecional,
+        apellidoPro: apellido,
       }),
     });
 
@@ -175,7 +175,7 @@ async function cargarNuevaEspecialidad() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        nombre: especialidad,
+        nombreEsp: especialidad,
       }),
     });
 
@@ -231,15 +231,13 @@ async function cargarProfesionalesSelect() {
     profesionales.forEach((profesional) => {
       const optionProfesional = document.createElement("option");
       optionProfesional.value = profesional.idProfesional;
-      optionProfesional.textContent = `${profesional.nombre} ${profesional.apellido}`;
+      optionProfesional.textContent = `${profesional.nombrePro} ${profesional.apellidoPro}`;
       selectProfesional.appendChild(optionProfesional);
     });
   } catch (error) {
     console.error("Error al cargar especialidades: ", error);
   }
 }
-
-function LimpiarSelect() {}
 
 //-----------------------------------MODALES
 function abrirModalProfesional() {

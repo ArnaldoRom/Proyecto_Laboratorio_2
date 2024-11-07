@@ -39,9 +39,9 @@ async function recuperarAgendas() {
       const opcion = document.createElement("a");
 
       opcion.href = "#";
-      opcion.textContent = agenda.nombre;
+      opcion.textContent = agenda.nombreEsp;
       opcion.addEventListener("click", () => {
-        mostrar("agenda", agenda.nombre, agenda.idAgenda);
+        mostrar("agenda", agenda.nombreEsp, agenda.idAgenda);
       });
 
       li.appendChild(opcion);

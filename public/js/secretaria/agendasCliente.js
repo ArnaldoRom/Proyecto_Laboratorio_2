@@ -4,6 +4,10 @@ async function buscarAgendaPro() {
   const dia = document.getElementById("dias-semana").value;
 
   try {
+    const response = await fetch(`/agenda/especialidad/${especialidad}`);
+    const data = response.json();
+
+    crearCards(data);
   } catch (error) {}
 }
 

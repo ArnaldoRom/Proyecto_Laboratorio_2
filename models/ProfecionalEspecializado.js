@@ -6,7 +6,12 @@ class ProfesionalEspecializado {
   #idProfesional;
   #matricula;
 
-  constructor(idProfecionalEspecializado, idEspecialidad, idProfesional, matricula) {
+  constructor(
+    idProfecionalEspecializado,
+    idEspecialidad,
+    idProfesional,
+    matricula
+  ) {
     this.#idProfecionalEspecializado = idProfecionalEspecializado;
     this.#idEspecialidad = idEspecialidad;
     this.#idProfesional = idProfesional;
@@ -20,11 +25,7 @@ class ProfesionalEspecializado {
         INSERT INTO profecionalespecializado (idEspecialidad, idProfesional, matricula) 
         VALUES (?, ?, ?)
       `;
-      const values = [
-        data.idEspecialidad,
-        data.idProfesional,
-        data.matricula,
-      ];
+      const values = [data.idEspecialidad, data.idProfesional, data.matricula];
       const [result] = await conexion.query(query, values);
       return result.insertId;
     } catch (error) {
@@ -38,7 +39,7 @@ class ProfesionalEspecializado {
   static async obtenerProfesionalesEspecializados() {
     try {
       const query = `
-        SELECT profesional.nombre AS nombreProfesional, profesional.apellido, especialidad.nombre, matricula   
+        SELECT profesional.nombrePro AS nombreProfesional, profesional.apellidoPro, especialidad.nombreEsp, matricula   
         FROM profecionalespecializado JOIN profesional ON profesional.idProfesional = profecionalespecializado.idProfesional JOIN especialidad ON especialidad.idEspecialidad = profecionalespecializado.idEspecialidad;
       `;
       const [rows] = await conexion.query(query);
@@ -50,7 +51,10 @@ class ProfesionalEspecializado {
   }
 
   // Actualizar un profesional especializado por id
-  static async actualizarProfesionalEspecializado(data, idProfecionalEspecializado) {
+  static async actualizarProfesionalEspecializado(
+    data,
+    idProfecionalEspecializado
+  ) {
     try {
       const query = `
         UPDATE profesionalEspecializado 
