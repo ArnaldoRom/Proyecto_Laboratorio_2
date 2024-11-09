@@ -1,7 +1,7 @@
 import Turno from "../models/turno.mjs";
 import Agenda from "../models/agenda.js";
-import ListaEspera from "../models/ListaEspera.js";
-import SobreTurno from "../models/SobreTurno.js";
+import ListaEspera from "../models/listaEspera.js";
+import SobreTurno from "../models/sobreTurno.js";
 
 export const reservarTurno = async (req, res) => {
   const data = req.body;

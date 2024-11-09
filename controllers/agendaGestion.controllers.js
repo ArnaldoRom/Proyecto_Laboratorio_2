@@ -1,7 +1,7 @@
 import Agenda from "../models/agenda.js";
-import ListaEspera from "../models/ListaEspera.js";
+import ListaEspera from "../models/listaEspera.js";
 import Turno from "../models/turno.mjs";
-import SobreTurno from "../models/SobreTurno.js";
+import SobreTurno from "../models/sobreTurno.js";
 
 export const crearAgenda = async (req, res) => {
   const agenda = req.body;
