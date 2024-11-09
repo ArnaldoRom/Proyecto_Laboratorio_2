@@ -1,5 +1,5 @@
 import Calendario from "../models/Calendario.mjs";
-import Sucursal from "../models/Sucursal.js";
+import Sucursal from "../models/sucursal.js";
 
 export const agregarSucursal = async (req, res) => {
   const sucursal = req.body;
