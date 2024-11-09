@@ -89,8 +89,7 @@ static async iniciarSesion(data) {
       throw error;
     }
   }
-
-
+s
 
 
   // Actualizar un usuario por id

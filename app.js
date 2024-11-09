@@ -33,19 +33,18 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
 
-
-
 app.use(agendaRouters);
 app.use(gestionRouters);
 app.use(profecionalesGestionRouters);
 app.use(turnoGestion);
 app.use(usuarioGestion);
-app.use(vistas);
 
-app.use("/vistaPaciente", validarToken(["Paciente"]), vistas);
-app.use("/vistaAdministradora", validarToken(["Administrador"]), vistas);
-app.use("/vistaSecretaria", validarToken(["Secretaria"]), vistas);
-app.use("/vistaProfecional", validarToken(["Profesional"]), vistas);
+app.use("/vistaPaciente", validarToken(["Paciente"]));
+
+app.use("/vistaAdministradora", validarToken(["Administrador"]));
+app.use("/vistaSecretaria", validarToken(["Secretaria"]));
+app.use("/vistaProfecional", validarToken(["Profesional"]));
+app.use(vistas);
 
 app.listen(3000, () => {
   console.log("TAMO REEEDDDYYYY 😎 🤙 ");
