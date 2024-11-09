@@ -94,7 +94,7 @@ class Agenda {
   static async porEspecialidad(nombre) {
     try {
       const query =
-        "SELECT * FROM agenda JOIN profecionalespecializado ON agenda.idProfesionalEspecializado = profecionalespecializado.idProfesionalEspecializado JOIN especialidad ON profecionalespecializado.idEspecialidad = especialidad.idEspecialidad WHERE nombreEsp = ?";
+        "SELECT * FROM agenda JOIN profecionalespecializado ON agenda.idProfesionalEspecializado = profecionalespecializado.idProfesionalEspecializado JOIN especialidad ON profecionalespecializado.idEspecialidad = especialidad.idEspecialidad JOIN profesional ON profecionalespecializado.idProfesional = profesional.idProfesional WHERE nombreEsp = ?";
 
       const [rows] = await conexion.query(query, [nombre]);
       return rows;
@@ -107,12 +107,33 @@ class Agenda {
   static async porProfecional(nombre) {
     try {
       const query =
-        "SELECT * FROM agenda JOIN profecionalespecializado ON agenda.idProfesionalEspecializado = profecionalespecializado.idProfesionalEspecializado JOIN profesional ON profecionalespecializado.idProfesional = profesional.idProfesional JOIN especialidad on especialidad.idEspecialidad = profecionalespecializado.idEspecialidad WHERE profesional.nombrePro = ?";
+        "SELECT * FROM agenda JOIN profecionalespecializado ON agenda.idProfesionalEspecializado = profecionalespecializado.idProfesionalEspecializado JOIN especialidad ON profecionalespecializado.idEspecialidad = especialidad.idEspecialidad JOIN profesional ON profecionalespecializado.idProfesional = profesional.idProfesional WHERE nombrePro = ?";
 
       const [rows] = await conexion.query(query, [nombre]);
       return rows;
     } catch (error) {
       console.error("Error al obtender Agenda por Profecional");
+      throw error;
+    }
+  }
+
+  static async porDias(dia) {
+    try {
+      const query = `SELECT * FROM agenda 
+            JOIN profecionalespecializado 
+              ON agenda.idProfesionalEspecializado = profecionalespecializado.idProfesionalEspecializado 
+            JOIN especialidad 
+              ON profecionalespecializado.idEspecialidad = especialidad.idEspecialidad 
+            JOIN profesional 
+              ON profecionalespecializado.idProfesional = profesional.idProfesional 
+            WHERE dia LIKE ? 
+               OR dia LIKE CONCAT('%,', ?, '%') 
+               OR dia LIKE CONCAT(?, ',%') 
+               OR dia LIKE CONCAT('%,', ?)`;
+      const [rows] = await conexion.query(query, [dia, dia, dia, dia]);
+      return rows;
+    } catch (error) {
+      console.error("Error al obtener agendas por Dia");
       throw error;
     }
   }

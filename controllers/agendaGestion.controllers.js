@@ -117,6 +117,23 @@ export const filtroProfecional = async (req, res) => {
   }
 };
 
+export const filtroDias = async (req, res) => {
+  try {
+    const rows = await Agenda.porDias(req.params.nombre);
+
+    if (rows.length === 0)
+      return res.status(404).json({
+        message: "Agenda del profecional no exite",
+      });
+    res.json(rows);
+  } catch (error) {
+    console.error("Error al obtener Agenda: ", error);
+    res.status(500).json({
+      message: "Error al obtener Agenda por Dias",
+    });
+  }
+};
+
 //----------- TURNOS Libre --------//
 
 export const filtroEstadoTurno = async (req, res) => {

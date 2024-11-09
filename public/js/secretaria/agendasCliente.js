@@ -3,41 +3,44 @@ async function buscarAgendaPro() {
   const especialidad = document.getElementById("especialidad").value;
   const dia = document.getElementById("dias-semana").value;
 
+  let url = "/agenda?";
+  let direccion = [];
+
   try {
-    const response = await fetch(`/agenda/especialidad/${especialidad}`);
-    const data = response.json();
+    // const response = await fetch(`/agenda/especialidad/${especialidad}`);
+    // const response = await fetch(`/agenda/profecional/${nombre}`);
+    const response = await fetch(`/agenda/dias/${dia}`);
+    const data = await response.json();
 
     crearCards(data);
   } catch (error) {}
 }
 
 function crearCards(data) {
-  const contendor = document.getElementById("agendas-resultado");
-  try {
-    if (!data) return;
+  const contenedor = document.getElementById("agendas-resultado");
 
+  contenedor.innerHTML = "";
+  data.forEach((agenda) => {
     const div = document.createElement("div");
     div.classList.add("card");
 
-    const img = document.createElement("img");
-    img.src = // direccion de la imagen
-      img.alt = "imagen de Usuario";
-    img.classList.add("img");
+    // const img = document.createElement("img");
+    // img.src = agenda.photo_path || "ruta/por_defecto.jpg"; // Asigna una imagen por defecto si no hay foto
+    // img.alt = "Imagen del profesional";
+    // img.classList.add("img");
 
     const h4 = document.createElement("h4");
-    h4.textContent = data.nombre;
+    h4.textContent = `${agenda.nombrePro} ${agenda.apellidoPro}`;
 
     const h5 = document.createElement("h5");
-    h5.textContent = data.especialidad;
+    h5.textContent = agenda.nombreEsp;
 
-    div.appendChild(img);
+    // div.appendChild(img);
     div.appendChild(h4);
     div.appendChild(h5);
 
-    contendor.appendChild(div);
-  } catch (error) {
-    console.error("Error al crear las cards: ", error);
-  }
+    contenedor.appendChild(div);
+  });
 }
 
 function buscar() {
