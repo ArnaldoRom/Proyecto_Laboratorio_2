@@ -49,6 +49,9 @@ if (form) {
           case "Profesional":
             window.location.href = "/vistaProfecional";
             break;
+          case "Super": 
+           window.location.href = "/vistaAdministradora";
+           break;
           default:
             console.error("El rol no es correcto", data.rol);
             alert("Rol no reconocido.");

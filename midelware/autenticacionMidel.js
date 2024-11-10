@@ -6,35 +6,38 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 export const validarToken = (roles = []) => {
   return (req, res, next) => {
-    // Verificar si hay un token en las cookies
     const token = req.cookies.token;
-    console.log("TOKEN RECIVID:", token);
+    console.log("TOKEN RECIBIDO:", token);
 
     if (!token) {
-      console.log("No hay token, acceso denegado."); // Log de error
-      return res
-        .status(403)
-        .json({ message: "No hay token, acceso denegado." });
+      console.log("No hay token, acceso denegado.");
+      return res.status(403).json({ message: "No hay token, acceso denegado." });
     }
+
     console.log("Entrando en validar");
-    // Verificar y decodificar el token
     jwt.verify(token, JWT_SECRET, (err, user) => {
       if (err) {
-        console.log("Token no válido:", err); // Log de error
+        console.log("Token no válido:", err);
         return res.status(403).json({ message: "Token no válido." });
       }
 
-      console.log("Usuario autenticado:", user); // Loog del usuario autenticad
+      console.log("Usuario autenticado:", user);
 
-      // Si se especifican roles, comprobar si el usuario tiene uno de ellos
+      // Permitir acceso si el usuario tiene el rol "Super"
+      if (user.rol === "Super") {
+        req.user = user;
+        console.log("Acceso permitido para el rol Super, continuando...");
+        return next();
+      }
+
+      // Verificar si el rol del usuario está en los roles permitidos
       if (roles.length && !roles.includes(user.rol)) {
-        console.log("Acceso denegado para el rol:", user.rol); // Log de acceso denegado
+        console.log("Acceso denegado para el rol:", user.rol);
         return res.status(403).json({ message: "Acceso denegado." });
       }
 
-      // Si el token es válido y el rol es permitido, continuar
       req.user = user;
-      console.log("Acceso permitido, continuando..."); // Log de acceso permitido
+      console.log("Acceso permitido, continuando...");
       next();
     });
   };

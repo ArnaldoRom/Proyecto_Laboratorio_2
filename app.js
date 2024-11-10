@@ -39,11 +39,11 @@ app.use(profecionalesGestionRouters);
 app.use(turnoGestion);
 app.use(usuarioGestion);
 
-app.use("/vistaPaciente", validarToken(["Paciente"]));
+app.use("/vistaPaciente", validarToken(["Paciente", "Super"]));
 
-app.use("/vistaAdministradora", validarToken(["Administrador"]));
-app.use("/vistaSecretaria", validarToken(["Secretaria"]));
-app.use("/vistaProfecional", validarToken(["Profesional"]));
+app.use("/vistaAdministradora", validarToken(["Administrador", "Super"]));
+app.use("/vistaSecretaria", validarToken(["Secretaria", "Super"]));
+app.use("/vistaProfecional", validarToken(["Profesional", "Super"]));
 app.use(vistas);
 
 app.listen(3000, () => {
