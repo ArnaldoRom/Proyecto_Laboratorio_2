@@ -1,4 +1,4 @@
-function mostrar(vista, push = true) {
+function mostrar(vista, idAgenda = "", push = true) {
   const contenedor = document.querySelector(".content");
   let url = "";
   let newurl = "";
@@ -33,6 +33,9 @@ function mostrar(vista, push = true) {
         buscar();
       } else if (vista === "turnos") {
         iniciarCalendarioTurno();
+        turnoAgenda(idAgenda);
+        obtenerTurnos(idAgenda);
+        // buscarTurnoSecretario();
       } else if (vista === "paciente") {
       }
     })

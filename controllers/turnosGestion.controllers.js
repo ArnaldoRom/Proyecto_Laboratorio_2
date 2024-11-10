@@ -44,6 +44,23 @@ export const getTurnoId = async (req, res) => {
   }
 };
 
+export const getTurnoPorAgenda = async (req, res) => {
+  try {
+    const rows = await Turno.getTurnoPorAgenda(req.params.id);
+
+    if (rows.length === 0)
+      return res.status(404).json({
+        message: "La agenda no existe",
+      });
+    res.json(rows);
+  } catch (error) {
+    console.error("Error al obtener Turno por Agenda", error);
+    res.status(500).json({
+      message: "Error al obtener el turno por Agenda",
+    });
+  }
+};
+
 export const cambiarEstado = async (req, res) => {
   const data = req.body;
   try {

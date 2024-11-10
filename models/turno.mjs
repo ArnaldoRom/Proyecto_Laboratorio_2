@@ -145,7 +145,7 @@ class Turno {
       const [rows] = await conexion.query("SELECT * FROM turno");
       return rows;
     } catch (error) {
-      console.error("Error al obtener Sucursal", error);
+      console.error("Error al obtener Turnos", error);
       throw error;
     }
   }
@@ -160,6 +160,18 @@ class Turno {
     } catch (error) {
       console.error("Error al recuperar Turno");
       throw error;
+    }
+  }
+
+  static async getTurnoPorAgenda(idAgenda) {
+    try {
+      const [rows] = await conexion.query(
+        "SELECT * FROM turno LEFT JOIN paciente ON paciente.idPaciente = turno.idPaciente WHERE idAgenda = ?",
+        [idAgenda]
+      );
+      return rows;
+    } catch (error) {
+      console.error("Error al obtener Turnos");
     }
   }
 

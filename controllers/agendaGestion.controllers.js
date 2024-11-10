@@ -166,3 +166,19 @@ export const filtroClasificacion = async (req, res) => {
       .json({ message: "Error al obtener agenda por clasificacion" });
   }
 };
+
+export const filtrosAgendas = async (req, res) => {
+  const { especialidad, nombre, dia } = req.query;
+  console.log("CONTROLADOR: ", especialidad, nombre, dia);
+  try {
+    const agendas = await Agenda.buscarAgendas({
+      especialidad,
+      nombre,
+      dia,
+    });
+    res.json(agendas);
+  } catch (error) {
+    console.error("Error en la búsqueda de agendas:", error);
+    res.status(500).json({ error: "Error al buscar agendas" });
+  }
+};

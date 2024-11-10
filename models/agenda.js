@@ -46,7 +46,7 @@ class Agenda {
   static async getAgendaId(id) {
     try {
       const [rows] = await conexion.query(
-        "SELECT * FROM agenda WHERE idAgenda = ?",
+        "SELECT * FROM agenda JOIN profecionalespecializado ON agenda.idProfesionalEspecializado = profecionalespecializado.idProfesionalEspecializado JOIN profesional ON profesional.idProfesional = profecionalespecializado.idProfesional JOIN especialidad ON especialidad.idEspecialidad = profecionalespecializado.idEspecialidad WHERE idAgenda = ?",
         [id]
       );
       return rows;
@@ -91,49 +91,47 @@ class Agenda {
     }
   }
 
-  static async porEspecialidad(nombre) {
+  static async buscarAgendas({ especialidad, nombre, dia }) {
     try {
-      const query =
-        "SELECT * FROM agenda JOIN profecionalespecializado ON agenda.idProfesionalEspecializado = profecionalespecializado.idProfesionalEspecializado JOIN especialidad ON profecionalespecializado.idEspecialidad = especialidad.idEspecialidad JOIN profesional ON profecionalespecializado.idProfesional = profesional.idProfesional WHERE nombreEsp = ?";
+      console.log(especialidad, nombre, dia);
 
-      const [rows] = await conexion.query(query, [nombre]);
+      let query = `
+      SELECT * FROM agenda
+      JOIN profecionalespecializado 
+        ON agenda.idProfesionalEspecializado = profecionalespecializado.idProfesionalEspecializado
+      JOIN especialidad 
+        ON profecionalespecializado.idEspecialidad = especialidad.idEspecialidad
+      JOIN profesional 
+        ON profecionalespecializado.idProfesional = profesional.idProfesional      
+      WHERE 1 = 1`;
+
+      const params = [];
+
+      if (especialidad) {
+        query += ` AND nombreEsp = ?`;
+        params.push(especialidad);
+      }
+
+      if (nombre) {
+        query += ` AND nombrePro = ?`;
+        params.push(nombre);
+      }
+
+      if (dia === "0") {
+        query += "";
+      } else {
+        query += ` WHERE dia LIKE ? 
+                  OR dia LIKE CONCAT('%,', ?, '%') 
+                  OR dia LIKE CONCAT(?, ',%') 
+                  OR dia LIKE CONCAT('%,', ?)`;
+
+        params.push(dia, dia, dia, dia);
+      }
+
+      const [rows] = await conexion.query(query, params);
       return rows;
     } catch (error) {
-      console.error("Error al obtener Agenda por Especialidad", error);
-      throw error;
-    }
-  }
-
-  static async porProfecional(nombre) {
-    try {
-      const query =
-        "SELECT * FROM agenda JOIN profecionalespecializado ON agenda.idProfesionalEspecializado = profecionalespecializado.idProfesionalEspecializado JOIN especialidad ON profecionalespecializado.idEspecialidad = especialidad.idEspecialidad JOIN profesional ON profecionalespecializado.idProfesional = profesional.idProfesional WHERE nombrePro = ?";
-
-      const [rows] = await conexion.query(query, [nombre]);
-      return rows;
-    } catch (error) {
-      console.error("Error al obtender Agenda por Profecional");
-      throw error;
-    }
-  }
-
-  static async porDias(dia) {
-    try {
-      const query = `SELECT * FROM agenda 
-            JOIN profecionalespecializado 
-              ON agenda.idProfesionalEspecializado = profecionalespecializado.idProfesionalEspecializado 
-            JOIN especialidad 
-              ON profecionalespecializado.idEspecialidad = especialidad.idEspecialidad 
-            JOIN profesional 
-              ON profecionalespecializado.idProfesional = profesional.idProfesional 
-            WHERE dia LIKE ? 
-               OR dia LIKE CONCAT('%,', ?, '%') 
-               OR dia LIKE CONCAT(?, ',%') 
-               OR dia LIKE CONCAT('%,', ?)`;
-      const [rows] = await conexion.query(query, [dia, dia, dia, dia]);
-      return rows;
-    } catch (error) {
-      console.error("Error al obtener agendas por Dia");
+      console.error("Error al obtener agendas con filtros combinados", error);
       throw error;
     }
   }
