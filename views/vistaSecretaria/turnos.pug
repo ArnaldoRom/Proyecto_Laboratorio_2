@@ -11,7 +11,17 @@ div(id="contenedor-principal", class="contenedor-principal")
 
       button(type="submit", id="enviar-form-turno") BUSCAR
 
-  div(id="contenedor-turno",class="contenedor-turno")
+
+  div(id="contenedor-turno", class="contenedor-turno")
     h2 Turnos Disponibles
-    div(id="calendar", class="calendario")
+    table(id="tabla-turno", class="tabla-turno") 
+      thead 
+        tr  
+          th HORA
+          th LUNES
+          th MARTES 
+          th MIERCOLES 
+          th JUEVES
+          th VIERNES
+      tbody 
   dialog(id="exito-turnos", class="contenedor-exito") ✅ Agregado con éxito

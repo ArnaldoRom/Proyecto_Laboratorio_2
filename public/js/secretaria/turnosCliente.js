@@ -1,78 +1,25 @@
-async function iniciarCalendarioTurno() {
-  const calendarEl = document.getElementById("calendar");
+let dataTableTurnoSecretaria;
+let dataTableTurnoSecretariaInicializado = false;
 
-  if (calendarEl) {
-    const calendar = new FullCalendar.Calendar(calendarEl, {
-      locale: "es",
-      initialView: "dayGridDay",
-      height: "auto",
-      headerToolbar: {
-        start: "prev today dayGridDay dayGridWeek",
-        center: "title",
-        end: "next",
-      },
-      buttonText: {
-        today: "hoy",
-        list: "Agenda",
-        dayGridDay: "Dia",
-        dayGridWeek: "Semana",
-      },
-      views: {
-        dayGridWeek: {
-          type: "dayGrid",
-          duration: { weeks: 1 },
-        },
-        dayGridDay: {
-          type: "dayGrid",
-          duration: { days: 1 },
-        },
-      },
-      events: [],
-      eventContent: function (arg) {
-        const hora = arg.event.start.toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        });
-        const paciente = arg.event.title || "No asignado"; // Muestra el nombre o "No asignado"
-        const estado = arg.event.extendedProps.estado;
-
-        // Define el color del botón basado en el estado
-        let estadoClass = "";
-        let estadoTexto = "";
-
-        if (estado === "confirmado") {
-          estadoClass = "btn-confirmado";
-          estadoTexto = "Confirmado";
-        } else if (estado === "reservado") {
-          estadoClass = "btn-reservado";
-          estadoTexto = "Reservado";
-        } else {
-          estadoClass = "btn-no-confirmado";
-          estadoTexto = "No confirmado";
-        }
-
-        return {
-          html: `
-            <div class="turno">
-              <div class="turno-hora">${hora}</div>
-              <div class="turno-paciente">${paciente}</div>
-              <button class="turno-estado ${estadoClass}">${estadoTexto}</button>
-            </div>
-          `,
-        };
-      },
-      slotDuration: "01:00",
-      windowResize: function () {
-        calendar.updateSize();
-      },
-    });
-    calendar.render();
-
-    window.miCalendarioTurno = calendar;
-  } else {
-    console.error("No se encontró el elemento #calendar");
+const TurnoSecretariaOpciones = {
+  destroy: true,
+  pageLength: 10,
+  language: {
+    url: "/js/dataTable/es_AR.json",
+  },
+};
+const iniciarDataTableTurnoSecretaria = async () => {
+  if (dataTableTurnoSecretariaInicializado) {
+    dataTableTurnoSecretaria.destroy();
   }
-}
+  // await listaSucursales();
+
+  dataTableTurnoSecretaria = $("#tabla-turno").DataTable(
+    TurnoSecretariaOpciones
+  );
+
+  dataTableTurnoSecretariaInicializado = true;
+};
 
 async function turnoAgenda(idAgenda) {
   try {
@@ -81,15 +28,18 @@ async function turnoAgenda(idAgenda) {
     if (!response.ok) throw new Error("Error al obtener la agenda");
 
     const agenda = await response.json();
-
     const datos = agenda[0];
 
     if (datos) {
       document.getElementById(
         "nombre"
       ).value = `${datos.nombrePro} ${datos.apellidoPro}`;
-
       document.getElementById("especialidad").value = datos.nombreEsp;
+
+      const diasAgenda = datos.dia.split(",").map((dia) => parseInt(dia));
+
+      console.log(diasAgenda);
+      await obtenerTurnos(idAgenda, diasAgenda);
     } else {
       console.error("No se encontro la agenda");
     }
@@ -98,10 +48,7 @@ async function turnoAgenda(idAgenda) {
   }
 }
 
-async function obtenerTurnos(idAgenda) {
-  // const nombre = parseInt(document.getElementById("nombre").value, 10);
-  // const especialidad = document.getElementById("especialidad").value;
-
+async function obtenerTurnos(idAgenda, diasAgenda) {
   try {
     const response = await fetch(`/turno/agenda/${idAgenda}`);
 
@@ -109,29 +56,100 @@ async function obtenerTurnos(idAgenda) {
 
     const turnos = await response.json();
 
-    const eventos = turnos.map((turno) => {
-      const fecha = new Date();
-      const [hora, minuto] = turno.hora.split(":");
-      fecha.setHours(hora, minuto, 0, 0);
+    // Convertir los días de la agenda a un arreglo de números
+    const diasAgendaArray = diasAgenda
+      .split(",")
+      .map((dia) => parseInt(dia.trim()));
 
-      const estado =
-        turno.idEstadoHorario === 4
-          ? "confirmado"
-          : turno.idEstadoHorario === 3
-          ? "reservado"
-          : "no confirmado";
-
-      return {
-        title: `${turno.apellido} ${turno.nombre}` || "", // Nombre del paciente
-        start: fecha.toISOString(),
-        estado: estado, // Estado del turno
-      };
+    // Filtrar los turnos solo para los días que están en diasAgendaArray
+    const turnosFiltrados = turnos.filter((turno) => {
+      // Aquí ya no usamos fecha.dia, sino que si el turno tiene alguna propiedad que nos indique
+      // qué día de la semana es, la usamos. Por ejemplo:
+      // Si cada turno tiene una propiedad `diaTurno`, como un número del 0 al 6 (domingo a sábado),
+      // podemos hacer la comparación con diasAgendaArray.
+      const diaTurno = turno.diaTurno; // Esto asume que el turno tiene un campo 'diaTurno' con el día
+      return diasAgendaArray.includes(diaTurno);
     });
 
-    window.miCalendarioTurno.addEventSource(eventos);
+    cargarTablaTurnos(turnosFiltrados);
   } catch (error) {
-    console.error("Error al obtener los Turnos: ", error);
+    console.error("Error al obtener los turnos: ", error);
   }
+}
+
+async function cargarTablaTurnos(turnos) {
+  const datos = document.querySelector("#tabla-turno tbody");
+
+  if (!datos) {
+    console.error("No se encontró el tbody, revisa la estructura HTML.");
+    return;
+  }
+
+  datos.innerHTML = "";
+
+  turnos.forEach((turno) => {
+    const tr = document.createElement("tr");
+
+    // Crear las celdas (td) y asignarles el contenido y el estilo según el estado
+    const tdHora = document.createElement("td");
+    tdHora.textContent = turno.hora;
+
+    const tdEstado = document.createElement("td");
+    const tdEstado2 = document.createElement("td");
+    const tdEstado3 = document.createElement("td");
+    const tdEstado4 = document.createElement("td");
+    const tdEstado5 = document.createElement("td");
+
+    let estadoTexto = "";
+    let colorFondo = "";
+
+    // Asignar texto y color de fondo según el idEstadoHorario
+    switch (turno.idEstadoHorario) {
+      case 2:
+        estadoTexto = "Libre";
+        colorFondo = "gray"; // Gris para libre
+        break;
+      case 3:
+        estadoTexto = "Reservado";
+        colorFondo = "yellow"; // Amarillo para reservado
+        break;
+      case 4:
+        estadoTexto = "Confirmado";
+        colorFondo = "green"; // Verde para confirmado
+        break;
+      default:
+        estadoTexto = "Desconocido";
+        colorFondo = "white"; // Blanco para estados no definidos
+        break;
+    }
+
+    // Asignar el texto y el color de fondo a las celdas
+    tdEstado.textContent = estadoTexto;
+    tdEstado.style.backgroundColor = colorFondo;
+
+    tdEstado2.textContent = estadoTexto;
+    tdEstado2.style.backgroundColor = colorFondo;
+
+    tdEstado3.textContent = estadoTexto;
+    tdEstado3.style.backgroundColor = colorFondo;
+
+    tdEstado4.textContent = estadoTexto;
+    tdEstado4.style.backgroundColor = colorFondo;
+
+    tdEstado5.textContent = estadoTexto;
+    tdEstado5.style.backgroundColor = colorFondo;
+
+    // Añadir las celdas a la fila
+    tr.appendChild(tdHora);
+    tr.appendChild(tdEstado);
+    tr.appendChild(tdEstado2);
+    tr.appendChild(tdEstado3);
+    tr.appendChild(tdEstado4);
+    tr.appendChild(tdEstado5);
+
+    // Añadir la fila al cuerpo de la tabla
+    datos.appendChild(tr);
+  });
 }
 
 // function buscarTurnoSecretario() {

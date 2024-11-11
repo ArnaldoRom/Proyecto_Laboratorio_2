@@ -4,8 +4,8 @@ import Empleado from "../models/empleado.mjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
-dotenv.config({ path: './token.env' }); 
-const JWT_SECRET = process.env.JWT_SECRET; 
+dotenv.config({ path: "./token.env" });
+const JWT_SECRET = process.env.JWT_SECRET;
 
 export const iniciarSesion = async (req, res) => {
   const data = req.body;
@@ -16,29 +16,27 @@ export const iniciarSesion = async (req, res) => {
     const usuario = await Usuario.iniciarSesion(data);
 
     if (!usuario) {
-      console.log("Usuario no encontrado o credenciales incorrectas"); 
+      console.log("Usuario no encontrado o credenciales incorrectas");
       return res.status(401).json({ message: "Credenciales incorrectas." });
     }
 
     console.log("Usuario autenticado con éxito:", usuario);
 
     // Crear el token JWT
-    const token = jwt.sign(
-      { id: usuario.id, rol: usuario.rol },
-      JWT_SECRET 
-    );
+    const token = jwt.sign({ id: usuario.id, rol: usuario.rol }, JWT_SECRET);
     console.log("Token JWT generado:", token);
 
-    // Guardar el token en una cookie 
+    // Guardar el token en una cookie
     res.cookie("token", token);
-    res.status(200).json({ message: "Inicio de sesión exitoso", rol: usuario.rol });
-    console.log("Token enviado en la cookie"); 
+    res
+      .status(200)
+      .json({ message: "Inicio de sesión exitoso", rol: usuario.rol });
+    console.log("Token enviado en la cookie");
   } catch (error) {
     console.error("Error al iniciar sesión:", error);
     res.status(500).json({ message: "Error al iniciar sesión." });
   }
 };
-
 
 export const crearUsuario = async (req, res) => {
   const data = req.body;
@@ -64,10 +62,7 @@ export const obtenerUsuario = async (req, res) => {
   }
 };
 
-
-
 export const traerUsuarios = async (req, res) => {
- 
   try {
     const usuario = await Usuario.traerUsuarios();
     res.status(200).json(usuario);
@@ -89,10 +84,6 @@ export const actualizarUsuario = async (req, res) => {
     res.status(500).json({ message: "Error al actualizar el usuario." });
   }
 };
-
-
-
-
 
 export const eliminarUsuario = async (req, res) => {
   const id = req.params.id;
@@ -122,7 +113,6 @@ export const activarUsuario = async (req, res) => {
 
 export const cargarPaciente = async (req, res) => {
   const data = req.body;
-
   try {
     const id = await Paciente.cargarPaciente(data);
     res.status(201).json({ message: "Paciente cargado exitosamente", id });
@@ -190,8 +180,6 @@ export const getPaciente = async (req, res) => {
     res.status(500).json({ message: "Error al obtener los pacientes." });
   }
 };
-
-
 
 // Controlador empleado -----------------------
 export const crearEmpleado = async (req, res) => {

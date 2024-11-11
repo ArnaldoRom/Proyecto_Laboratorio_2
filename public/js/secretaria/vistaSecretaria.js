@@ -32,9 +32,9 @@ function mostrar(vista, idAgenda = "", push = true) {
       if (vista === "agendas") {
         buscar();
       } else if (vista === "turnos") {
-        iniciarCalendarioTurno();
+        iniciarDataTableTurnoSecretaria();
         turnoAgenda(idAgenda);
-        obtenerTurnos(idAgenda);
+        // obtenerTurnos(idAgenda);
         // buscarTurnoSecretario();
       } else if (vista === "paciente") {
       }
