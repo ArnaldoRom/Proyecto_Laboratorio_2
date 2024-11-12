@@ -31,7 +31,7 @@ export const crearAgenda = async (req, res) => {
 
     while (tiempo < tiempoFin) {
       const turno = await Turno.crearTurnoConNull({
-        fecha: null,
+        diaTurno: null,
         hora: `${String(tiempo.getHours()).padStart(2, "0")}:${String(
           tiempo.getMinutes()
         ).padStart(2, "0")}:00`,

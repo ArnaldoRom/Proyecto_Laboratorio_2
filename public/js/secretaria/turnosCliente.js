@@ -24,7 +24,6 @@ const iniciarDataTableTurnoSecretaria = async () => {
 async function turnoAgenda(idAgenda) {
   try {
     const response = await fetch(`/agenda/${idAgenda}`);
-
     if (!response.ok) throw new Error("Error al obtener la agenda");
 
     const agenda = await response.json();
@@ -36,12 +35,14 @@ async function turnoAgenda(idAgenda) {
       ).value = `${datos.nombrePro} ${datos.apellidoPro}`;
       document.getElementById("especialidad").value = datos.nombreEsp;
 
-      const diasAgenda = datos.dia.split(",").map((dia) => parseInt(dia));
+      // Filtrar y obtener los días disponibles
+      const diasAgenda = datos.dia
+        .split(",") // Dividir la cadena "1,4"
+        .map((dia) => parseInt(dia.trim(), 10)); // Convertir cada valor a número
 
-      console.log(diasAgenda);
-      await obtenerTurnos(idAgenda, diasAgenda);
+      await obtenerTurnos(idAgenda, diasAgenda); // Pasar los días disponibles a la función
     } else {
-      console.error("No se encontro la agenda");
+      console.error("No se encontró la agenda");
     }
   } catch (error) {
     console.error("Error al obtener los datos de la agenda: ", error);
@@ -51,33 +52,16 @@ async function turnoAgenda(idAgenda) {
 async function obtenerTurnos(idAgenda, diasAgenda) {
   try {
     const response = await fetch(`/turno/agenda/${idAgenda}`);
-
-    if (!response.ok) throw new Error("Error al obtener los turnos");
+    if (!response.ok) throw new Error("Error al obtener Turnos");
 
     const turnos = await response.json();
-
-    // Convertir los días de la agenda a un arreglo de números
-    const diasAgendaArray = diasAgenda
-      .split(",")
-      .map((dia) => parseInt(dia.trim()));
-
-    // Filtrar los turnos solo para los días que están en diasAgendaArray
-    const turnosFiltrados = turnos.filter((turno) => {
-      // Aquí ya no usamos fecha.dia, sino que si el turno tiene alguna propiedad que nos indique
-      // qué día de la semana es, la usamos. Por ejemplo:
-      // Si cada turno tiene una propiedad `diaTurno`, como un número del 0 al 6 (domingo a sábado),
-      // podemos hacer la comparación con diasAgendaArray.
-      const diaTurno = turno.diaTurno; // Esto asume que el turno tiene un campo 'diaTurno' con el día
-      return diasAgendaArray.includes(diaTurno);
-    });
-
-    cargarTablaTurnos(turnosFiltrados);
+    cargarTablaTurnos(turnos, diasAgenda); // Pasar los días disponibles y turnos a la función
   } catch (error) {
-    console.error("Error al obtener los turnos: ", error);
+    console.error("Error al obtener los turnos:", error);
   }
 }
 
-async function cargarTablaTurnos(turnos) {
+async function cargarTablaTurnos(turnos, diasAgenda) {
   const datos = document.querySelector("#tabla-turno tbody");
 
   if (!datos) {
@@ -85,71 +69,91 @@ async function cargarTablaTurnos(turnos) {
     return;
   }
 
-  datos.innerHTML = "";
+  datos.innerHTML = ""; // Limpiar el contenido de la tabla
 
+  // Definir los días de la semana y los índices de los días en la tabla (lunes a viernes)
+  const diasSemana = ["lunes", "martes", "miércoles", "jueves", "viernes"];
+  const diasIndices = {
+    1: "lunes",
+    2: "martes",
+    3: "miércoles",
+    4: "jueves",
+    5: "viernes",
+  };
+
+  // Agrupar los turnos por hora y día
+  let turnosPorHora = {};
   turnos.forEach((turno) => {
+    if (turno.hora) {
+      if (!turnosPorHora[turno.hora]) {
+        turnosPorHora[turno.hora] = {};
+      }
+      const dia = diasIndices[turno.diaTurno];
+      if (diasAgenda.includes(parseInt(turno.diaTurno))) {
+        turnosPorHora[turno.hora][dia] = turno;
+      }
+    }
+  });
+
+  // Crear filas por cada hora en turnosPorHora
+  for (let hora in turnosPorHora) {
     const tr = document.createElement("tr");
 
-    // Crear las celdas (td) y asignarles el contenido y el estilo según el estado
+    // Celda de hora
     const tdHora = document.createElement("td");
-    tdHora.textContent = turno.hora;
-
-    const tdEstado = document.createElement("td");
-    const tdEstado2 = document.createElement("td");
-    const tdEstado3 = document.createElement("td");
-    const tdEstado4 = document.createElement("td");
-    const tdEstado5 = document.createElement("td");
-
-    let estadoTexto = "";
-    let colorFondo = "";
-
-    // Asignar texto y color de fondo según el idEstadoHorario
-    switch (turno.idEstadoHorario) {
-      case 2:
-        estadoTexto = "Libre";
-        colorFondo = "gray"; // Gris para libre
-        break;
-      case 3:
-        estadoTexto = "Reservado";
-        colorFondo = "yellow"; // Amarillo para reservado
-        break;
-      case 4:
-        estadoTexto = "Confirmado";
-        colorFondo = "green"; // Verde para confirmado
-        break;
-      default:
-        estadoTexto = "Desconocido";
-        colorFondo = "white"; // Blanco para estados no definidos
-        break;
-    }
-
-    // Asignar el texto y el color de fondo a las celdas
-    tdEstado.textContent = estadoTexto;
-    tdEstado.style.backgroundColor = colorFondo;
-
-    tdEstado2.textContent = estadoTexto;
-    tdEstado2.style.backgroundColor = colorFondo;
-
-    tdEstado3.textContent = estadoTexto;
-    tdEstado3.style.backgroundColor = colorFondo;
-
-    tdEstado4.textContent = estadoTexto;
-    tdEstado4.style.backgroundColor = colorFondo;
-
-    tdEstado5.textContent = estadoTexto;
-    tdEstado5.style.backgroundColor = colorFondo;
-
-    // Añadir las celdas a la fila
+    tdHora.textContent = hora;
     tr.appendChild(tdHora);
-    tr.appendChild(tdEstado);
-    tr.appendChild(tdEstado2);
-    tr.appendChild(tdEstado3);
-    tr.appendChild(tdEstado4);
-    tr.appendChild(tdEstado5);
 
-    // Añadir la fila al cuerpo de la tabla
+    // Crear las celdas de cada día de la semana
+    diasSemana.forEach((dia) => {
+      const tdDia = document.createElement("td");
+
+      // Si el día está en diasAgenda, mostrar el turno correspondiente o dejarlo libre
+      if (
+        diasAgenda.includes(
+          parseInt(
+            Object.keys(diasIndices).find((key) => diasIndices[key] === dia)
+          )
+        )
+      ) {
+        const turno = turnosPorHora[hora][dia] || { idEstadoHorario: 2 }; // Estado "Libre" si no hay turno
+
+        // Asignar estado y color de fondo
+        let estadoTexto = "";
+        let colorFondo = "";
+
+        switch (turno.idEstadoHorario) {
+          case 2:
+            estadoTexto = "Libre";
+            colorFondo = "gray";
+            break;
+          case 3:
+            estadoTexto = "Reservado";
+            colorFondo = "yellow";
+            break;
+          case 4:
+            estadoTexto = "Confirmado";
+            colorFondo = "green";
+            break;
+          default:
+            estadoTexto = "Desconocido";
+            colorFondo = "white";
+            break;
+        }
+
+        tdDia.textContent = estadoTexto;
+        tdDia.style.backgroundColor = colorFondo;
+      } else {
+        // Dejar la celda vacía si el día no está en la agenda
+        tdDia.textContent = "";
+      }
+
+      tr.appendChild(tdDia);
+    });
+
+    // Agregar la fila al tbody de la tabla
     datos.appendChild(tr);
-  });
+  }
 }
 
 // function buscarTurnoSecretario() {

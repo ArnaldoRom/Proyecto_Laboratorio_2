@@ -1,7 +1,7 @@
 import { conexion } from "../config/db.js";
 
 class Turno {
-  #fecha;
+  #diaTurno;
   #hora;
   #clasificacion;
   #idPaciente;
@@ -10,7 +10,7 @@ class Turno {
   #idEstadoHorario;
 
   constructor(
-    fecha,
+    diaTurno,
     hora,
     clasificacion,
     idPaciente,
@@ -18,7 +18,7 @@ class Turno {
     idEmpleado,
     idEstadoHorario
   ) {
-    this.#fecha = fecha;
+    this.#diaTurno = diaTurno;
     this.#hora = hora;
     this.#clasificacion = clasificacion;
     this.#idPaciente = idPaciente;
@@ -31,11 +31,11 @@ class Turno {
   static async crearTurno(data) {
     try {
       const query = `
-        INSERT INTO turno (fecha, hora, clasificacion, idPaciente, idAgenda, idEmpleado, idEstadoHorario)
+        INSERT INTO turno (diaTurno, hora, clasificacion, idPaciente, idAgenda, idEmpleado, idEstadoHorario)
         VALUES (?, ?, ?, ?, ?, ?, ?)
       `;
       const values = [
-        data.fecha,
+        data.diaTurno,
         data.hora,
         data.clasificacion,
         data.idPaciente,
@@ -55,7 +55,7 @@ class Turno {
   static async crearTurnoConNull(data) {
     try {
       const query = `
-        INSERT INTO turno (fecha, hora, clasificacion, idPaciente, idAgenda, idEmpleado, idEstadoHorario)
+        INSERT INTO turno (diaTurno, hora, clasificacion, idPaciente, idAgenda, idEmpleado, idEstadoHorario)
         VALUES (NULL, ?, NULL, NULL, ?, NULL, ?)
       `;
       const values = [data.hora, data.idAgenda, data.idEstadoHorario];
@@ -72,10 +72,10 @@ class Turno {
     try {
       const query = `
       UPDATE turno 
-      SET fecha = ?, clasificacion = ?, idPaciente = ?, idEmpleado = ?, idEstadoHorario = 3 WHERE idTurno = ?
+      SET diaTurno = ?, clasificacion = ?, idPaciente = ?, idEmpleado = ?, idEstadoHorario = 3 WHERE idTurno = ?
       `;
       const values = [
-        data.fecha,
+        data.diaTurno,
         data.clasificacion,
         data.idPaciente,
         data.idEmpleado,
