@@ -138,7 +138,7 @@ class Agenda {
 
   static async buscarAgendaSinDia({especialidad, nombre}){
     try {
-      console.log(especialidad, nombre, dia);
+      console.log(especialidad, nombre);
 
       let query = `
       SELECT * FROM agenda
