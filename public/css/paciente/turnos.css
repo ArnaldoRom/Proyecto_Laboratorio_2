@@ -1,0 +1,88 @@
+/* Contenedor principal para el formulario y el calendario */
+.contenedor-principal {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  /* Estilo para el formulario */
+  .form-turnos {
+    width: 30%;
+    margin-right: 20px;
+  }
+  
+  .form-turnos h2 {
+    font-size: 20px;
+    color: #004080;
+    margin-bottom: 20px;
+  }
+  
+  .form-turnos form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-turnos label {
+    margin-top: 10px;
+    font-weight: bold;
+  }
+  
+  .form-turnos input {
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .form-turnos button {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .form-turnos button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Estilos para la tabla */
+  .contenedor-turno {
+    width: 100%;
+    max-width: 80%;
+    margin: 20px auto;
+  }
+  
+  .tabla-turno {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .tabla-turno th,
+  .tabla-turno td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+  
+  .tabla-turno th {
+    background-color: #004080;
+    color: white;
+  }
+  
+  .tabla-turno tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .tabla-turno tr:hover {
+    background-color: #f1f1f1;
+  }
+  

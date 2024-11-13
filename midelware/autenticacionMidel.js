@@ -14,7 +14,6 @@ export const validarToken = (roles = []) => {
       return res.status(403).json({ message: "No hay token, acceso denegado." });
     }
 
-    console.log("Entrando en validar");
     jwt.verify(token, JWT_SECRET, (err, user) => {
       if (err) {
         console.log("Token no válido:", err);
@@ -22,6 +21,9 @@ export const validarToken = (roles = []) => {
       }
 
       console.log("Usuario autenticado:", user);
+
+      // Guardar el nombre del usuario en `res.locals` para acceso en la vista
+      res.locals.nombreUsuario = user.nombreUsuario;
 
       // Permitir acceso si el usuario tiene el rol "Super"
       if (user.rol === "Super") {

@@ -23,7 +23,7 @@ export const iniciarSesion = async (req, res) => {
     console.log("Usuario autenticado con éxito:", usuario);
 
     // Crear el token JWT
-    const token = jwt.sign({ id: usuario.id, rol: usuario.rol }, JWT_SECRET);
+    const token = jwt.sign({ id: usuario.id, rol: usuario.rol, nombreUsuario: usuario.nombreUsuario }, JWT_SECRET);
     console.log("Token JWT generado:", token);
 
     // Guardar el token en una cookie

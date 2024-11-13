@@ -122,7 +122,7 @@ if (abrirModal && modal && exito && botonRegistrar) {
 
       limpiarCampos();
       modal.close();
-      window.location.href = "/vista-paciente";
+      window.location.href = "/vistaPaciente";
     } catch (error) {
       console.error("Error al registrar el paciente: ", error);
     }

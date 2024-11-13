@@ -3,12 +3,34 @@ extends layout
 block content
   .header
     h1 Clinica Popeye
-    p Usuario: nombre_del_usuario
-   .main-content
-     .navegadorIzquierdo
-       nav
-         ul    
-           li
-             a(href="/turnos", onclick="mostrar('turnos'); return false;") Turnos    
-     .content     
-     
+    p #{nombreUsuario}
+  
+  .main-content.content
+    link(rel="stylesheet", href="/css/paciente/turnos.css")
+    
+    #contenedor-principal.contenedor-principal
+      #formulario-turnos.form-turnos
+        h2 Nuevo Evento 
+        form
+          label(for="nombre") Profesional
+          input(type="text", id="nombre", placeholder="Nombre del profesional")
+
+          label(for="especialidad") Especialidad 
+          input(type="text", id="especialidad", placeholder="Especialidad")
+
+          button(type="button", id="enviar-form-turno") BUSCAR
+
+      #contenedor-turno.contenedor-turno
+        h2 Turnos Disponibles
+        table#tabla-turno.tabla-turno
+          thead
+            tr
+              th HORA
+              th LUNES
+              th MARTES
+              th MIERCOLES
+              th JUEVES
+              th VIERNES
+          tbody 
+
+      dialog#exito-turnos.contenedor-exito ✅ reservado con exito
