@@ -6,11 +6,13 @@ function inicializarTurnosPaciente() {
     .then((response) => response.text())
     .then((html) => {
       contenedor.innerHTML = html;
-      iniciarDataTableTurnoPaciente();  
-      turnoPaciente();                  
+      iniciarDataTableTurnoPaciente();
+      // turnoPaciente();
+      buscarAgenda();
     })
-    .catch((error) => console.error("Error al cargar la vista de reserva de turnos:", error));
+    .catch((error) =>
+      console.error("Error al cargar la vista de reserva de turnos:", error)
+    );
 }
-
 
 document.addEventListener("DOMContentLoaded", inicializarTurnosPaciente);

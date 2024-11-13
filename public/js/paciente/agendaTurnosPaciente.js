@@ -29,10 +29,14 @@ async function turnoPaciente(idTurno) {
     const datos = turno[0];
 
     if (datos) {
-      document.getElementById("nombre").value = `${datos.nombrePro} ${datos.apellidoPro}`;
+      document.getElementById(
+        "nombre"
+      ).value = `${datos.nombrePro} ${datos.apellidoPro}`;
       document.getElementById("especialidad").value = datos.nombreEsp;
 
-      const diasTurno = datos.dia.split(",").map((dia) => parseInt(dia.trim(), 10));
+      const diasTurno = datos.dia
+        .split(",")
+        .map((dia) => parseInt(dia.trim(), 10));
       await obtenerTurnosPaciente(idTurno, diasTurno);
     } else {
       console.error("No se encontró el turno");
@@ -96,7 +100,13 @@ async function cargarTablaTurnosPaciente(turnos, diasTurno) {
     diasSemana.forEach((dia) => {
       const tdDia = document.createElement("td");
 
-      if (diasTurno.includes(parseInt(Object.keys(diasIndices).find((key) => diasIndices[key] === dia)))) {
+      if (
+        diasTurno.includes(
+          parseInt(
+            Object.keys(diasIndices).find((key) => diasIndices[key] === dia)
+          )
+        )
+      ) {
         const turno = turnosPorHora[hora][dia] || { idEstadoHorario: 2 };
 
         const botonTurno = document.createElement("button");
@@ -133,19 +143,19 @@ async function cargarTablaTurnosPaciente(turnos, diasTurno) {
 function solicitarTurno(turno) {
   const modalCargaTurnoPaciente = document.getElementById("exito-turnos");
   modalCargaTurnoPaciente.showModal();
-  console.log("Solicitando turno:", turno); 
+  console.log("Solicitando turno:", turno);
   setTimeout(() => {
     modalCargaTurnoPaciente.close();
-  }, 2000); 
+  }, 2000);
 }
 
 // Función para buscar la agenda por especialidad y nombre
 async function buscarAgenda(especialidad, nombre) {
   try {
     // Construir la URL con los parámetros de búsqueda
-    const url = new URL('/agenda', window.location.origin);
-    if (especialidad) url.searchParams.append('especialidad', especialidad);
-    if (nombre) url.searchParams.append('nombre', nombre);
+    const url = new URL("/agenda", window.location.origin);
+    if (especialidad) url.searchParams.append("especialidad", especialidad);
+    if (nombre) url.searchParams.append("nombre", nombre);
 
     // Realizar la solicitud a la ruta de agendas
     const response = await fetch(url);
@@ -157,7 +167,9 @@ async function buscarAgenda(especialidad, nombre) {
       const idAgenda = agendas[0].id; // Tomamos el primer ID si hay varios resultados
       turnoPaciente(idAgenda); // Llamamos a turnoPaciente con el ID de la agenda
     } else {
-      console.error("No se encontró ninguna agenda con los criterios especificados");
+      console.error(
+        "No se encontró ninguna agenda con los criterios especificados"
+      );
     }
   } catch (error) {
     console.error("Error al buscar la agenda:", error);
@@ -169,7 +181,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   botonBuscar.addEventListener("click", (event) => {
     event.preventDefault();
-    
+
     // Obtener los valores de especialidad y nombre desde los inputs
     const especialidad = document.getElementById("input-especialidad").value;
     const nombre = document.getElementById("input-nombre").value;
