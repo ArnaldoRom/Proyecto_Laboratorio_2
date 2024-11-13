@@ -136,6 +136,40 @@ class Agenda {
     }
   }
 
+  static async buscarAgendaSinDia({especialidad, nombre}){
+    try {
+      console.log(especialidad, nombre, dia);
+
+      let query = `
+      SELECT * FROM agenda
+      JOIN profecionalespecializado 
+        ON agenda.idProfesionalEspecializado = profecionalespecializado.idProfesionalEspecializado
+      JOIN especialidad 
+        ON profecionalespecializado.idEspecialidad = especialidad.idEspecialidad
+      JOIN profesional 
+        ON profecionalespecializado.idProfesional = profesional.idProfesional      
+      WHERE 1 = 1`;
+
+      const params = [];
+
+      if (especialidad) {
+        query += ` AND nombreEsp = ?`;
+        params.push(especialidad);
+      }
+
+      if (nombre) {
+        query += ` AND nombrePro = ?`;
+        params.push(nombre);
+      }
+
+      const [rows] = await conexion.query(query, params);
+      return rows;
+    } catch (error) {
+      console.error("Error al obtener agendas con filtros combinados", error);
+      throw error;
+    }
+  }
+
   static async porEstadoTurno(estado = "Libre") {
     try {
       const query =

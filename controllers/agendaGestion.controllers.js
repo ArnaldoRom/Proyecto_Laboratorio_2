@@ -182,3 +182,19 @@ export const filtrosAgendas = async (req, res) => {
     res.status(500).json({ error: "Error al buscar agendas" });
   }
 };
+
+
+export const filtrosAgendaSinDia = async (req, res) => {
+  const { especialidad, nombre} = req.query;
+  console.log("CONTROLADOR: ", especialidad, nombre);
+  try {
+    const agendas = await Agenda.buscarAgendaSinDia({
+      especialidad,
+      nombre,
+    });
+    res.json(agendas);
+  } catch (error) {
+    console.error("Error en la búsqueda de agendas:", error);
+    res.status(500).json({ error: "Error al buscar agendas" });
+  }
+};
