@@ -19,38 +19,55 @@ const iniciarDataTableTurnoPaciente = async () => {
 };
 
 // Función para buscar el ID de la agenda por especialidad o nombre del profesional
-async function buscarAgenda() {
-  const nombreProfesional = document.getElementById("nombre").value.trim();
-  const especialidadProfesional = document
-    .getElementById("especialidad")
-    .value.trim();
-  const diaSeleccionado = 0; // Puedes cambiar este valor o hacerlo dinámico según lo necesites
+function buscarAgenda() {
+  const botonBuscar = document.getElementById("enviar-form-turno");
 
-  // Crear un objeto para los parámetros de búsqueda
-  const queryParams = new URLSearchParams();
+  botonBuscar?.addEventListener("click", async (event) => {
+    event.preventDefault();
 
-  // Solo agregar parámetros que tengan valores válidos
-  if (nombreProfesional) queryParams.append("nombre", nombreProfesional);
-  if (especialidadProfesional)
-    queryParams.append("especialidad", especialidadProfesional);
-  queryParams.append("dia", diaSeleccionado); // Si dia es obligatorio, no necesita validación
+    // Verificar la existencia de los campos de entrada
+    const inputNombre = document.getElementById("nombre");
+    const inputEspecialidad = document.getElementById("especialidad");
 
-  const url = `/agenda?${queryParams.toString()}`;
-
-  try {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error("Error al obtener la agenda");
-
-    const agendas = await response.json();
-    if (agendas.length > 0) {
-      const idAgenda = agendas[0].id; // Supongo que cada agenda tiene un id
-      turnoAgenda(idAgenda); // Pasar el ID de la agenda a la función turnoAgenda
-    } else {
-      console.log("No se encontraron agendas con los criterios especificados.");
+    if (!inputNombre && !inputEspecialidad) {
+      console.error(
+        "No se encontraron los campos de nombre o especialidad en el DOM."
+      );
+      return;
     }
-  } catch (error) {
-    console.error("Error al buscar la agenda:", error);
-  }
+
+    const nombre = inputNombre ? inputNombre.value : "";
+    const especialidad = inputEspecialidad ? inputEspecialidad.value : "";
+
+    try {
+      let response;
+
+      if (nombre && especialidad) {
+        // Si ambos campos están completos, hacer la consulta por nombre
+        response = await fetch(`/agenda/profesional/${nombre}`);
+      } else if (especialidad) {
+        // Si solo hay especialidad, hacer la consulta por especialidad
+        response = await fetch(`/agenda/especialidad/${especialidad}`);
+      } else if (nombre) {
+        // Si solo hay nombre, hacer la consulta por nombre
+        response = await fetch(`/agenda/profesional/${nombre}`);
+      }
+
+      if (!response || !response.ok) {
+        throw new Error("No se pudo obtener la agenda.");
+      }
+
+      const agendas = await response.json();
+      if (agendas.length > 0) {
+        const idAgenda = agendas[0].idAgenda;
+        turnoPaciente(idAgenda); // Llama a la función de carga de turnos con el ID encontrado
+      } else {
+        console.error("No se encontró ninguna agenda.");
+      }
+    } catch (error) {
+      console.error("Error al buscar agenda:", error);
+    }
+  });
 }
 
 async function turnoPaciente(idAgenda) {
@@ -187,6 +204,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   botonBuscar.addEventListener("click", (event) => {
     event.preventDefault();
-    buscarAgendaID();
+    buscarAgenda();
   });
 });
