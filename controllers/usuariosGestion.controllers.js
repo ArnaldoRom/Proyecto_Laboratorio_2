@@ -30,7 +30,7 @@ export const iniciarSesion = async (req, res) => {
     res.cookie("token", token);
     res
       .status(200)
-      .json({ message: "Inicio de sesión exitoso", rol: usuario.rol });
+      .json({ message: "Inicio de sesión exitoso", rol: usuario.rol, nombreUsuario: usuario.nombreUsuario });
     console.log("Token enviado en la cookie");
   } catch (error) {
     console.error("Error al iniciar sesión:", error);
