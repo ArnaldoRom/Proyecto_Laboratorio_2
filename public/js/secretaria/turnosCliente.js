@@ -3,10 +3,11 @@ let dataTableTurnoSecretariaInicializado = false;
 
 const TurnoSecretariaOpciones = {
   destroy: true,
-  pageLength: 10,
+  pageLength: 6,
   language: {
     url: "/js/dataTable/es_AR.json",
   },
+  scrollX: true, // Permite el desplazamiento horizontal si es necesario
 };
 const iniciarDataTableTurnoSecretaria = async () => {
   if (dataTableTurnoSecretariaInicializado) {
@@ -71,7 +72,6 @@ async function cargarTablaTurnos(turnos, diasAgenda) {
 
   datos.innerHTML = ""; // Limpiar el contenido de la tabla
 
-  // Definir los días de la semana y los índices de los días en la tabla (lunes a viernes)
   const diasSemana = ["lunes", "martes", "miércoles", "jueves", "viernes"];
   const diasIndices = {
     1: "lunes",
@@ -81,7 +81,6 @@ async function cargarTablaTurnos(turnos, diasAgenda) {
     5: "viernes",
   };
 
-  // Agrupar los turnos por hora y día
   let turnosPorHora = {};
   turnos.forEach((turno) => {
     if (turno.hora) {
@@ -95,20 +94,16 @@ async function cargarTablaTurnos(turnos, diasAgenda) {
     }
   });
 
-  // Crear filas por cada hora en turnosPorHora
   for (let hora in turnosPorHora) {
     const tr = document.createElement("tr");
 
-    // Celda de hora
     const tdHora = document.createElement("td");
     tdHora.textContent = hora;
     tr.appendChild(tdHora);
 
-    // Crear las celdas de cada día de la semana
     diasSemana.forEach((dia) => {
       const tdDia = document.createElement("td");
 
-      // Si el día está en diasAgenda, mostrar el turno correspondiente o dejarlo libre
       if (
         diasAgenda.includes(
           parseInt(
@@ -116,44 +111,70 @@ async function cargarTablaTurnos(turnos, diasAgenda) {
           )
         )
       ) {
-        const turno = turnosPorHora[hora][dia] || { idEstadoHorario: 2 }; // Estado "Libre" si no hay turno
+        const turno = turnosPorHora[hora][dia] || { idEstadoHorario: 2 };
 
-        // Asignar estado y color de fondo
-        let estadoTexto = "";
-        let colorFondo = "";
+        const botonTurno = document.createElement("button");
+        botonTurno.style.width = "100%";
+        botonTurno.style.border = "none";
+        botonTurno.style.cursor = "pointer";
 
         switch (turno.idEstadoHorario) {
           case 2:
-            estadoTexto = "Libre";
-            colorFondo = "gray";
+            botonTurno.textContent = "Libre";
+            botonTurno.style.backgroundColor = "gray";
             break;
           case 3:
-            estadoTexto = "Reservado";
-            colorFondo = "yellow";
+            botonTurno.textContent = "Reservado";
+            botonTurno.style.backgroundColor = "yellow";
             break;
           case 4:
-            estadoTexto = "Confirmado";
-            colorFondo = "green";
+            botonTurno.textContent = "Confirmado";
+            botonTurno.style.backgroundColor = "green";
             break;
           default:
-            estadoTexto = "Desconocido";
-            colorFondo = "white";
+            botonTurno.textContent = "Desconocido";
+            botonTurno.style.backgroundColor = "white";
             break;
         }
 
-        tdDia.textContent = estadoTexto;
-        tdDia.style.backgroundColor = colorFondo;
+        tdDia.appendChild(botonTurno);
       } else {
-        // Dejar la celda vacía si el día no está en la agenda
         tdDia.textContent = "";
       }
 
       tr.appendChild(tdDia);
     });
 
-    // Agregar la fila al tbody de la tabla
     datos.appendChild(tr);
   }
+
+  // Agregar eventos a los botones después de generar la tabla
+  abrirModalCargaTurno();
+}
+
+function abrirModalCargaTurno() {
+  const nuevaCargaTurno = document.getElementById(`enviar-form-cargaTurno`);
+  const modalCargaTurno = document.getElementById(`modal-cargaTurno`);
+  const botones = document.querySelectorAll("#tabla-turno tbody td button");
+
+  botones.forEach((boton) => {
+    if (boton.textContent === "Libre") {
+      boton.addEventListener("click", () => {
+        modalCargaTurno.showModal();
+      });
+    }
+  });
+
+  nuevaCargaTurno.addEventListener("click", (event) => {
+    event.preventDefault();
+    // Registrar acción aquí
+  });
+
+  window.onclick = function (event) {
+    if (event.target === modalCargaTurno) {
+      modalCargaTurno.close();
+    }
+  };
 }
 
 // function buscarTurnoSecretario() {

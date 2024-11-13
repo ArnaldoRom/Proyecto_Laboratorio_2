@@ -7,7 +7,7 @@
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   height: 100vh;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 /* Estilo para el formulario */
@@ -59,11 +59,14 @@
   width: 100%;
   max-width: 80%;
   margin: 20px auto;
+  overflow-x: auto; /* Permite desplazamiento horizontal si es necesario */
 }
 
 .tabla-turno {
   width: 100%;
+  max-width: 100%; /* Se ajusta al contenedor */
   border-collapse: collapse;
+  table-layout: fixed; /* Distribuye las celdas en el ancho disponible */
 }
 
 .tabla-turno th,
@@ -84,4 +87,72 @@
 
 .tabla-turno tr:hover {
   background-color: #f1f1f1;
+}
+
+.contenedor-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  padding: 20px;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  background-color: white;
+  z-index: 1000;
+}
+
+.contenedor-modal::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+input {
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+button {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.contenedor-exito {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  padding: 20px;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  background-color: white;
+  z-index: 1000;
+  text-align: center;
+}
+
+.contenedor-exito::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
 }
