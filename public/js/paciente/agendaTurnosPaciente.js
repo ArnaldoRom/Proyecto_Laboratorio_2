@@ -139,12 +139,42 @@ function solicitarTurno(turno) {
   }, 2000); 
 }
 
+// Función para buscar la agenda por especialidad y nombre
+async function buscarAgenda(especialidad, nombre) {
+  try {
+    // Construir la URL con los parámetros de búsqueda
+    const url = new URL('/agenda', window.location.origin);
+    if (especialidad) url.searchParams.append('especialidad', especialidad);
+    if (nombre) url.searchParams.append('nombre', nombre);
+
+    // Realizar la solicitud a la ruta de agendas
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Error al buscar la agenda");
+
+    const agendas = await response.json();
+
+    if (agendas.length > 0) {
+      const idAgenda = agendas[0].id; // Tomamos el primer ID si hay varios resultados
+      turnoPaciente(idAgenda); // Llamamos a turnoPaciente con el ID de la agenda
+    } else {
+      console.error("No se encontró ninguna agenda con los criterios especificados");
+    }
+  } catch (error) {
+    console.error("Error al buscar la agenda:", error);
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const botonBuscar = document.getElementById("enviar-form-turno");
-  
+
   botonBuscar.addEventListener("click", (event) => {
-    event.preventDefault(); // Prevenir el envío del formulario
-    turnoPaciente(); // Llama a la función que obtiene los turnos del paciente
+    event.preventDefault();
+    
+    // Obtener los valores de especialidad y nombre desde los inputs
+    const especialidad = document.getElementById("input-especialidad").value;
+    const nombre = document.getElementById("input-nombre").value;
+
+    // Llamar a la función para buscar la agenda
+    buscarAgenda(especialidad, nombre);
   });
 });
-
