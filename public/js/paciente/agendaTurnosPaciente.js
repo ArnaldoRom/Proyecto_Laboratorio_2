@@ -19,43 +19,38 @@ const iniciarDataTableTurnoPaciente = async () => {
 };
 
 // Función para buscar el ID de la agenda por especialidad o nombre del profesional
-function buscarAgenda() {
-  const botonBuscar = document.getElementById("enviar-form-turno");
-  
-  botonBuscar?.addEventListener("click", async (event) => {
-    event.preventDefault();
-    
-    // Verificar la existencia de los campos de entrada
-    const inputNombre = document.getElementById("nombre");
-    const inputEspecialidad = document.getElementById("especialidad");
+async function buscarAgenda() {
+  const nombreProfesional = document.getElementById("nombre").value.trim();
+  const especialidadProfesional = document
+    .getElementById("especialidad")
+    .value.trim();
+  const diaSeleccionado = 0; // Puedes cambiar este valor o hacerlo dinámico según lo necesites
 
-    if (!inputNombre || !inputEspecialidad) {
-      console.error("No se encontraron los campos de nombre o especialidad en el DOM.");
-      return;
-    }
-    
-    const nombre = inputNombre.value;
-    const especialidad = inputEspecialidad.value;
+  // Crear un objeto para los parámetros de búsqueda
+  const queryParams = new URLSearchParams();
 
-    if (nombre || especialidad) {
-      try {
-        const response = await fetch(`/agenda?nombre=${nombre}&especialidad=${especialidad}`);
-        if (!response.ok) throw new Error("No se pudo obtener el ID de la agenda.");
+  // Solo agregar parámetros que tengan valores válidos
+  if (nombreProfesional) queryParams.append("nombre", nombreProfesional);
+  if (especialidadProfesional)
+    queryParams.append("especialidad", especialidadProfesional);
+  queryParams.append("dia", diaSeleccionado); // Si dia es obligatorio, no necesita validación
 
-        const agendas = await response.json();
-        if (agendas.length > 0) {
-          const idAgenda = agendas[0].idAgenda;
-          turnoPaciente(idAgenda);  // Llama a la función de carga de turnos con el ID encontrado
-        } else {
-          console.error("No se encontró ninguna agenda.");
-        }
-      } catch (error) {
-        console.error("Error al buscar agenda:", error);
-      }
+  const url = `/agenda?${queryParams.toString()}`;
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Error al obtener la agenda");
+
+    const agendas = await response.json();
+    if (agendas.length > 0) {
+      const idAgenda = agendas[0].id; // Supongo que cada agenda tiene un id
+      turnoAgenda(idAgenda); // Pasar el ID de la agenda a la función turnoAgenda
     } else {
-      console.error("Debes completar al menos uno de los campos.");
+      console.log("No se encontraron agendas con los criterios especificados.");
     }
-  });
+  } catch (error) {
+    console.error("Error al buscar la agenda:", error);
+  }
 }
 
 async function turnoPaciente(idAgenda) {
@@ -67,10 +62,14 @@ async function turnoPaciente(idAgenda) {
     const datos = agenda[0];
 
     if (datos) {
-      document.getElementById("nombre").value = `${datos.nombrePro} ${datos.apellidoPro}`;
+      document.getElementById(
+        "nombre"
+      ).value = `${datos.nombrePro} ${datos.apellidoPro}`;
       document.getElementById("especialidad").value = datos.nombreEsp;
 
-      const diasTurno = datos.dia.split(",").map((dia) => parseInt(dia.trim(), 10));
+      const diasTurno = datos.dia
+        .split(",")
+        .map((dia) => parseInt(dia.trim(), 10));
       await obtenerTurnos(idAgenda, diasTurno);
     } else {
       console.error("No se encontró la agenda");
@@ -103,7 +102,13 @@ async function cargarTablaTurnos(turnos, diasTurno) {
   datos.innerHTML = "";
 
   const diasSemana = ["lunes", "martes", "miércoles", "jueves", "viernes"];
-  const diasIndices = { 1: "lunes", 2: "martes", 3: "miércoles", 4: "jueves", 5: "viernes" };
+  const diasIndices = {
+    1: "lunes",
+    2: "martes",
+    3: "miércoles",
+    4: "jueves",
+    5: "viernes",
+  };
 
   let turnosPorHora = {};
   turnos.forEach((turno) => {
@@ -128,7 +133,13 @@ async function cargarTablaTurnos(turnos, diasTurno) {
     diasSemana.forEach((dia) => {
       const tdDia = document.createElement("td");
 
-      if (diasTurno.includes(parseInt(Object.keys(diasIndices).find((key) => diasIndices[key] === dia)))) {
+      if (
+        diasTurno.includes(
+          parseInt(
+            Object.keys(diasIndices).find((key) => diasIndices[key] === dia)
+          )
+        )
+      ) {
         const turno = turnosPorHora[hora][dia] || { idEstadoHorario: 2 };
 
         const botonTurno = document.createElement("button");

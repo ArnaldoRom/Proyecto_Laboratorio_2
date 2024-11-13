@@ -156,3 +156,22 @@ button:hover {
 .contenedor-exito::backdrop {
   background-color: rgba(0, 0, 0, 0.5);
 }
+
+.contenedor-sugerencias {
+  position: absolute;
+  border: 1px solid #ccc;
+  background-color: white;
+  max-height: 150px;
+  overflow-y: auto;
+  z-index: 1000;
+  width: 100%;
+}
+
+.sugerencia {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.sugerencia:hover {
+  background-color: #e9e9e9;
+}

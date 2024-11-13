@@ -167,7 +167,7 @@ function abrirModalCargaTurno() {
 
   nuevaCargaTurno.addEventListener("click", (event) => {
     event.preventDefault();
-    // Registrar acción aquí
+    confirmarTurno();
   });
 
   window.onclick = function (event) {
@@ -175,6 +175,41 @@ function abrirModalCargaTurno() {
       modalCargaTurno.close();
     }
   };
+}
+
+async function confirmarTurno() {
+  const dni = document.getElementById("dni").value;
+  const nombre = document.getElementById("nombre").value;
+  const apellido = document.getElementById("apellido").value;
+  const motivo = document.getElementById("motivo").value;
+  const obraSocial = document.getElementById("obra").value;
+  const exito = document.getElementById("exito-turnos");
+
+  try {
+    const response = await fetch("/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        nombreEmpleado: nombre,
+        apellido,
+        numeroLegajo: legajo,
+        idSucursal: sucursal,
+        idUsuario: idUsuario.id,
+      }),
+    });
+
+    if (!response.ok) throw new Error("Error al confirmar turno");
+
+    document.getElementById("modal-cargaTurno").close();
+    exito.style.display = "block";
+    exito.showModal();
+    setTimeout(() => {
+      exito.close();
+      exito.style.display = "none";
+    }, 3000);
+  } catch (error) {}
 }
 
 // function buscarTurnoSecretario() {
@@ -192,3 +227,45 @@ function abrirModalCargaTurno() {
 //     }
 //   });
 // }
+
+function autocompletar(input, datos) {
+  // Crea un contenedor para las sugerencias de autocompletado
+  const contenedor = document.createElement("div");
+  contenedor.classList.add("contenedor-sugerencias");
+  input.parentNode.appendChild(contenedor);
+
+  // Agrega un evento de escucha para cuando el usuario escribe en el campo
+  input.addEventListener("input", function () {
+    const valor = this.value;
+    contenedor.innerHTML = "";
+
+    if (!valor) return;
+
+    // Filtra los datos que coinciden con el valor del input
+    const sugerencias = datos.filter((item) =>
+      item.toLowerCase().includes(valor.toLowerCase())
+    );
+
+    // Muestra cada sugerencia en el contenedor
+    sugerencias.forEach((sugerencia) => {
+      const item = document.createElement("div");
+      item.classList.add("sugerencia");
+      item.textContent = sugerencia;
+
+      // Cuando se hace clic en una sugerencia, se rellena el input
+      item.addEventListener("click", function () {
+        input.value = sugerencia;
+        contenedor.innerHTML = ""; // Limpiar sugerencias
+      });
+
+      contenedor.appendChild(item);
+    });
+  });
+
+  // Ocultar las sugerencias cuando se hace clic fuera
+  document.addEventListener("click", function (e) {
+    if (!contenedor.contains(e.target) && e.target !== input) {
+      contenedor.innerHTML = "";
+    }
+  });
+}
