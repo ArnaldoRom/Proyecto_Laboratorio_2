@@ -1,5 +1,6 @@
 let dataTableTurnoSecretaria;
 let dataTableTurnoSecretariaInicializado = false;
+let pacientesData = [];
 
 const TurnoSecretariaOpciones = {
   destroy: true,
@@ -177,6 +178,15 @@ function abrirModalCargaTurno() {
   };
 }
 
+async function cargarDatosPacientes() {
+  try {
+    const response = await fetch("/pacientes");
+    pacientesData = await response.json();
+  } catch (error) {
+    console.error("Error al cargar datos de pacientes", error);
+  }
+}
+
 async function confirmarTurno() {
   const dni = document.getElementById("dni").value;
   const nombre = document.getElementById("nombre").value;
@@ -186,17 +196,18 @@ async function confirmarTurno() {
   const exito = document.getElementById("exito-turnos");
 
   try {
+    autocompletar(dni);
     const response = await fetch("/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        nombreEmpleado: nombre,
+        dni,
+        nombre,
         apellido,
-        numeroLegajo: legajo,
-        idSucursal: sucursal,
-        idUsuario: idUsuario.id,
+        motivoConsulta: motivo,
+        obraSocial,
       }),
     });
 
@@ -209,7 +220,9 @@ async function confirmarTurno() {
       exito.close();
       exito.style.display = "none";
     }, 3000);
-  } catch (error) {}
+  } catch (error) {
+    console.error("Error al confirmar turno:", error);
+  }
 }
 
 // function buscarTurnoSecretario() {
@@ -228,44 +241,14 @@ async function confirmarTurno() {
 //   });
 // }
 
-function autocompletar(input, datos) {
-  // Crea un contenedor para las sugerencias de autocompletado
-  const contenedor = document.createElement("div");
-  contenedor.classList.add("contenedor-sugerencias");
-  input.parentNode.appendChild(contenedor);
-
-  // Agrega un evento de escucha para cuando el usuario escribe en el campo
-  input.addEventListener("input", function () {
-    const valor = this.value;
-    contenedor.innerHTML = "";
-
-    if (!valor) return;
-
-    // Filtra los datos que coinciden con el valor del input
-    const sugerencias = datos.filter((item) =>
-      item.toLowerCase().includes(valor.toLowerCase())
-    );
-
-    // Muestra cada sugerencia en el contenedor
-    sugerencias.forEach((sugerencia) => {
-      const item = document.createElement("div");
-      item.classList.add("sugerencia");
-      item.textContent = sugerencia;
-
-      // Cuando se hace clic en una sugerencia, se rellena el input
-      item.addEventListener("click", function () {
-        input.value = sugerencia;
-        contenedor.innerHTML = ""; // Limpiar sugerencias
-      });
-
-      contenedor.appendChild(item);
-    });
-  });
-
-  // Ocultar las sugerencias cuando se hace clic fuera
-  document.addEventListener("click", function (e) {
-    if (!contenedor.contains(e.target) && e.target !== input) {
-      contenedor.innerHTML = "";
-    }
-  });
+function autocompletar(inputDNI) {
+  const paciente = pacientesData.find((p) => p.DNI === inputDNI);
+  if (paciente) {
+    document.getElementById("nombre").value = paciente.nombre;
+    document.getElementById("apellido").value = paciente.apellido;
+    document.getElementById("motivo").value = paciente.motivoConsulta || "";
+    document.getElementById("obra").value = paciente.obraSocial || "";
+  } else {
+    console.error("El paciente no se encontró");
+  }
 }
