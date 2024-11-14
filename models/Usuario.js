@@ -67,6 +67,27 @@ static async iniciarSesion(data) {
   }
 }
 
+static async obtenerPacientePorUsuario(idUsuario) {
+  try {
+    const query = ("SELECT paciente.idPaciente FROM usuario JOIN paciente ON usuario.idUsuario = paciente.idPaciente WHERE usuario.idUsuario = ?");
+    const value = idUsuario;
+    const result = await conexion.query(query, value)
+    return result;
+  } catch (error) {
+    console.error("Error al obtener usuarios", error);
+    throw error;
+  }
+}
+
+static async traerUsuarios() {
+  try {
+    const [rows] = await conexion.query("SELECT nombreUsuario FROM usuario");
+    return rows;
+  } catch (error) {
+    console.error("Error al obtener nombres de usuarios", error);
+    throw error;
+  }
+}
 
 
   // Obtener todos los usuarios
@@ -89,7 +110,7 @@ static async iniciarSesion(data) {
       throw error;
     }
   }
-s
+
 
 
   // Actualizar un usuario por id

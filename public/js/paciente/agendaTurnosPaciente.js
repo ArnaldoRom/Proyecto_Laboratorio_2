@@ -177,13 +177,47 @@ async function cargarTablaTurnos(turnos, diasTurno) {
 }
 
 function solicitarTurno(turno) {
+  if (turno.idEstadoHorario === 2) { // Verifica que el turno esté en estado "libre"
+    // Realiza la solicitud para cambiar el estado a "reservado"
+    fetch("/turno/estado/reservado", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ idTurno: turno.idTurno }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error al cambiar el estado del turno.");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.affectedRows > 0) {
+          const botonTurno = document.querySelector(`[data-id-turno="${turno.idTurno}"]`);
+          if (botonTurno) {
+            botonTurno.textContent = "Reservado";
+            botonTurno.style.backgroundColor = "yellow";
+            botonTurno.disabled = true;
+          }
+          mostrarModalExito();
+        }
+      })
+      .catch((error) => {
+        console.error("Error al solicitar turno:", error);
+      });
+  }
+}
+
+
+function mostrarModalExito() {
   const modalCargaTurnoPaciente = document.getElementById("exito-turnos");
   modalCargaTurnoPaciente.showModal();
-  console.log("Solicitando turno:", turno);
   setTimeout(() => {
     modalCargaTurnoPaciente.close();
   }, 2000);
 }
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const botonBuscar = document.getElementById("enviar-form-turno");

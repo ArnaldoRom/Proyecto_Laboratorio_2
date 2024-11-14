@@ -12,6 +12,7 @@ import {
   sacarPacienteDeListaEspera,
   recuperarTurnosConfirmados,
   getTurnoPorAgenda,
+  cambiarEstadoAReservado,
 } from "../controllers/turnosGestion.controllers.js";
 
 const routes = Router();
@@ -23,6 +24,8 @@ routes.post("/turno/reservar", reservarTurno);
 routes.get("/turnos", getTurno);
 
 routes.post("/turno/estado", cambiarEstado);
+
+routes.post("/turno/estado/reservado", cambiarEstadoAReservado)
 
 routes.get("/turno/:id", getTurnoId);
 

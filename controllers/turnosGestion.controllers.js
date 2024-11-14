@@ -78,6 +78,24 @@ export const cambiarEstado = async (req, res) => {
   }
 };
 
+export const cambiarEstadoAReservado = async (req, res) => {
+  const data = req.body;
+  try {
+    const result = await Turno.cambiarEstadoAReservado(data);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "El turno no existe" });
+    }
+
+    return res.status(200).json({ message: "Estado cambiado con exito" });
+  } catch (error) {
+    console.error("Error al Actualizar");
+    return res.status(500).json({
+      message: "Error al cambiar estado del Turno",
+    });
+  }
+};
+
+
 export const recuperarTurnosConfirmados = async (req, res) => {
   try {
     const rows = await Turno.turnosConfirmadosPorAgenda(req.params.id);
