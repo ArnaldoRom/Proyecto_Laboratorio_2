@@ -216,11 +216,9 @@ async function confirmarTurno(turnoId) {
         idTurno: turnoId,
       }),
     });
-    console.log("Respuesta /turno: ", datitas);
+    const turnoconfi = await datitas.json();
 
-    const turno = await datitas.json();
-    console.log("Resultado /turnos: ", turno);
-    if (resultado.exito && turno.exito) {
+    if (responsePa.ok && datitas.ok) {
       document.getElementById("modal-cargaTurno").close();
 
       if (botonSeleccionado) {
