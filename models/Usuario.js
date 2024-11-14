@@ -69,7 +69,7 @@ static async iniciarSesion(data) {
 
 static async obtenerPacientePorUsuario(idUsuario) {
   try {
-    const query = "SELECT paciente.idPaciente FROM usuario JOIN paciente ON usuario.idUsuario = paciente.idUsuario WHERE usuario.idUsuario = ?";
+    const query = "SELECT paciente.idPaciente FROM usuario JOIN paciente ON usuario.idUsuario = paciente.idUsuario WHERE usuario.nombreUsuario = ?";
     const value = [idUsuario]; 
     const result = await conexion.query(query, value);
     return result;

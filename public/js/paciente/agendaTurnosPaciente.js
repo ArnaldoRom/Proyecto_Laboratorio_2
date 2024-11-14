@@ -18,14 +18,12 @@ const iniciarDataTableTurnoPaciente = async () => {
   dataTableTurnoPacienteInicializado = true;
 };
 
-// Función para buscar el ID de la agenda por especialidad o nombre del profesional
 function buscarAgenda() {
   const botonBuscar = document.getElementById("enviar-form-turno");
 
   botonBuscar?.addEventListener("click", async (event) => {
     event.preventDefault();
 
-    // Verificar la existencia de los campos de entrada
     const inputNombre = document.getElementById("nombre");
     const inputEspecialidad = document.getElementById("especialidad");
 
@@ -41,7 +39,6 @@ function buscarAgenda() {
       let url = "/agenda?";
       let queryParams = [];
 
-      
       if (especialidad) {
         url += `especialidad=${especialidad}&`;
       }
@@ -50,10 +47,8 @@ function buscarAgenda() {
         url += `nombre=${nombre}&`;
       }
 
-      
       url = url.slice(0, -1);
 
-    
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error("No se pudo obtener la agenda.");
@@ -62,7 +57,7 @@ function buscarAgenda() {
       const agendas = await response.json();
       if (agendas.length > 0) {
         const idAgenda = agendas[0].idAgenda;
-        turnoPaciente(idAgenda);  
+        turnoPaciente(idAgenda);
       } else {
         console.error("No se encontró ninguna agenda.");
       }
@@ -176,22 +171,37 @@ async function cargarTablaTurnos(turnos, diasTurno) {
   }
 }
 
-function solicitarTurno(turno) {
-  const nombreUsuario = querySelector(".header p")
-  console.log(nombreUsuario);
-  const modalCargaTurnoPaciente = document.getElementById("exito-turnos");
-  modalCargaTurnoPaciente.showModal();
-  console.log("Solicitando turno:", turno);
-  setTimeout(() => {
-    modalCargaTurnoPaciente.close();
-  }, 2000);
+async function solicitarTurno(turno) {
+  const nombreUsuario = document.querySelector(".header p").textContent.trim();
+
+  try {
+    const responsePaciente = await fetch(`/usuario/obtenerPaciente?nombreUsuario=${nombreUsuario}`);
+    if (!responsePaciente.ok) throw new Error("No se pudo obtener el ID del paciente.");
+
+    const { idPaciente } = await responsePaciente.json();
+
+    const response = await fetch("/turno/estado/reservado", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ idTurno: turno.idTurno, idPaciente: idPaciente }),
+    });
+
+    if (!response.ok) throw new Error("Error al cambiar el estado del turno.");
+
+    const modalCargaTurnoPaciente = document.getElementById("exito-turnos");
+    modalCargaTurnoPaciente.showModal();
+    console.log("Turno reservado con éxito:", turno);
+    setTimeout(() => {
+      modalCargaTurnoPaciente.close();
+    }, 2000);
+  } catch (error) {
+    console.error("Error al solicitar turno:", error);
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const botonBuscar = document.getElementById("enviar-form-turno");
-
-  botonBuscar.addEventListener("click", (event) => {
-    event.preventDefault();
-    buscarAgenda();
-  });
+  iniciarDataTableTurnoPaciente();
+  buscarAgenda();
 });

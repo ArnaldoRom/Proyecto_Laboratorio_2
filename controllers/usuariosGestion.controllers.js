@@ -63,7 +63,7 @@ export const obtenerUsuario = async (req, res) => {
 };
 
 export const obtenerPacientePorUsuario = async (req, res) => {
-  const id = req.params.id;
+  const id = req.params.nombreUsuario;
 
   try {
     const usuario = await Usuario.obtenerPacientePorUsuario(id);
