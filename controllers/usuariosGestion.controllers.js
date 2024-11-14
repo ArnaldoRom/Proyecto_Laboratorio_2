@@ -62,6 +62,19 @@ export const obtenerUsuario = async (req, res) => {
   }
 };
 
+export const obtenerPacientePorUsuario = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const usuario = await Usuario.obtenerPacientePorUsuario(id);
+    res.status(200).json(usuario);
+  } catch (error) {
+    console.error("Error al obtener el usuario:", error);
+    res.status(500).json({ message: "Error al obtener el usuario." });
+  }
+};
+
+
 export const traerUsuarios = async (req, res) => {
   try {
     const usuario = await Usuario.traerUsuarios();

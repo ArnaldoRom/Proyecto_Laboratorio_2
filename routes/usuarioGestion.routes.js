@@ -17,7 +17,8 @@ import {
   eliminarEmpleado,
   activarEmpleado,
   traerUsuarios,
-  iniciarSesion
+  iniciarSesion,
+  obtenerPacientePorUsuario
 } from "../controllers/usuariosGestion.controllers.js";
 
 const router = Router();
@@ -29,6 +30,7 @@ const router = Router();
 router.post("/usuarios", crearUsuario);
 router.post("/iniciar-sesion", iniciarSesion);
 router.get("/usuariosLista", traerUsuarios);
+router.get("/usuario/obtenerPaciente", obtenerPacientePorUsuario)
 router.get("/usuarios/:id", obtenerUsuario);
 router.post("/usuarios/:id/actualizar", actualizarUsuario);
 router.post("/usuarios/:id/eliminar", eliminarUsuario);
