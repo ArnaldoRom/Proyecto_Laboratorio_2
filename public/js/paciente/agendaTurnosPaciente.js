@@ -18,35 +18,6 @@ const iniciarDataTableTurnoPaciente = async () => {
   dataTableTurnoPacienteInicializado = true;
 };
 
-// Función para decodificar el token de la cookie
-function obtenerIdUsuarioDesdeToken() {
-  const token = document.cookie.split("; ").find(row => row.startsWith("token="))?.split("=")[1];
-  if (!token) return null;
-
-  const payloadBase64 = token.split(".")[1];
-  const payload = JSON.parse(atob(payloadBase64));
-  return payload.id;
-}
-
-// Función para obtener el ID del paciente utilizando el ID de usuario
-async function obtenerIdPaciente() {
-  const idUsuario = obtenerIdUsuarioDesdeToken();
-  if (!idUsuario) {
-    console.error("No se pudo obtener el ID de usuario desde el token.");
-    return null;
-  }
-
-  try {
-    const response = await fetch(`/usuario/obtenerPaciente?idUsuario=${idUsuario}`);
-    if (!response.ok) throw new Error("Error al obtener el ID del paciente.");
-    const data = await response.json();
-    return data.idPaciente;
-  } catch (error) {
-    console.error("Error al obtener el ID del paciente:", error);
-    return null;
-  }
-}
-
 // Función para buscar el ID de la agenda por especialidad o nombre del profesional
 function buscarAgenda() {
   const botonBuscar = document.getElementById("enviar-form-turno");
@@ -54,6 +25,7 @@ function buscarAgenda() {
   botonBuscar?.addEventListener("click", async (event) => {
     event.preventDefault();
 
+    // Verificar la existencia de los campos de entrada
     const inputNombre = document.getElementById("nombre");
     const inputEspecialidad = document.getElementById("especialidad");
 
@@ -67,17 +39,30 @@ function buscarAgenda() {
 
     try {
       let url = "/agenda?";
-      if (especialidad) url += `especialidad=${especialidad}&`;
-      if (nombre) url += `nombre=${nombre}&`;
+      let queryParams = [];
+
+      
+      if (especialidad) {
+        url += `especialidad=${especialidad}&`;
+      }
+
+      if (nombre) {
+        url += `nombre=${nombre}&`;
+      }
+
+      
       url = url.slice(0, -1);
 
+    
       const response = await fetch(url);
-      if (!response.ok) throw new Error("No se pudo obtener la agenda.");
+      if (!response.ok) {
+        throw new Error("No se pudo obtener la agenda.");
+      }
 
       const agendas = await response.json();
       if (agendas.length > 0) {
         const idAgenda = agendas[0].idAgenda;
-        turnoPaciente(idAgenda);
+        turnoPaciente(idAgenda);  
       } else {
         console.error("No se encontró ninguna agenda.");
       }
@@ -191,21 +176,22 @@ async function cargarTablaTurnos(turnos, diasTurno) {
   }
 }
 
-async function solicitarTurno(turno) {
-  const idPaciente = await obtenerIdPaciente();
-  if (!idPaciente) {
-    console.error("No se pudo obtener el ID del paciente.");
-    return;
-  }
-
+function solicitarTurno(turno) {
+  const nombreUsuario = querySelector(".header p")
+  console.log(nombreUsuario);
   const modalCargaTurnoPaciente = document.getElementById("exito-turnos");
   modalCargaTurnoPaciente.showModal();
-  console.log("Solicitando turno para paciente con ID:", idPaciente, "Turno:", turno);
+  console.log("Solicitando turno:", turno);
   setTimeout(() => {
     modalCargaTurnoPaciente.close();
   }, 2000);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  buscarAgenda();
+  const botonBuscar = document.getElementById("enviar-form-turno");
+
+  botonBuscar.addEventListener("click", (event) => {
+    event.preventDefault();
+    buscarAgenda();
+  });
 });
