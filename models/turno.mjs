@@ -128,7 +128,7 @@ class Turno {
       try {
         const query = `
           UPDATE turno 
-          SET estado = '3'
+          SET idEstadoHorario = 3
           WHERE idTurno = ?
         `;
         const [result] = await conexion.query(query, [idTurno]);
