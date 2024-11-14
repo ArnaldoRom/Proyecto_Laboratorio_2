@@ -25,6 +25,7 @@ function buscarAgenda() {
   botonBuscar?.addEventListener("click", async (event) => {
     event.preventDefault();
 
+    // Verificar la existencia de los campos de entrada
     const inputNombre = document.getElementById("nombre");
     const inputEspecialidad = document.getElementById("especialidad");
 
@@ -38,21 +39,30 @@ function buscarAgenda() {
 
     try {
       let url = "/agenda?";
+      let queryParams = [];
+
+      
       if (especialidad) {
         url += `especialidad=${especialidad}&`;
       }
+
       if (nombre) {
         url += `nombre=${nombre}&`;
       }
+
+      
       url = url.slice(0, -1);
 
+    
       const response = await fetch(url);
-      if (!response.ok) throw new Error("No se pudo obtener la agenda.");
+      if (!response.ok) {
+        throw new Error("No se pudo obtener la agenda.");
+      }
 
       const agendas = await response.json();
       if (agendas.length > 0) {
         const idAgenda = agendas[0].idAgenda;
-        turnoPaciente(idAgenda);
+        turnoPaciente(idAgenda);  
       } else {
         console.error("No se encontró ninguna agenda.");
       }
@@ -166,62 +176,12 @@ async function cargarTablaTurnos(turnos, diasTurno) {
   }
 }
 
-async function obtenerIdPaciente() {
-  try {
-    const token = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("tuNombreDeCookie="))
-      ?.split("=")[1];
-    
-    if (!token) throw new Error("Token no encontrado en las cookies");
-
-    const decoded = jwt_decode(token);
-    const idUsuario = decoded.id;
-
-    const response = await fetch(`/usuario/obtenerPaciente?idUsuario=${idUsuario}`);
-    if (!response.ok) throw new Error("No se pudo obtener el ID de paciente");
-
-    const { idPaciente } = await response.json();
-    return idPaciente;
-  } catch (error) {
-    console.error("Error al obtener el ID del paciente:", error);
-  }
-}
-
-async function solicitarTurno(turno) {
-  if (turno.idEstadoHorario === 2) {
-    try {
-      const idPaciente = await obtenerIdPaciente();
-
-      const response = await fetch("/turno/estado/reservado", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ idTurno: turno.idTurno, idPaciente }),
-      });
-
-      if (!response.ok) throw new Error("Error al cambiar el estado del turno.");
-
-      const data = await response.json();
-      if (data.affectedRows > 0) {
-        const botonTurno = document.querySelector(`[data-id-turno="${turno.idTurno}"]`);
-        if (botonTurno) {
-          botonTurno.textContent = "Reservado";
-          botonTurno.style.backgroundColor = "yellow";
-          botonTurno.disabled = true;
-        }
-        mostrarModalExito();
-      }
-    } catch (error) {
-      console.error("Error al solicitar turno:", error);
-    }
-  }
-}
-
-function mostrarModalExito() {
+function solicitarTurno(turno) {
+  const nombreUsuario = querySelector(".header p")
+  console.log(nombreUsuario);
   const modalCargaTurnoPaciente = document.getElementById("exito-turnos");
   modalCargaTurnoPaciente.showModal();
+  console.log("Solicitando turno:", turno);
   setTimeout(() => {
     modalCargaTurnoPaciente.close();
   }, 2000);
