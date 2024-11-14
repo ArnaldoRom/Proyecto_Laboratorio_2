@@ -65,8 +65,8 @@ class Paciente {
         data.apellido,
         data.DNI,
         data.obraSocial,
-        data.datosContacto,
-        data.idUsuario,
+        data.datosContacto || null,
+        data.idUsuario || null,
       ];
 
       const [result] = await conexion.query(query, values);

@@ -5,10 +5,12 @@ import SobreTurno from "../models/sobreTurno.js";
 
 export const crearAgenda = async (req, res) => {
   const agenda = req.body;
-  const { hora_inicio, hora_Fin, duacionHorario } = req.body;
+  const { hora_inicio, hora_Fin, duacionHorario, dia } = req.body; // Incluye el campo 'dia' como VARCHAR
   try {
+    // Agregar la agenda a la base de datos
     const agendaNueva = await Agenda.agregarAgenda(agenda);
 
+    // Convertir el rango de tiempo de inicio y fin
     let [horasInicio, minutosInicio] = hora_inicio.split(":").map(Number);
     let [horasFin, minutosFin] = hora_Fin.split(":").map(Number);
 
@@ -18,33 +20,37 @@ export const crearAgenda = async (req, res) => {
     const tiempoFin = new Date();
     tiempoFin.setHours(horasFin, minutosFin, 0, 0);
 
-    let tiempo = new Date(tiempoInicio);
-
     const [horasDuracion, minutosDuracion] = duacionHorario
       .split(":")
       .map(Number);
     const duracionTurno = horasDuracion * 60 + minutosDuracion;
 
-    console.log(duracionTurno);
+    // Procesar la cadena 'dia' y convertirla en un array de números
+    const diasAgenda = dia.split(",").map(Number); // Convertir la cadena "1,4" a [1, 4]
 
     const turnos = [];
 
-    while (tiempo < tiempoFin) {
-      const turno = await Turno.crearTurnoConNull({
-        diaTurno: null,
-        hora: `${String(tiempo.getHours()).padStart(2, "0")}:${String(
-          tiempo.getMinutes()
-        ).padStart(2, "0")}:00`,
-        idPaciente: null,
-        idAgenda: agendaNueva,
-        idEmpleado: null,
-        idListaEspera: null,
-        idEstadoHorario: 2, // "LIBRE"
-      }); // FUNCION PARA CREEAR TURNO
+    // Iterar sobre cada día en la lista de días de la agenda
+    for (const diaTurno of diasAgenda) {
+      let tiempo = new Date(tiempoInicio);
 
-      turnos.push(turno);
-      tiempo = Agenda.crearIntervalosTurno(tiempo, duracionTurno);
-      console.log(tiempo);
+      while (tiempo < tiempoFin) {
+        // Crear el turno para el día específico
+        const turno = await Turno.crearTurnoConNull({
+          diaTurno: String(diaTurno), // Convertimos a String para que sea VARCHAR
+          hora: `${String(tiempo.getHours()).padStart(2, "0")}:${String(
+            tiempo.getMinutes()
+          ).padStart(2, "0")}:00`,
+          idPaciente: null,
+          idAgenda: agendaNueva,
+          idEmpleado: null,
+          idListaEspera: null,
+          idEstadoHorario: 2, // "LIBRE"
+        });
+
+        turnos.push(turno);
+        tiempo = Agenda.crearIntervalosTurno(tiempo, duracionTurno);
+      }
     }
 
     res.status(201).json({ agenda: agendaNueva, turnos });
@@ -183,9 +189,8 @@ export const filtrosAgendas = async (req, res) => {
   }
 };
 
-
 export const filtrosAgendaSinDia = async (req, res) => {
-  const { especialidad, nombre} = req.query;
+  const { especialidad, nombre } = req.query;
   console.log("CONTROLADOR: ", especialidad, nombre);
   try {
     const agendas = await Agenda.buscarAgendaSinDia({

@@ -119,6 +119,9 @@ async function cargarTablaTurnos(turnos, diasAgenda) {
         botonTurno.style.border = "none";
         botonTurno.style.cursor = "pointer";
 
+        botonTurno.dataset.idTurno = turno.idTurno || "";
+        botonTurno.dataset.dia = dia; // Agregar el día en el dataset
+
         switch (turno.idEstadoHorario) {
           case 2:
             botonTurno.textContent = "Libre";
@@ -138,6 +141,12 @@ async function cargarTablaTurnos(turnos, diasAgenda) {
             break;
         }
 
+        botonTurno.addEventListener("click", () => {
+          if (botonTurno.textContent === "Libre") {
+            abrirModalCargaTurno(botonTurno);
+          }
+        });
+
         tdDia.appendChild(botonTurno);
       } else {
         tdDia.textContent = "";
@@ -148,27 +157,18 @@ async function cargarTablaTurnos(turnos, diasAgenda) {
 
     datos.appendChild(tr);
   }
-
-  // Agregar eventos a los botones después de generar la tabla
-  abrirModalCargaTurno();
 }
 
-function abrirModalCargaTurno() {
+function abrirModalCargaTurno(boton) {
+  botonSeleccionado = boton;
+  const turnoId = boton.dataset.idTurno;
   const nuevaCargaTurno = document.getElementById(`enviar-form-cargaTurno`);
   const modalCargaTurno = document.getElementById(`modal-cargaTurno`);
-  const botones = document.querySelectorAll("#tabla-turno tbody td button");
-
-  botones.forEach((boton) => {
-    if (boton.textContent === "Libre") {
-      boton.addEventListener("click", () => {
-        modalCargaTurno.showModal();
-      });
-    }
-  });
+  modalCargaTurno.showModal();
 
   nuevaCargaTurno.addEventListener("click", (event) => {
     event.preventDefault();
-    confirmarTurno();
+    confirmarTurno(turnoId);
   });
 
   window.onclick = function (event) {
@@ -178,48 +178,66 @@ function abrirModalCargaTurno() {
   };
 }
 
-async function cargarDatosPacientes() {
-  try {
-    const response = await fetch("/pacientes");
-    pacientesData = await response.json();
-  } catch (error) {
-    console.error("Error al cargar datos de pacientes", error);
-  }
-}
-
-async function confirmarTurno() {
+async function confirmarTurno(turnoId) {
   const dni = document.getElementById("dni").value;
-  const nombre = document.getElementById("nombre").value;
+  const nombre = document.getElementById("nombreTurno").value;
   const apellido = document.getElementById("apellido").value;
   const motivo = document.getElementById("motivo").value;
   const obraSocial = document.getElementById("obra").value;
   const exito = document.getElementById("exito-turnos");
+  console.log("CONFIRMAS: ", turnoId);
+  if (!turnoId) {
+    console.error("No se encontró idTurno para confirmar el turno");
+    return;
+  }
 
   try {
-    autocompletar(dni);
-    const response = await fetch("/", {
+    const responsePa = await fetch("/pacientes", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        dni,
         nombre,
         apellido,
-        motivoConsulta: motivo,
+        DNI: dni,
         obraSocial,
       }),
+    }); // Verifica si la respuesta es correcta
+    const resultado = await responsePa.json();
+
+    const datitas = await fetch("/turno/estado", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        idEstadoHorario: 4,
+        idTurno: turnoId,
+      }),
     });
+    console.log("Respuesta /turno: ", datitas);
 
-    if (!response.ok) throw new Error("Error al confirmar turno");
+    const turno = await datitas.json();
+    console.log("Resultado /turnos: ", turno);
+    if (resultado.exito && turno.exito) {
+      document.getElementById("modal-cargaTurno").close();
 
-    document.getElementById("modal-cargaTurno").close();
-    exito.style.display = "block";
-    exito.showModal();
-    setTimeout(() => {
-      exito.close();
-      exito.style.display = "none";
-    }, 3000);
+      if (botonSeleccionado) {
+        exito.style.display = "block";
+        exito.showModal();
+
+        botonSeleccionado.textContent = "Confirmado";
+        botonSeleccionado.style.backgroundColor = "green";
+      }
+
+      setTimeout(() => {
+        exito.close();
+        exito.style.display = "none";
+      }, 3000);
+    } else {
+      console.error("Error al confirmar el turno en el servidor");
+    }
   } catch (error) {
     console.error("Error al confirmar turno:", error);
   }
@@ -241,14 +259,14 @@ async function confirmarTurno() {
 //   });
 // }
 
-function autocompletar(inputDNI) {
-  const paciente = pacientesData.find((p) => p.DNI === inputDNI);
-  if (paciente) {
-    document.getElementById("nombre").value = paciente.nombre;
-    document.getElementById("apellido").value = paciente.apellido;
-    document.getElementById("motivo").value = paciente.motivoConsulta || "";
-    document.getElementById("obra").value = paciente.obraSocial || "";
-  } else {
-    console.error("El paciente no se encontró");
-  }
-}
+// function autocompletar(inputDNI) {
+//   const paciente = pacientesData.find((p) => p.DNI === inputDNI);
+//   if (paciente) {
+//     document.getElementById("nombre").value = paciente.nombre;
+//     document.getElementById("apellido").value = paciente.apellido;
+//     document.getElementById("motivo").value = paciente.motivoConsulta || "";
+//     document.getElementById("obra").value = paciente.obraSocial || "";
+//   } else {
+//     console.error("El paciente no se encontró");
+//   }
+// }

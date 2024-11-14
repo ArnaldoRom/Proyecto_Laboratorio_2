@@ -34,9 +34,6 @@ function mostrar(vista, idAgenda = "", push = true) {
       } else if (vista === "turnos") {
         iniciarDataTableTurnoSecretaria();
         turnoAgenda(idAgenda);
-        cargarDatosPacientes();
-        // obtenerTurnos(idAgenda);
-        // buscarTurnoSecretario();
       } else if (vista === "paciente") {
       }
     })

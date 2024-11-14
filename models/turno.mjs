@@ -56,9 +56,14 @@ class Turno {
     try {
       const query = `
         INSERT INTO turno (diaTurno, hora, clasificacion, idPaciente, idAgenda, idEmpleado, idEstadoHorario)
-        VALUES (NULL, ?, NULL, NULL, ?, NULL, ?)
+        VALUES (?, ?, NULL, NULL, ?, NULL, ?)
       `;
-      const values = [data.hora, data.idAgenda, data.idEstadoHorario];
+      const values = [
+        data.diaTurno,
+        data.hora,
+        data.idAgenda,
+        data.idEstadoHorario,
+      ];
       const [result] = await conexion.query(query, values);
       return result.insertId;
     } catch (error) {
@@ -123,21 +128,21 @@ class Turno {
     }
   }
 
-    // Cambiar el estado siempre a reservado
-    static async cambiarEstadoAReservado(idTurno) {
-      try {
-        const query = `
+  // Cambiar el estado siempre a reservado
+  static async cambiarEstadoAReservado(idTurno) {
+    try {
+      const query = `
           UPDATE turno 
           SET estado = '3'
           WHERE idTurno = ?
         `;
-        const [result] = await conexion.query(query, [idTurno]);
-        return result.affectedRows;
-      } catch (error) {
-        console.error("Error al cambiar el estado a libre", error);
-        throw error;
-      }
+      const [result] = await conexion.query(query, [idTurno]);
+      return result.affectedRows;
+    } catch (error) {
+      console.error("Error al cambiar el estado a libre", error);
+      throw error;
     }
+  }
 
   static async asignarPaciente(idPaciente, idTurno) {
     try {

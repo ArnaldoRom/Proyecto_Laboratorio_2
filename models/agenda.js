@@ -70,7 +70,7 @@ class Agenda {
     } = data;
     try {
       const query =
-        "INSERT INTO agenda (dia, duacionHorario, hora_inicio, hora_Fin, limiteTurno, idProfesionalEspecializado, idSucursal, idCalendario, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        "INSERT INTO agenda (dia, duacionHorario, hora_inicio, hora_Fin, limiteTurno, idProfesionalEspecializado, idSucursal, idCalendario, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)";
 
       const values = [
         dia,
@@ -136,7 +136,7 @@ class Agenda {
     }
   }
 
-  static async buscarAgendaSinDia({especialidad, nombre}){
+  static async buscarAgendaSinDia({ especialidad, nombre }) {
     try {
       console.log(especialidad, nombre);
 
