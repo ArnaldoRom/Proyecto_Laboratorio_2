@@ -79,21 +79,23 @@ export const cambiarEstado = async (req, res) => {
 };
 
 export const cambiarEstadoAReservado = async (req, res) => {
-  const data = req.body;
+  const { idTurno, idPaciente } = req.body; // Extraer idTurno e idPaciente del cuerpo de la solicitud
+
   try {
-    const result = await Turno.cambiarEstadoAReservado(data);
-    if (result.affectedRows === 0) {
+    const affectedRows = await Turno.cambiarEstadoAReservado(idTurno, idPaciente); // Pasar ambos parámetros
+    if (affectedRows === 0) {
       return res.status(404).json({ message: "El turno no existe" });
     }
 
-    return res.status(200).json({ message: "Estado cambiado con exito" });
+    return res.status(200).json({ message: "Estado cambiado con éxito" });
   } catch (error) {
-    console.error("Error al Actualizar");
+    console.error("Error al actualizar el estado del turno y asignar el paciente:", error);
     return res.status(500).json({
-      message: "Error al cambiar estado del Turno",
+      message: "Error al cambiar el estado del turno",
     });
   }
 };
+
 
 
 export const recuperarTurnosConfirmados = async (req, res) => {

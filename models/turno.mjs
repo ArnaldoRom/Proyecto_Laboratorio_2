@@ -117,7 +117,7 @@ class Turno {
     try {
       const query = `
         UPDATE turno 
-        SET estado = '2'
+        SET estado = '2', idPaciente = 
         WHERE idTurno = ?
       `;
       const [result] = await conexion.query(query, [idTurno]);
@@ -129,21 +129,20 @@ class Turno {
   }
 
   // Cambiar el estado siempre a reservado
-  static async cambiarEstadoAReservado(idTurno) {
+  static async cambiarEstadoAReservado(idTurno, idPaciente) {
     try {
       const query = `
-          UPDATE turno 
-          SET idEstadoHorario = 3
-          WHERE idTurno = ?
-        `;
-      const [result] = await conexion.query(query, [idTurno]);
+        UPDATE turno 
+        SET idEstadoHorario = 3, idPaciente = ?
+        WHERE idTurno = ?
+      `;
+      const [result] = await conexion.query(query, [idPaciente, idTurno]);
       return result.affectedRows;
     } catch (error) {
-      console.error("Error al cambiar el estado a libre", error);
+      console.error("Error al cambiar el estado a reservado y asignar el paciente", error);
       throw error;
     }
   }
-
   static async asignarPaciente(idPaciente, idTurno) {
     try {
       const query = `
