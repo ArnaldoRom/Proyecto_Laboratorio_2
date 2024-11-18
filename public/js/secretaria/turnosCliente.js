@@ -1,6 +1,5 @@
 let dataTableTurnoSecretaria;
 let dataTableTurnoSecretariaInicializado = false;
-let pacientesData = [];
 
 const TurnoSecretariaOpciones = {
   destroy: true,
@@ -164,7 +163,11 @@ function abrirModalCargaTurno(boton) {
   const turnoId = boton.dataset.idTurno;
   const nuevaCargaTurno = document.getElementById(`enviar-form-cargaTurno`);
   const modalCargaTurno = document.getElementById(`modal-cargaTurno`);
+  const sugerencia = document.getElementById("sugerencias-dni");
+  const inputDNI = document.getElementById("dni");
   modalCargaTurno.showModal();
+
+  autocomplete(inputDNI, sugerencia, "/pacientes");
 
   nuevaCargaTurno.addEventListener("click", (event) => {
     event.preventDefault();
@@ -185,7 +188,7 @@ async function confirmarTurno(turnoId) {
   const motivo = document.getElementById("motivo").value;
   const obraSocial = document.getElementById("obra").value;
   const exito = document.getElementById("exito-turnos");
-  console.log("CONFIRMAS: ", turnoId);
+
   if (!turnoId) {
     console.error("No se encontró idTurno para confirmar el turno");
     return;
@@ -255,16 +258,4 @@ async function confirmarTurno(turnoId) {
 //       }
 //     }
 //   });
-// }
-
-// function autocompletar(inputDNI) {
-//   const paciente = pacientesData.find((p) => p.DNI === inputDNI);
-//   if (paciente) {
-//     document.getElementById("nombre").value = paciente.nombre;
-//     document.getElementById("apellido").value = paciente.apellido;
-//     document.getElementById("motivo").value = paciente.motivoConsulta || "";
-//     document.getElementById("obra").value = paciente.obraSocial || "";
-//   } else {
-//     console.error("El paciente no se encontró");
-//   }
 // }

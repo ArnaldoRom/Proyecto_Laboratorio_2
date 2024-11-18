@@ -51,7 +51,7 @@ router.get("/vistaSecretaria", (req, res) => {
 });
 
 router.get("/listaAgendas", (req, res) => {
-  res.render("vistaSecretaria/agendas", { layaut: false });
+  res.render("vistaSecretaria/agendas", { layout: false });
 });
 
 router.get("/cargaturnos", (rea, res) => {
@@ -59,7 +59,7 @@ router.get("/cargaturnos", (rea, res) => {
 });
 
 router.get("/gestionPacientes", (req, res) => {
-  res.render("vistaSecretaria/paciente", { layaut: false });
+  res.render("vistaSecretaria/paciente", { layout: false });
 });
 
 //---------------------- VISTA PACIENTE-----------------//
