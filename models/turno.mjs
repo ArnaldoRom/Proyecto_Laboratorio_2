@@ -77,13 +77,12 @@ class Turno {
     try {
       const query = `
       UPDATE turno 
-      SET diaTurno = ?, clasificacion = ?, idPaciente = ?, idEmpleado = ?, idEstadoHorario = 3 WHERE idTurno = ?
+      SET clasificacion = ?, idPaciente = ?, idEmpleado = ?, idEstadoHorario = 4 WHERE idTurno = ?
       `;
       const values = [
-        data.diaTurno,
-        data.clasificacion,
+        data.clasificacion || null,
         data.idPaciente,
-        data.idEmpleado,
+        data.idEmpleado || null,
         data.idTurno,
       ];
       const [result] = await conexion.query(query, values);
@@ -139,7 +138,10 @@ class Turno {
       const [result] = await conexion.query(query, [idPaciente, idTurno]);
       return result.affectedRows;
     } catch (error) {
-      console.error("Error al cambiar el estado a reservado y asignar el paciente", error);
+      console.error(
+        "Error al cambiar el estado a reservado y asignar el paciente",
+        error
+      );
       throw error;
     }
   }

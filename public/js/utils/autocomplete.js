@@ -1,7 +1,13 @@
-async function autocomplete(input, divSugerencia, url) {
+async function autocomplete(
+  input,
+  divSugerencia,
+  url,
+  filtro,
+  textSugerencia,
+  seleccion = null
+) {
   input.onkeyup = async (event) => {
     const inputValue = event.target.value.trim();
-
     divSugerencia.innerHTML = "";
 
     if (inputValue) {
@@ -15,18 +21,22 @@ async function autocomplete(input, divSugerencia, url) {
         const listaDatos = await response.json();
 
         const datosFiltrados = listaDatos.filter((data) =>
-          data.DNI.toString().startsWith(inputValue)
+          filtro(data, inputValue)
         );
 
         if (datosFiltrados.length > 0) {
           datosFiltrados.forEach((datos) => {
             const sugerencia = document.createElement("div");
             sugerencia.classList.add("sugerencia");
-            sugerencia.textContent = datos.DNI;
+            sugerencia.textContent = textSugerencia(datos);
 
             sugerencia.onclick = () => {
-              input.value = data.DNI;
+              input.value = textSugerencia(datos);
               divSugerencia.innerHTML = "";
+
+              if (seleccion) {
+                seleccion(datos);
+              }
             };
 
             divSugerencia.appendChild(sugerencia);

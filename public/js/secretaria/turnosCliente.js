@@ -36,12 +36,11 @@ async function turnoAgenda(idAgenda) {
       ).value = `${datos.nombrePro} ${datos.apellidoPro}`;
       document.getElementById("especialidad").value = datos.nombreEsp;
 
-      // Filtrar y obtener los días disponibles
       const diasAgenda = datos.dia
-        .split(",") // Dividir la cadena "1,4"
-        .map((dia) => parseInt(dia.trim(), 10)); // Convertir cada valor a número
+        .split(",")
+        .map((dia) => parseInt(dia.trim(), 10));
 
-      await obtenerTurnos(idAgenda, diasAgenda); // Pasar los días disponibles a la función
+      await obtenerTurnos(idAgenda, diasAgenda);
     } else {
       console.error("No se encontró la agenda");
     }
@@ -56,7 +55,7 @@ async function obtenerTurnos(idAgenda, diasAgenda) {
     if (!response.ok) throw new Error("Error al obtener Turnos");
 
     const turnos = await response.json();
-    cargarTablaTurnos(turnos, diasAgenda); // Pasar los días disponibles y turnos a la función
+    cargarTablaTurnos(turnos, diasAgenda);
   } catch (error) {
     console.error("Error al obtener los turnos:", error);
   }
@@ -70,8 +69,7 @@ async function cargarTablaTurnos(turnos, diasAgenda) {
     return;
   }
 
-  datos.innerHTML = ""; // Limpiar el contenido de la tabla
-
+  datos.innerHTML = "";
   const diasSemana = ["lunes", "martes", "miércoles", "jueves", "viernes"];
   const diasIndices = {
     1: "lunes",
@@ -96,14 +94,13 @@ async function cargarTablaTurnos(turnos, diasAgenda) {
 
   for (let hora in turnosPorHora) {
     const tr = document.createElement("tr");
-
     const tdHora = document.createElement("td");
+
     tdHora.textContent = hora;
     tr.appendChild(tdHora);
 
     diasSemana.forEach((dia) => {
       const tdDia = document.createElement("td");
-
       if (
         diasAgenda.includes(
           parseInt(
@@ -119,7 +116,7 @@ async function cargarTablaTurnos(turnos, diasAgenda) {
         botonTurno.style.cursor = "pointer";
 
         botonTurno.dataset.idTurno = turno.idTurno || "";
-        botonTurno.dataset.dia = dia; // Agregar el día en el dataset
+        botonTurno.dataset.dia = dia;
 
         switch (turno.idEstadoHorario) {
           case 2:
@@ -150,10 +147,8 @@ async function cargarTablaTurnos(turnos, diasAgenda) {
       } else {
         tdDia.textContent = "";
       }
-
       tr.appendChild(tdDia);
     });
-
     datos.appendChild(tr);
   }
 }
@@ -167,7 +162,25 @@ function abrirModalCargaTurno(boton) {
   const inputDNI = document.getElementById("dni");
   modalCargaTurno.showModal();
 
-  autocomplete(inputDNI, sugerencia, "/pacientes");
+  const filtroDni = (data, inputValue) =>
+    data.DNI.toString().startsWith(inputValue);
+  const filtroData = (data) => data.DNI;
+
+  const seleccionPaciente = (paciente) => {
+    document.getElementById("nombreTurno").value = paciente.nombre || "";
+    document.getElementById("apellido").value = paciente.apellido || "";
+    document.getElementById("motivo").value = paciente.motivoConsulta || "";
+    document.getElementById("obra").value = paciente.obraSocial || "";
+  };
+
+  autocomplete(
+    inputDNI,
+    sugerencia,
+    "/pacientes",
+    filtroDni,
+    filtroData,
+    seleccionPaciente
+  );
 
   nuevaCargaTurno.addEventListener("click", (event) => {
     event.preventDefault();
@@ -195,33 +208,22 @@ async function confirmarTurno(turnoId) {
   }
 
   try {
-    const responsePa = await fetch("/pacientes", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        nombre,
-        apellido,
-        DNI: dni,
-        obraSocial,
-      }),
-    }); // Verifica si la respuesta es correcta
-    const resultado = await responsePa.json();
+    const paciente = await fetch(`/paciente/${dni}`);
+    const resultado = await paciente.json();
 
-    const datitas = await fetch("/turno/estado", {
+    const datitas = await fetch("/turno/reservar", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        idEstadoHorario: 4,
+        idPaciente: resultado.idPaciente,
         idTurno: turnoId,
       }),
     });
     const turnoconfi = await datitas.json();
 
-    if (responsePa.ok && datitas.ok) {
+    if (paciente.ok && datitas.ok) {
       document.getElementById("modal-cargaTurno").close();
 
       if (botonSeleccionado) {

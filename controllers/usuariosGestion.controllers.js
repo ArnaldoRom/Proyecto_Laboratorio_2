@@ -23,14 +23,23 @@ export const iniciarSesion = async (req, res) => {
     console.log("Usuario autenticado con éxito:", usuario);
 
     // Crear el token JWT
-    const token = jwt.sign({ id: usuario.id, rol: usuario.rol, nombreUsuario: usuario.nombreUsuario }, JWT_SECRET);
+    const token = jwt.sign(
+      {
+        id: usuario.id,
+        rol: usuario.rol,
+        nombreUsuario: usuario.nombreUsuario,
+      },
+      JWT_SECRET
+    );
     console.log("Token JWT generado:", token);
 
     // Guardar el token en una cookie
     res.cookie("token", token);
-    res
-      .status(200)
-      .json({ message: "Inicio de sesión exitoso", rol: usuario.rol, nombreUsuario: usuario.nombreUsuario });
+    res.status(200).json({
+      message: "Inicio de sesión exitoso",
+      rol: usuario.rol,
+      nombreUsuario: usuario.nombreUsuario,
+    });
     console.log("Token enviado en la cookie");
   } catch (error) {
     console.error("Error al iniciar sesión:", error);
@@ -73,7 +82,6 @@ export const obtenerPacientePorUsuario = async (req, res) => {
     res.status(500).json({ message: "Error al obtener el usuario." });
   }
 };
-
 
 export const traerUsuarios = async (req, res) => {
   try {
@@ -194,6 +202,17 @@ export const getPaciente = async (req, res) => {
   }
 };
 
+export const getPacienteDNI = async (req, res) => {
+  const dni = req.params.dni;
+  try {
+    const paciente = await Paciente.getPacienteDNI(dni);
+    res.status(200).json(paciente);
+  } catch (error) {
+    console.error("Error al obtener el paciente", error);
+    res.status(500).json({ message: "Error al obtener los pacientes." });
+  }
+};
+
 // Controlador empleado -----------------------
 export const crearEmpleado = async (req, res) => {
   const data = req.body;
@@ -253,5 +272,3 @@ export const activarEmpleado = async (req, res) => {
     res.status(500).json({ message: "Error al activar el empleado." });
   }
 };
-
-// COntrolador usua

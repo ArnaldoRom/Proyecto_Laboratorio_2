@@ -53,6 +53,19 @@ class Paciente {
     }
   }
 
+  static async getPacienteDNI(dni) {
+    try {
+      const [rows] = await conexion.query(
+        "SELECT * FROM paciente WHERE DNI = ?",
+        [dni]
+      );
+      return rows[0];
+    } catch (error) {
+      console.error("Error al obtener paciente por dni");
+      throw error;
+    }
+  }
+
   static async cargarPaciente(data) {
     try {
       const query = `
