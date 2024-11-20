@@ -59,14 +59,14 @@
   width: 100%;
   max-width: 80%;
   margin: 20px auto;
-  overflow-x: auto; /* Permite desplazamiento horizontal si es necesario */
+  overflow-x: auto;
 }
 
 .tabla-turno {
   width: 100%;
-  max-width: 100%; /* Se ajusta al contenedor */
+  max-width: 100%;
   border-collapse: collapse;
-  table-layout: fixed; /* Distribuye las celdas en el ancho disponible */
+  table-layout: fixed;
 }
 
 .tabla-turno th,
@@ -101,30 +101,31 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   background-color: white;
   z-index: 1000;
-  overflow: hidden; /* Previene scroll horizontal */
+  overflow: hidden;
 }
 
 .contenedor-modal::backdrop {
   background-color: rgba(0, 0, 0, 0.5);
 }
 
-h2 {
-  margin: 0 0 10px; /* Evita líneas adicionales */
+.contenedor-modal h2 {
+  margin: 0 0 10px;
   text-align: center;
 }
 
-form {
+.contenedor-modal form {
   display: flex;
   flex-direction: column;
-  position: relative; /* Para posicionar sugerencias relativo al formulario */
+  position: relative;
 }
 
-label {
+.contenedor-modal label {
   margin-top: 10px;
   font-weight: bold;
 }
 
-input {
+.contenedor-modal input,
+.contenedor-modal select {
   padding: 8px;
   margin-top: 5px;
   border: 1px solid #ddd;
@@ -177,4 +178,23 @@ button#enviar-form-paciente {
 
 button#enviar-form-paciente:hover {
   background-color: #0056b3;
+}
+
+.contenedor-exito {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  padding: 20px;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  background-color: white;
+  z-index: 1000;
+  text-align: center;
+}
+
+.contenedor-exito::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
 }

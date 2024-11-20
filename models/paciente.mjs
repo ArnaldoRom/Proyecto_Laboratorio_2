@@ -4,7 +4,6 @@ class Paciente {
   #nombre;
   #apellido;
   #dni;
-  #motivoConsulta;
   #obraSocial;
   #datoContacto;
   #idUsuario;
@@ -14,7 +13,6 @@ class Paciente {
     nombre,
     apellido,
     dni,
-    motivoConsulta,
     obraSocial,
     datoContacto,
     idUsuario,
@@ -23,7 +21,6 @@ class Paciente {
     this.#nombre = nombre;
     this.#apellido = apellido;
     this.#dni = dni;
-    this.#motivoConsulta = motivoConsulta;
     this.#obraSocial = obraSocial;
     this.#datoContacto = datoContacto;
     this.#idUsuario = idUsuario;
@@ -93,13 +90,12 @@ class Paciente {
   static async actualizarPaciente(data, id) {
     try {
       const query =
-        "UPDATE paciente SET nombre = IFNULL(?, nombre), apellido = IFNULL(?, apellido), DNI = IFNULL(?, DNI), motivoConsulta = IFNULL(?, motivoConsulta), obraSocial = IFNULL(?, obraSocial), datosContacto = IFNULL(?, datosContacto), idUsuario = IFNULL(?, idUsuario) WHERE idPaciente = ?";
+        "UPDATE paciente SET nombre = IFNULL(?, nombre), apellido = IFNULL(?, apellido), DNI = IFNULL(?, DNI), obraSocial = IFNULL(?, obraSocial), datosContacto = IFNULL(?, datosContacto), idUsuario = IFNULL(?, idUsuario) WHERE idPaciente = ?";
 
       const values = [
         data.nombre,
         data.apellido,
         data.DNI,
-        data.motivoConsulta,
         data.obraSocial,
         data.datosContacto,
         data.idUsuario,

@@ -161,6 +161,7 @@ function abrirModalCargaTurno(boton) {
   const sugerencia = document.getElementById("sugerencias-dni");
   const inputDNI = document.getElementById("dni");
   modalCargaTurno.showModal();
+  // limpiarCamposModal();
 
   const filtroDni = (data, inputValue) =>
     data.DNI.toString().startsWith(inputValue);
@@ -169,7 +170,6 @@ function abrirModalCargaTurno(boton) {
   const seleccionPaciente = (paciente) => {
     document.getElementById("nombreTurno").value = paciente.nombre || "";
     document.getElementById("apellido").value = paciente.apellido || "";
-    document.getElementById("motivo").value = paciente.motivoConsulta || "";
     document.getElementById("obra").value = paciente.obraSocial || "";
   };
 
@@ -196,11 +196,9 @@ function abrirModalCargaTurno(boton) {
 
 async function confirmarTurno(turnoId) {
   const dni = document.getElementById("dni").value;
-  const nombre = document.getElementById("nombreTurno").value;
-  const apellido = document.getElementById("apellido").value;
   const motivo = document.getElementById("motivo").value;
-  const obraSocial = document.getElementById("obra").value;
-  const exito = document.getElementById("exito-turnos");
+  const clasificacion = document.getElementById("clasificacion").value;
+  const exitoConfirmadoTurno = document.getElementById("exito-turnos");
 
   if (!turnoId) {
     console.error("No se encontró idTurno para confirmar el turno");
@@ -217,7 +215,9 @@ async function confirmarTurno(turnoId) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        clasificacion,
         idPaciente: resultado.idPaciente,
+        motivoConsulta: motivo,
         idTurno: turnoId,
       }),
     });
@@ -227,16 +227,16 @@ async function confirmarTurno(turnoId) {
       document.getElementById("modal-cargaTurno").close();
 
       if (botonSeleccionado) {
-        exito.style.display = "block";
-        exito.showModal();
-
         botonSeleccionado.textContent = "Confirmado";
         botonSeleccionado.style.backgroundColor = "green";
       }
 
+      exitoConfirmadoTurno.style.display = "block";
+      exitoConfirmadoTurno.showModal();
+
       setTimeout(() => {
-        exito.close();
-        exito.style.display = "none";
+        exitoConfirmadoTurno.close();
+        exitoConfirmadoTurno.style.display = "none";
       }, 3000);
     } else {
       console.error("Error al confirmar el turno en el servidor");
@@ -245,6 +245,15 @@ async function confirmarTurno(turnoId) {
     console.error("Error al confirmar turno:", error);
   }
 }
+
+// function limpiarCamposModal() {
+//   document.getElementById("dni").value = "";
+//   document.getElementById("nombreTurno").value = "";
+//   document.getElementById("apellido").value = "";
+//   document.getElementById("obra").value = "";
+//   document.getElementById("motivo").value = "";
+//   document.getElementById("clasificacion").value = "";
+// }
 
 // function buscarTurnoSecretario() {
 //   const enviar = document.getElementById("enviar-form-turno");

@@ -5,8 +5,8 @@ class Turno {
   #hora;
   #clasificacion;
   #idPaciente;
+  #motivoConsulta;
   #idAgenda;
-  #idEmpleado;
   #idEstadoHorario;
 
   constructor(
@@ -14,8 +14,8 @@ class Turno {
     hora,
     clasificacion,
     idPaciente,
+    motivoConsulta,
     idAgenda,
-    idEmpleado,
     idEstadoHorario
   ) {
     this.#diaTurno = diaTurno;
@@ -23,7 +23,7 @@ class Turno {
     this.#clasificacion = clasificacion;
     this.#idPaciente = idPaciente;
     this.#idAgenda = idAgenda;
-    this.#idEmpleado = idEmpleado;
+    this.#motivoConsulta = motivoConsulta;
     this.#idEstadoHorario = idEstadoHorario;
   }
 
@@ -31,7 +31,7 @@ class Turno {
   static async crearTurno(data) {
     try {
       const query = `
-        INSERT INTO turno (diaTurno, hora, clasificacion, idPaciente, idAgenda, idEmpleado, idEstadoHorario)
+        INSERT INTO turno (diaTurno, hora, clasificacion, idPaciente, idAgenda, motivoConsulta, idEstadoHorario)
         VALUES (?, ?, ?, ?, ?, ?, ?)
       `;
       const values = [
@@ -39,8 +39,8 @@ class Turno {
         data.hora,
         data.clasificacion,
         data.idPaciente,
+        data.motivoConsulta,
         data.idAgenda,
-        data.idEmpleado,
         data.idEstadoHorario,
       ];
       const [result] = await conexion.query(query, values);
@@ -55,8 +55,8 @@ class Turno {
   static async crearTurnoConNull(data) {
     try {
       const query = `
-        INSERT INTO turno (diaTurno, hora, clasificacion, idPaciente, idAgenda, idEmpleado, idEstadoHorario)
-        VALUES (?, ?, NULL, NULL, ?, NULL, ?)
+        INSERT INTO turno (diaTurno, hora, clasificacion, idPaciente, motivoConsulta, idAgenda, idEstadoHorario)
+        VALUES (?, ?, NULL, NULL, NULL, ?, ?)
       `;
       const values = [
         data.diaTurno,
@@ -77,12 +77,12 @@ class Turno {
     try {
       const query = `
       UPDATE turno 
-      SET clasificacion = ?, idPaciente = ?, idEmpleado = ?, idEstadoHorario = 4 WHERE idTurno = ?
+      SET clasificacion = ?, idPaciente = ?, motivoConsulta = ?, idEstadoHorario = 4 WHERE idTurno = ?
       `;
       const values = [
         data.clasificacion || null,
         data.idPaciente,
-        data.idEmpleado || null,
+        data.motivoConsulta || null,
         data.idTurno,
       ];
       const [result] = await conexion.query(query, values);
