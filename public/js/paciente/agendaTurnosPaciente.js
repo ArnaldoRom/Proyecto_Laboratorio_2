@@ -62,6 +62,7 @@ function buscarAgenda() {
         console.error("No se encontró ninguna agenda.");
       }
     } catch (error) {
+      //agregar un dialog para mostrar el error
       console.error("Error al buscar agenda:", error);
     }
   });
@@ -193,6 +194,12 @@ async function solicitarTurno(turno) {
     const modalCargaTurnoPaciente = document.getElementById("exito-turnos");
     modalCargaTurnoPaciente.showModal();
     console.log("Turno reservado con éxito:", turno);
+
+    
+    const diasTurno = Object.keys(turnosPorHora[turno.hora]);
+    const idAgenda = turno.idAgenda; 
+    await obtenerTurnos(idAgenda, diasTurno);
+
     setTimeout(() => {
       modalCargaTurnoPaciente.close();
     }, 2000);
