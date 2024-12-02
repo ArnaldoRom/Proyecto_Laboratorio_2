@@ -1,3 +1,53 @@
-body {
-  background-color: blue;
+.contenedor-principal {
+  display: flex;
+  justify-content: center; /* Centra horizontalmente */
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  height: 100vh;
+}
+
+/* Estilo para el formulario */
+.form-nuevoPaciente {
+  width: 30%;
+  margin-right: 20px;
+}
+
+.form-nuevoPaciente h2 {
+  font-size: 20px;
+  color: #004080;
+  margin-bottom: 20px;
+}
+
+.form-nuevoPaciente form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-nuevoPaciente label {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.form-nuevoPaciente input {
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.form-nuevoPaciente button {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.form-nuevoPaciente button:hover {
+  background-color: #45a049;
 }

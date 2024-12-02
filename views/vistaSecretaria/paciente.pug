@@ -1,2 +1,21 @@
 link(rel="stylesheet", href="/css/secretaria/paciente.css")
-h2 SOY EL PACIENTE DE SECRETARIA
+div(id="contenedor-principalPaciente", class="contenedor-principal")
+  div(id="form-nuevoPaciente", class="form-nuevoPaciente")
+    h2 Registrar Nuevo Paciente   
+    form
+      label(for="nombrePaciente") Nombre 
+      input(type="text", id="nombre")
+
+      label(for="apellidoPaciente") Apellido 
+      input(type="text", id="apellido")
+
+      label(for="dniPaciente") DNI 
+      input(type="text", id="DNI")
+
+      label(for="obraSocial") Obra Social 
+      input(type="text", id="obra-social")
+
+      label(for="datos") Email 
+      input(type="text", id="datos-contacto")
+
+      button(type="submit", id="enviar-form-nuevoPaciente") AGREGAR  

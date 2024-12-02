@@ -175,7 +175,7 @@ class Turno {
   static async getTurnoId(id) {
     try {
       const [rows] = await conexion.query(
-        "SELECT * FROM turno WHERE idTurno = ?",
+        "SELECT * FROM turno t JOIN paciente p ON p.idPaciente = t.idPaciente JOIN agenda a ON a.idAgenda = t.idAgenda JOIN profecionalespecializado pf ON pf.idProfesionalEspecializado = a.idProfesionalEspecializado JOIN profesional pro ON pro.idProfesional = pf.idEspecialidad WHERE idTurno = ?",
         [id]
       );
       return rows;

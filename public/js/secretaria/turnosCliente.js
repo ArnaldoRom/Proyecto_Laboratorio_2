@@ -122,6 +122,9 @@ async function cargarTablaTurnos(turnos, diasAgenda) {
           case 2:
             botonTurno.textContent = "Libre";
             botonTurno.style.backgroundColor = "gray";
+            botonTurno.addEventListener("click", () => {
+              abrirModalCargaTurno(botonTurno);
+            });
             break;
           case 3:
             botonTurno.textContent = "Reservado";
@@ -130,18 +133,15 @@ async function cargarTablaTurnos(turnos, diasAgenda) {
           case 4:
             botonTurno.textContent = "Confirmado";
             botonTurno.style.backgroundColor = "green";
+            botonTurno.addEventListener("click", () => {
+              abrirModalInfo(botonTurno);
+            });
             break;
           default:
             botonTurno.textContent = "Desconocido";
             botonTurno.style.backgroundColor = "white";
             break;
         }
-
-        botonTurno.addEventListener("click", () => {
-          if (botonTurno.textContent === "Libre") {
-            abrirModalCargaTurno(botonTurno);
-          }
-        });
 
         tdDia.appendChild(botonTurno);
       } else {
@@ -153,15 +153,18 @@ async function cargarTablaTurnos(turnos, diasAgenda) {
   }
 }
 
+let nuevoEvento;
+
 function abrirModalCargaTurno(boton) {
   botonSeleccionado = boton;
   const turnoId = boton.dataset.idTurno;
   const nuevaCargaTurno = document.getElementById(`enviar-form-cargaTurno`);
   const modalCargaTurno = document.getElementById(`modal-cargaTurno`);
   const sugerencia = document.getElementById("sugerencias-dni");
+  const nuevoPaciente = document.getElementById("enviar-form-paciente");
   const inputDNI = document.getElementById("dni");
   modalCargaTurno.showModal();
-  // limpiarCamposModal();
+  limpiarCamposModal();
 
   const filtroDni = (data, inputValue) =>
     data.DNI.toString().startsWith(inputValue);
@@ -182,9 +185,21 @@ function abrirModalCargaTurno(boton) {
     seleccionPaciente
   );
 
-  nuevaCargaTurno.addEventListener("click", (event) => {
+  if (nuevoEvento) {
+    nuevaCargaTurno.removeEventListener("click", nuevoEvento);
+  }
+
+  nuevoEvento = async (event) => {
     event.preventDefault();
-    confirmarTurno(turnoId);
+    await confirmarTurno(turnoId);
+  };
+
+  nuevaCargaTurno.addEventListener("click", nuevoEvento);
+
+  nuevoPaciente.addEventListener("click", (event) => {
+    event.preventDefault();
+    mostrar("paciente");
+    modalCargaTurno.close();
   });
 
   window.onclick = function (event) {
@@ -200,6 +215,7 @@ async function confirmarTurno(turnoId) {
   const clasificacion = document.getElementById("clasificacion").value;
   const exitoConfirmadoTurno = document.getElementById("exito-turnos");
 
+  console.log(turnoId);
   if (!turnoId) {
     console.error("No se encontró idTurno para confirmar el turno");
     return;
@@ -246,14 +262,54 @@ async function confirmarTurno(turnoId) {
   }
 }
 
-// function limpiarCamposModal() {
-//   document.getElementById("dni").value = "";
-//   document.getElementById("nombreTurno").value = "";
-//   document.getElementById("apellido").value = "";
-//   document.getElementById("obra").value = "";
-//   document.getElementById("motivo").value = "";
-//   document.getElementById("clasificacion").value = "";
-// }
+async function abrirModalInfo(boton) {
+  const idInfo = boton.dataset.idTurno;
+  const modalInfo = document.getElementById("modal-infoPaciente");
+  const info = document.getElementById("info-turno");
+  const cerrar = document.getElementById("cerrar-info");
+  modalInfo.showModal();
+
+  try {
+    const infoTurno = await fetch(`/turno/${idInfo}`);
+    if (!infoTurno.ok) throw new Error("Error al buscar info");
+
+    const datosTurno = await infoTurno.json();
+    const Turnos = datosTurno[0];
+
+    info.innerHTML = `
+      <p><strong>DNI:</strong> ${Turnos.DNI}</p>
+      <p><strong>Nombre:</strong> ${Turnos.nombre}</p>
+      <p><strong>Apellido:</strong> ${Turnos.apellido}</p>
+      <p><strong>Motivo Consulta:</strong> ${Turnos.motivoConsulta}</p>
+      <p><strong>Clasificación:</strong> ${Turnos.clasificacion}</p>
+      <p><strong>Obra Social:</strong> ${Turnos.obraSocial}</p>
+      <p><strong>Hora:</strong> ${Turnos.hora}</p>
+      <p><strong>Día:</strong> ${Turnos.dia}</p>
+      <p><strong>Médico:</strong> ${Turnos.nombrePro}${Turnos.apellidoPro}</p>
+    `;
+
+    cerrar.addEventListener("click", () => {
+      modalInfo.close();
+    });
+  } catch (error) {
+    console.error("Error al obener info del Turno", error);
+  }
+
+  window.onclick = function (event) {
+    if (event.target === modalInfo) {
+      modalInfo.close();
+    }
+  };
+}
+
+function limpiarCamposModal() {
+  document.getElementById("dni").value = "";
+  document.getElementById("nombreTurno").value = "";
+  document.getElementById("apellido").value = "";
+  document.getElementById("obra").value = "";
+  document.getElementById("motivo").value = "";
+  document.getElementById("clasificacion").value = "";
+}
 
 // function buscarTurnoSecretario() {
 //   const enviar = document.getElementById("enviar-form-turno");
