@@ -23,6 +23,10 @@ const iniciarDataTableTurnoSecretaria = async () => {
 };
 
 async function turnoAgenda(idAgenda) {
+  if (!idAgenda) {
+    return;
+  }
+
   try {
     const response = await fetch(`/agenda/${idAgenda}`);
     if (!response.ok) throw new Error("Error al obtener la agenda");
@@ -310,19 +314,3 @@ function limpiarCamposModal() {
   document.getElementById("motivo").value = "";
   document.getElementById("clasificacion").value = "";
 }
-
-// function buscarTurnoSecretario() {
-//   const enviar = document.getElementById("enviar-form-turno");
-
-//   enviar.addEventListener("click", async (event) => {
-//     event.preventDefault();
-//     const turnos = await obtenerTurnos(idAgenda);
-
-//     if (window.miCalendarioTurno) {
-//       window.miCalendarioTurno.removeAllEvents();
-//       if (turnos) {
-//         window.miCalendarioTurno.addEventSource(turnos);
-//       }
-//     }
-//   });
-// }

@@ -33,8 +33,11 @@ function mostrar(vista, idAgenda = "", push = true) {
         buscar();
       } else if (vista === "turnos") {
         iniciarDataTableTurnoSecretaria();
-        turnoAgenda(idAgenda);
+        if (idAgenda) {
+          turnoAgenda(idAgenda);
+        }
       } else if (vista === "paciente") {
+        registrar();
       }
     })
     .catch((error) => console.error("error", error));
