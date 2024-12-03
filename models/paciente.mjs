@@ -7,6 +7,7 @@ class Paciente {
   #obraSocial;
   #datoContacto;
   #idUsuario;
+  #fotocopiaDNI
   #estado;
 
   constructor(
@@ -25,6 +26,7 @@ class Paciente {
     this.#datoContacto = datoContacto;
     this.#idUsuario = idUsuario;
     this.#estado = estado;
+    this.#fotocopiaDNI = fotocopiaDNI;
   }
 
   static async getPaciente() {
@@ -66,8 +68,8 @@ class Paciente {
   static async cargarPaciente(data) {
     try {
       const query = `
-        INSERT INTO paciente (nombre, apellido, DNI, obraSocial, datosContacto, idUsuario, estado)
-        VALUES (?, ?, ?, ?, ?, ?, 1)
+        INSERT INTO paciente (nombre, apellido, DNI, obraSocial, datosContacto, fotocopiaDNI, idUsuario, estado)
+        VALUES (?, ?, ?, ?, ?, ?, ?, 1)
     `;
 
       const values = [
@@ -76,6 +78,7 @@ class Paciente {
         data.DNI,
         data.obraSocial,
         data.datosContacto || null,
+        data.fotocopiaDNI || null,
         data.idUsuario || null,
       ];
 
