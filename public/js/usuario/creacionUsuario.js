@@ -3,20 +3,20 @@ const modal = document.getElementById("modal");
 const exito = document.getElementById("exito");
 const botonRegistrar = document.getElementById("boton-registrar");
 
-// Abre el modal al hacer clic en el boton
+// Abre el modal al hacer clic en el
 if (abrirModal && modal && exito && botonRegistrar) {
   abrirModal.addEventListener("click", () => {
     modal.showModal();
   });
 
-  // Cerrar el modal si se hace clic fuera del contenido
+  // Cerrar el modal si se hace clic
   modal.addEventListener("click", (event) => {
     if (event.target === modal) {
       modal.close();
     }
   });
 
-  // Manejar el clic en el boton "Registrar"
+  // Manejar el clic en el botón "Registrar"
   botonRegistrar.addEventListener("click", async function (event) {
     event.preventDefault();
 
@@ -28,17 +28,9 @@ if (abrirModal && modal && exito && botonRegistrar) {
     const contrasenaRegistro = document
       .getElementById("contrasenaRegistro")
       .value.trim();
-    const fotocopiaDni = document.getElementById("fotocopiaDni").files[0]; // Capturar archivo
 
     // Validaciones
-    if (
-      !nombre ||
-      !apellido ||
-      !DNI ||
-      !datosContacto ||
-      !contrasenaRegistro ||
-      !fotocopiaDni
-    ) {
+    if (!nombre || !apellido || !DNI || !datosContacto || !contrasenaRegistro) {
       alert("Todos los campos son obligatorios.");
       return;
     }
@@ -50,13 +42,13 @@ if (abrirModal && modal && exito && botonRegistrar) {
 
     if (!/^[\w.-]+@[\w.-]+\.(com)$/i.test(datosContacto)) {
       alert(
-        "Debe ingresar un correo electrónico valido."
+        "El campo de contacto debe ser un correo electrónico válido (debe contener '@' y terminar en '.com')."
       );
       return;
     }
 
     try {
-      // Validación para comprobar si el correo esta utilizado
+      // Validacioon para comprobar si el correo esta utilizado
       const responseUsuarios = await fetch("/usuariosLista");
       if (!responseUsuarios.ok)
         throw new Error("Error al verificar usuarios existentes");
@@ -102,29 +94,25 @@ if (abrirModal && modal && exito && botonRegistrar) {
       const usuarioData = await responseUsuario.json();
       const idUsuario = usuarioData.id;
 
-      // Paso 2: Crear paciente con el ID del usuario recien creado
-      const formData = new FormData();
-      formData.append("nombre", nombre);
-      formData.append("apellido", apellido);
-      formData.append("DNI", DNI);
-      formData.append("obraSocial", obraSocial);
-      formData.append("datosContacto", datosContacto);
-      formData.append("fotocopiaDNI", fotocopiaDni); 
-      formData.append("idUsuario", idUsuario);
-    
-      for (let pair of formData.entries()) {
-        console.log(pair[0] + ": " + pair[1]);
-      }
-      
-
+      // Paso 2: Crear paciente con el ID del usuario recién creado
       const responsePaciente = await fetch("/pacientes", {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nombre,
+          apellido,
+          DNI,
+          obraSocial,
+          datosContacto,
+          idUsuario,
+        }),
       });
 
       if (!responsePaciente.ok) throw new Error("Error al crear paciente");
 
-      // limpiar campos
+      // Mostrar mensaje de éxito y limpiar campos
       exito.style.display = "block";
       exito.showModal();
       setTimeout(() => {
@@ -151,5 +139,4 @@ function limpiarCampos() {
   document.getElementById("obraSocial").value = "";
   document.getElementById("datosContacto").value = "";
   document.getElementById("contrasenaRegistro").value = "";
-  document.getElementById("fotocopiaDni").value = ""; 
 }
