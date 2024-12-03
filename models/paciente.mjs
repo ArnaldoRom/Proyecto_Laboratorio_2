@@ -1,5 +1,3 @@
-import { conexion } from "../config/db.js";
-
 class Paciente {
   #nombre;
   #apellido;
@@ -8,6 +6,7 @@ class Paciente {
   #datoContacto;
   #idUsuario;
   #estado;
+  #fotocopiaDNI;
 
   constructor(
     nombre,
@@ -16,7 +15,8 @@ class Paciente {
     obraSocial,
     datoContacto,
     idUsuario,
-    estado
+    estado,
+    fotocopiaDNI = null
   ) {
     this.#nombre = nombre;
     this.#apellido = apellido;
@@ -25,50 +25,15 @@ class Paciente {
     this.#datoContacto = datoContacto;
     this.#idUsuario = idUsuario;
     this.#estado = estado;
-  }
-
-  static async getPaciente() {
-    try {
-      const [rows] = await conexion.query("SELECT * FROM paciente");
-      return rows;
-    } catch (error) {
-      console.error("Error al obtener Pacientes", error);
-      throw error;
-    }
-  }
-
-  static async getPacienteId(id) {
-    try {
-      const [rows] = await conexion.query(
-        "SELECT * FROM paciente WHERE idPaciente = ?",
-        [id]
-      );
-      return rows[0];
-    } catch (error) {
-      console.error("Error al recuperar Paciente");
-      throw error;
-    }
-  }
-
-  static async getPacienteDNI(dni) {
-    try {
-      const [rows] = await conexion.query(
-        "SELECT * FROM paciente WHERE DNI = ?",
-        [dni]
-      );
-      return rows[0];
-    } catch (error) {
-      console.error("Error al obtener paciente por dni");
-      throw error;
-    }
+    this.#fotocopiaDNI = fotocopiaDNI;
   }
 
   static async cargarPaciente(data) {
     try {
       const query = `
-        INSERT INTO paciente (nombre, apellido, DNI, obraSocial, datosContacto, idUsuario, estado)
-        VALUES (?, ?, ?, ?, ?, ?, 1)
-    `;
+        INSERT INTO paciente (nombre, apellido, DNI, obraSocial, datosContacto, idUsuario, estado, fotocopiaDNI)
+        VALUES (?, ?, ?, ?, ?, ?, 1, ?)
+      `;
 
       const values = [
         data.nombre,
@@ -77,6 +42,7 @@ class Paciente {
         data.obraSocial,
         data.datosContacto || null,
         data.idUsuario || null,
+        data.fotocopiaDNI || null,
       ];
 
       const [result] = await conexion.query(query, values);
@@ -89,8 +55,17 @@ class Paciente {
 
   static async actualizarPaciente(data, id) {
     try {
-      const query =
-        "UPDATE paciente SET nombre = IFNULL(?, nombre), apellido = IFNULL(?, apellido), DNI = IFNULL(?, DNI), obraSocial = IFNULL(?, obraSocial), datosContacto = IFNULL(?, datosContacto), idUsuario = IFNULL(?, idUsuario) WHERE idPaciente = ?";
+      const query = `
+        UPDATE paciente SET 
+          nombre = IFNULL(?, nombre),
+          apellido = IFNULL(?, apellido),
+          DNI = IFNULL(?, DNI),
+          obraSocial = IFNULL(?, obraSocial),
+          datosContacto = IFNULL(?, datosContacto),
+          idUsuario = IFNULL(?, idUsuario),
+          fotocopiaDNI = IFNULL(?, fotocopiaDNI)
+        WHERE idPaciente = ?
+      `;
 
       const values = [
         data.nombre,
@@ -99,42 +74,15 @@ class Paciente {
         data.obraSocial,
         data.datosContacto,
         data.idUsuario,
+        data.fotocopiaDNI,
         id,
       ];
 
       const [rows] = await conexion.query(query, values);
       return rows;
     } catch (error) {
-      console.error("Error al Actualizar datos del Paciente");
-      throw error;
-    }
-  }
-
-  static async bajaPaciente(id) {
-    try {
-      const [rows] = await conexion.query(
-        "UPDATE paciente SET estado = 0 WHERE idPaciente = ?",
-        [id]
-      );
-      return rows;
-    } catch (error) {
-      console.error("Error al dar de baja Paciente");
-      throw error;
-    }
-  }
-
-  static async altaPaciente(id) {
-    try {
-      const [rows] = await conexion.query(
-        "UPDATE paciente SET estado = 1 WHERE idPaciente = ?",
-        [id]
-      );
-      return rows;
-    } catch (error) {
-      console.error("Error al dar de alta Paciente");
+      console.error("Error al Actualizar datos del Paciente", error);
       throw error;
     }
   }
 }
-
-export default Paciente;
