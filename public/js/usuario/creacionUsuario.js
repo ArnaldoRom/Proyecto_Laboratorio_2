@@ -50,7 +50,7 @@ if (abrirModal && modal && exito && botonRegistrar) {
 
     if (!/^[\w.-]+@[\w.-]+\.(com)$/i.test(datosContacto)) {
       alert(
-        "El campo de contacto debe ser un correo electrónico válido (debe contener '@' y terminar en '.com')."
+        "Debe ingresar un correo electrónico valido."
       );
       return;
     }
